@@ -25,4 +25,12 @@ export default defineNuxtConfig({
   generate: {
     dir: '.output/public',
   },
+  nitro: {
+    output: {
+      publicDir: '.output/public'
+    }
+  },
+  router: {
+    base: '/'
+  }
 })
