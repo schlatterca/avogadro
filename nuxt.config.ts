@@ -20,4 +20,9 @@ export default defineNuxtConfig({
     projectId: "z2uq9iqi",
     dataset: "production"
   },
+  build: {
+  },
+  generate: {
+    dir: '.output/public',
+  },
 })
