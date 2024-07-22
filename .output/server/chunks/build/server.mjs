@@ -117,8 +117,8 @@ if (!globalThis.$fetch) {
     baseURL: baseURL()
   });
 }
+const appPageTransition = { "name": "page", "mode": "out-in" };
 const appLayoutTransition = false;
-const appPageTransition = false;
 const appKeepalive = false;
 const nuxtLinkDefaults = { "componentName": "NuxtLink" };
 const asyncDataDefaults = { "value": null, "errorValue": null, "deep": true };

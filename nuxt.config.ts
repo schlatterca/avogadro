@@ -1,36 +1,28 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
+import { defineNuxtModule } from 'nuxt'
 export default defineNuxtConfig({
   app: {
     head: {
       charset: 'utf-8',
       viewport: 'width=device-width, initial-scale=1',
-    }
+    },
+    pageTransition: { name: 'page', mode: 'out-in' }
   },
-  compatibilityDate: '2024-04-03',
-  devtools: { enabled: true },
+
   css: ['~/assets/css/main.css'],
+
   postcss: {
     plugins: {
       tailwindcss: {},
-      autoprefixer: {},
+      autoprefixer: {}
     },
   },
-  modules: ["@nuxtjs/sanity", "@vueuse/nuxt", "@pinia/nuxt"],
+
+  modules: ['@nuxtjs/sanity', '@vueuse/nuxt', '@pinia/nuxt'],
+
   sanity: {
     projectId: "z2uq9iqi",
     dataset: "production"
   },
-  build: {
-  },
-  generate: {
-    dir: '.output/public',
-  },
-  nitro: {
-    output: {
-      publicDir: '.output/public'
-    }
-  },
-  router: {
-    base: '/'
-  }
+
+  compatibilityDate: '2024-07-22',
 })
