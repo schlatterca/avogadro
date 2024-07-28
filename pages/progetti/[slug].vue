@@ -34,7 +34,7 @@
                 <div id="empty" class="slide active pic snap-start w-screen h-screen shrink-0"></div>
 
                 <div id='planimetria' class="slide w-66% ml-33% flex pic snap-end h-screen shrink-0 bg-lightgrey">
-                    <figure class="ml-17vw w-33% mt-50vh bg-lightgrey -translate-x-1/2 -translate-y-1/2">
+                    <figure class="ml-17vw w-33% bg-lightgrey -translate-x-1/2 mt-auto mb-auto">
                         <img v-if="myData.planimetria"
                         :src="imageUrlFor(myData.planimetria)"
                         class="pic w-auto h-full m-auto object-cover mix-blend-multiply"/>
