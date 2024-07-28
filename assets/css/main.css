@@ -8,6 +8,8 @@
 
 :root {
     --margin: 20px;
+    --mouse-x: 0px;
+    --mouse-y: 0px;
 }
 
 * {
@@ -281,6 +283,69 @@ a.hasArrow:before {
 }
 #head a.hasArrow.text-black:before {
 	content: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg id='Livello_1' data-name='Livello 1' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cdefs%3E%3Cstyle%3E .cls-1 %7B fill: %23000000; stroke-width: 0px; %7D %3C/style%3E%3C/defs%3E%3Cpolygon class='cls-1' points='12.23 .4 .28 12.33 98.72 110.99 1.45 111.2 18.08 127.6 127.02 127.36 127.72 18.43 111.09 2.04 110.66 99.04 12.23 .4'/%3E%3C/svg%3E")
+}
+
+
+
+/*NAVIGATION IN SLUG*/
+/* .slide {
+    opacity: 1;
+    transition: opacity 0.6s ease-in-out;
+}
+.slide.fade-out {opacity: 0;}
+.slide.fade-in {opacity: 1;}
+.slide {
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+.slide.active {
+    opacity: 1;
+}
+.displayNone {
+    display: none;
+} */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgb(234, 234, 234);
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+    pointer-events: none!important;
+    z-index: 1000;
+    overflow: hidden;
+}
+.overlay.bg-white {
+    background-color: white;
+}
+.overlay.show {
+    opacity: 1;
+}
+
+
+#leftArrow, #rightArrow {
+    background-image: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg id='Livello_1' data-name='Livello 1' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Cdefs%3E%3Cstyle%3E .cls-1 %7B fill: %23ffffff; stroke-width: 0px; %7D %3C/style%3E%3C/defs%3E%3Cpolygon class='cls-1' points='175.47 98.2 175.48 81.31 36.11 81.16 104.74 12.23 81.38 12.39 4.52 89.59 81.05 167.11 104.41 166.95 36.12 98.05 175.47 98.2'/%3E%3C/svg%3E");
+    height: 1em;
+    width: 1em;
+    display: inline-block;
+
+    left: var(--mouse-x);
+    top: var(--mouse-y);
+
+    position: absolute;
+    mix-blend-mode: difference;
+
+    opacity: 0;
+    pointer-events: none;
+    z-index: 100;
+}
+#rightArrow {
+    background-image: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg id='Livello_1' data-name='Livello 1' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Cdefs%3E%3Cstyle%3E .cls-1 %7B fill: %23ffffff; stroke-width: 0px; %7D %3C/style%3E%3C/defs%3E%3Cpolygon class='cls-1' points='4.53 81.47 4.52 98.36 143.89 98.51 75.26 167.44 98.62 167.28 175.48 90.08 98.95 12.56 75.59 12.72 143.88 81.62 4.53 81.47'/%3E%3C/svg%3E");
+}
+#leftArrow.visible, #rightArrow.visible {
+    opacity: 1;
 }
 
 /*SLUG.JS*/

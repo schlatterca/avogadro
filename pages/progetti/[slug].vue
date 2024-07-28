@@ -7,7 +7,7 @@
         <div v-if="loading" class="bg-white w-screen h-screen fixed top-0 left-0">
         </div>
         <div v-else>
-            <div id="header-component">
+            <div id="header-component" class="pointer-events-none">
                 <Header></Header>
             </div>
             <figure id='background' class="pic snap-start w-screen h-screen shrink-0">
@@ -17,30 +17,38 @@
                 />
             </figure>
         
-            <div id='snapContainer' class="flex snap-mandatory snap-x overflow-scroll absolute left-0 top-0 w-screen h-screen"
-            @scroll.passive="onScroll">
-                <!-- <div>
-                    <p class="text-3xl font-bold underline">{{slug}}</p>
-                    <p class="text-5xl font-bold underline">{{myData.title}}</p>
-                </div> -->
-                <div id="empty" class="pic snap-start w-screen h-screen shrink-0"></div>
+            <div id="leftArrow" class="arrow"></div>
+            <div id="rightArrow" class="arrow"></div>
 
-                <div id='planimetria' class="w-66% ml-33% flex pic snap-end h-screen shrink-0 bg-lightgrey">
+            <div id='snapContainer' class="flex snap-mandatory snap-x overflow-hidden absolute left-0 top-0
+            w-screen h-screen cursor-none select-none"
+            @scroll.passive="onScroll"
+            @mousemove="handleMouseMove" 
+            @mouseleave="handleMouseLeave"
+            @mouseenter="handleMouseEnter"
+            @click="handleClick">
+
+
+
+                <div class="overlay" id="overlay"></div>
+                <div id="empty" class="slide active pic snap-start w-screen h-screen shrink-0"></div>
+
+                <div id='planimetria' class="slide w-66% ml-33% flex pic snap-end h-screen shrink-0 bg-lightgrey">
                     <figure class="ml-17vw w-33% mt-50vh bg-lightgrey -translate-x-1/2 -translate-y-1/2">
                         <img v-if="myData.planimetria"
                         :src="imageUrlFor(myData.planimetria)"
                         class="pic w-auto h-full m-auto object-cover mix-blend-multiply"/>
                     </figure>
                     <div class="m-auto w-33% ml-0 DM-Mono leading-tight">
-                        <p class="text-l uppercase" v-html="myData.title" v-if="myData.title"></p>
+                        <p class="text-base uppercase" v-html="myData.title" v-if="myData.title"></p>
                         <p class="text-s mt-4" v-html="myData.citta" v-if="myData.citta"></p>
-                        <p class="text-l mt-8" v-html="myData.description" v-if="myData.description"></p>
+                        <p class="text-base mt-8" v-html="myData.description" v-if="myData.description"></p>
                         <p class="text-s mt-6" v-html="myData.altre_info" v-if="myData.altre_info"></p>
                     </div>
                 </div>
 
                 <div v-for="slide in myImages.slides" :key="slide._key"
-                class="pic snap-start w-screen h-screen shrink-0 flex gap-20px items-end p-20px bg-lightgrey"
+                class="slide pic snap-start w-screen h-screen shrink-0 flex gap-20px items-end p-20px bg-lightgrey"
                 :class="[`place-content-${isContentCenter(slide.justify)}`],
                     [`fixed-height-${isContentHeight(slide.fixed_height)}`]">
                     
@@ -59,8 +67,8 @@
                         class="pic object-cover"
                         />
                     </figure>
-
                 </div>
+
             </div>
         </div>
     </transition>
@@ -260,26 +268,167 @@ function onScroll(event) {
     
 
     
-    let GIFs = document.querySelectorAll('figure[alt_1]');
+    /* let GIFs = document.querySelectorAll('figure[alt_1]');
     if(GIFs.length > 0){
         const originalImgSrc = GIFs[0].getElementsByTagName('img')[0].src;
-        //console.log('original:', GIFs[0].getElementsByTagName('img')[0].parentElement.getAttribute('alt_1'));
         if(!store.myUrlSaved){
             store.myUrl_1 = originalImgSrc;
             store.myUrl_2 = GIFs[0].getElementsByTagName('img')[0].parentElement.getAttribute('alt_1');
             store.myUrlSaved = true;
         }
         if((GIFs.length > 0)&&(GIFs[0].getBoundingClientRect().left > (width._value / 2)&&(GIFs[0].classList.contains('changed')))) {
-            //console.log('2')
             GIFs[0].classList.remove('changed')
             GIFs[0].getElementsByTagName('img')[0].src = store.myUrl_1;
         } else if((GIFs.length > 0)&&(GIFs[0].getBoundingClientRect().left <= (width._value / 2)&&(!GIFs[0].classList.contains('changed')))) {
-            //console.log('1')
+            GIFs[0].classList.add('changed')
+            GIFs[0].getElementsByTagName('img')[0].src = store.myUrl_2;
+        }
+    } */
+}
+
+
+
+function changeGifImg(mousePosition, width) {
+    let GIFs = document.querySelectorAll('figure[alt_1]');
+    if(GIFs.length > 0){
+        const originalImgSrc = GIFs[0].getElementsByTagName('img')[0].src;
+        if(!store.myUrlSaved){
+            store.myUrl_1 = originalImgSrc;
+            store.myUrl_2 = GIFs[0].getElementsByTagName('img')[0].parentElement.getAttribute('alt_1');
+            store.myUrlSaved = true;
+        }
+        if((GIFs.length > 0)&&(mousePosition > (width / 2)&&(GIFs[0].classList.contains('changed')))) {
+            GIFs[0].classList.remove('changed')
+            GIFs[0].getElementsByTagName('img')[0].src = store.myUrl_1;
+        } else if((GIFs.length > 0)&&(mousePosition <= (width / 2)&&(!GIFs[0].classList.contains('changed')))) {
             GIFs[0].classList.add('changed')
             GIFs[0].getElementsByTagName('img')[0].src = store.myUrl_2;
         }
     }
 }
+
+
+
+
+const handleMouseMove = (event) => {
+  const container = event.currentTarget;
+  const mouseX = event.clientX;
+  const mouseY = event.clientY;
+
+  document.documentElement.style.setProperty('--mouse-x', `${mouseX}px`);
+  document.documentElement.style.setProperty('--mouse-y', `${mouseY}px`);
+
+  const containerWidth = container.offsetWidth;
+  if (mouseX < containerWidth / 2) {
+    document.querySelector('#leftArrow').classList.add('visible');
+    document.querySelector('#rightArrow').classList.remove('visible');
+  } else {
+    document.querySelector('#leftArrow').classList.remove('visible');
+    document.querySelector('#rightArrow').classList.add('visible');
+  }
+
+  const { width, height } = useWindowSize();
+  if(document.querySelector('figure[alt_1]')){
+    if(document.querySelector('figure[alt_1]').getBoundingClientRect().left > 0
+    && document.querySelector('figure[alt_1]').getBoundingClientRect().left < (width._value)){
+        changeGifImg(mouseX, width._value);
+    }
+    }
+};
+const handleMouseLeave = () => {
+    document.querySelector('#leftArrow').classList.remove('visible');
+    document.querySelector('#rightArrow').classList.remove('visible');
+};
+const handleMouseEnter = (event) => {
+    handleMouseMove(event);
+};
+
+
+
+
+const handleClick = (event) => {
+    event.preventDefault();
+
+    const container = event.currentTarget;
+    const overlay = document.getElementById('overlay');
+
+    if (overlay.classList.contains('show')) {
+        return;
+    }
+
+    const mouseX = event.clientX - container.getBoundingClientRect().left;
+    const containerWidth = container.offsetWidth;
+
+    const slides = Array.from(container.children).filter(child => child.classList.contains('slide'));
+    const currentIndex = slides.findIndex(slide => slide.getBoundingClientRect().left >= container.getBoundingClientRect().left - 10);
+
+    let nextIndex;
+    if (mouseX < containerWidth / 2) {
+        nextIndex = currentIndex > 0 ? currentIndex - 1 : slides.length - 1;
+    } else {
+        nextIndex = currentIndex < slides.length - 1 ? currentIndex + 1 : 0;
+    }
+
+    overlay.classList.add('show');
+    setTimeout(() => {
+        if (mouseX < containerWidth / 2) {
+            if (currentIndex > 0) {
+                slides[currentIndex - 1].scrollIntoView({ behavior: 'smooth', inline: 'start' });
+            } else {
+                slides[slides.length - 1].scrollIntoView({ behavior: 'smooth', inline: 'start' });
+            }
+        } else {
+            if (currentIndex < slides.length - 1) {
+                slides[currentIndex + 1].scrollIntoView({ behavior: 'smooth', inline: 'start' });
+            } else {
+                slides[0].scrollIntoView({ behavior: 'smooth', inline: 'start' });
+            }
+        }
+
+        setTimeout(() => {
+            overlay.classList.remove('show');
+        }, 200);
+
+    }, 200);
+};
+
+
+/* const handleClick = (event) => {
+    const container = event.currentTarget;
+    const mouseX = event.clientX - container.getBoundingClientRect().left;
+    const containerWidth = container.offsetWidth;
+
+    const slides = Array.from(container.children);
+    const currentIndex = slides.findIndex(slide => slide.classList.contains('active'));
+    let nextIndex;
+
+    if (mouseX < containerWidth / 2) {
+        nextIndex = currentIndex > 0 ? currentIndex - 1 : slides.length - 1;
+    } else {
+        nextIndex = currentIndex < slides.length - 1 ? currentIndex + 1 : 0;
+    }
+
+    if (currentIndex === nextIndex) return; // No change in slide
+
+    const currentSlide = slides[currentIndex];
+    const nextSlide = slides[nextIndex];
+
+    currentSlide.classList.add('fade-out');
+    nextSlide.classList.add('fade-in');
+
+    setTimeout(() => {
+        currentSlide.classList.remove('active', 'fade-out');
+        currentSlide.classList.add('displayNone');
+        nextSlide.classList.remove('displayNone');
+        nextSlide.classList.add('active');
+        nextSlide.classList.remove('fade-in');
+    }, 600);
+};
+ */
+
+
+
+
 </script>
 
 <script>

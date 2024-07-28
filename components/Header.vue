@@ -1,11 +1,11 @@
 <template>
     <div id="head" style="color: white;" :class="{'!text-black':onAbout()}">
         <p :class="{'!transition-none':!onHomepage()}">
-            <a href='../' :class="{'small':!onHomepage(), 'show-dot':!onHomepage()}" class="main"><span>C</span></a>
-            <a href='../' :class="{'notVisible':!onHomepage()}" class="first" style="visibility: visible; display: inline;"><span>ecilia</span></a>
-            <a href='../' :class="{'invisible':!onHomepage()}" class="blankSpace"><span> </span></a>
-            <a href='../' :class="{'small':!onHomepage(), 'show-dot':!onHomepage()}" class="main"><span>A</span></a>
-            <a href='../' :class="{'notVisible':!onHomepage()}" class="first" style="visibility: visible; display: inline; margin-left: -.08em;"><span>vogadro</span></a>
+            <a href='../' :class="{'small':!onHomepage(), 'show-dot':!onHomepage()}" class="main pointer-events-auto"><span>C</span></a>
+            <a href='../' :class="{'notVisible':!onHomepage()}" class="first pointer-events-auto" style="visibility: visible; display: inline;"><span>ecilia</span></a>
+            <a href='../' :class="{'invisible':!onHomepage()}" class="blankSpace pointer-events-auto"><span> </span></a>
+            <a href='../' :class="{'small':!onHomepage(), 'show-dot':!onHomepage()}" class="main pointer-events-auto"><span>A</span></a>
+            <a href='../' :class="{'notVisible':!onHomepage()}" class="first pointer-events-auto" style="visibility: visible; display: inline; margin-left: -.08em;"><span>vogadro</span></a>
         </p>
         <p :class="{'invisible':!onHomepage()}" class="arch">Arch.</p>
         <div :class="{'visible':!onHomepage()}" id="spansRow">

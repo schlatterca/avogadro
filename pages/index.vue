@@ -1,88 +1,94 @@
 <template>
-    <div id="header-component">
-        <Header></Header>
+    <div>
+
+        <div class="overlay bg-white" id="overlay"></div>
+
+        <div id="header-component">
+            <Header></Header>
+        </div>
+
+        <transition name="fade"
+        @before-enter="beforeEnter"
+        @enter="enter"
+        @leave="leave">
+            <div v-if="loading" class="bg-white w-screen h-screen fixed top-0 left-0">
+            </div>
+            <div v-else>
+
+                <main id="mainHome">
+                    <section id="s_1">
+                    </section>
+
+                    <section id="s_2">
+                        <img src="https://freight.cargo.site/t/original/i/eb7592ba1f63f887f8bfefe0682439c59867bdf787af1ada187e871fa91a7447/_Z9A3926.jpg">
+                        <img src="https://freight.cargo.site/t/original/i/2a7cd7086a218f34084b4a2bcba1682f8eeec2272068baf14898a753f0279647/_Z9A3936.jpg">
+                        <img src="https://freight.cargo.site/t/original/i/9f672c4aeda59bf5c45247795ff7f5cf9bbd74b9e5e6043597515054de662b08/_Z9A3872_a.jpg">
+                    </section>
+
+                    <section id="s_3">
+                        <p>Trasformare uno spazio in un luogo<br>
+                        di senso che faccia star bene chi<br>
+                        ci trascorre del tempo è per me<br>
+                        una gioia, ma non solo: è il mezzo<br>
+                        con cui faccio la mia parte nella<br>
+                        società civile.</p>
+                    </section>
+
+                    <!-- <section id="s_4">
+                        <div class="imagesGroup">
+                            <div class="image img_1">
+                                <img src="https://freight.cargo.site/t/original/i/732eeab1c9250de3f02831b0394e080d320572e9d2862790526c9316502d9a77/_Z9A3996---dimensioni-grandi.jpeg">
+                                <p>Piazzale Aquileia</p>
+                            </div>
+                            <div class="image img_2">
+                                <img src="https://freight.cargo.site/t/original/i/034d4e19749dd252d9aed8dc1bc27a7cb97f5772074058f5ce47bbadc76728c0/Friuli30-Cristina-Galliena-Bohman---dimensioni-grandi.jpeg">
+                                <p>Via Friuli</p>
+                            </div>
+                            <div class="image img_3">
+                                <img src="https://freight.cargo.site/t/original/i/963733fd202bfec2c4118f44497e3c0530553b8376d34b0b4ad659f9c3bd6792/Londonio004-Casamenu---dimensioni-grandi.jpeg">
+                                <p>Via Londonio</p>
+                            </div>
+                            <div class="image img_4">
+                                <img src="https://freight.cargo.site/t/original/i/034d4e19749dd252d9aed8dc1bc27a7cb97f5772074058f5ce47bbadc76728c0/Friuli30-Cristina-Galliena-Bohman---dimensioni-grandi.jpeg">
+                                <p>Via Friuli</p>
+                            </div>
+                        </div>
+                    </section> -->
+
+                    <section id="s_4">
+                        <template v-for="project in myData" :key="project._key">
+                        <a v-bind:href="'/progetti/'+ project.slug.current"
+                        class="flex"
+                        :style="project.gridSpan ? {
+                            gridColumn: project.gridSpan.columnStart + ' / span ' + project.gridSpan.columnSpan,
+                            gridRow: project.gridSpan.rowStart + ' / span ' + project.gridSpan.rowSpan
+                        } : {}">
+                            <!-- <p v-html="project.title"></p> -->
+                            <figure
+                            class="group">
+                                <p class="projectName opacity-0 group-hover:opacity-100 transition-opacity duration-500
+                                fixed pointer-events-none cursor-follower">
+                                    <span class="circle"></span>
+                                    <span v-html="project.title"></span>
+                                </p>
+                                <img v-if="project.cover_image"
+                                :src="imageBuilder.image (project.cover_image)"
+                                class="pic w-full h-full object-cover"/>
+                            </figure>
+                        </a>
+                        </template>
+                    </section>
+                </main>
+
+            </div>
+        </transition>
     </div>
-
-    <transition name="fade"
-    @before-enter="beforeEnter"
-    @enter="enter"
-    @leave="leave">
-        <div v-if="loading" class="bg-white w-screen h-screen fixed top-0 left-0">
-        </div>
-        <div v-else>
-
-            <main id="mainHome">
-                <section id="s_1">
-                </section>
-
-                <section id="s_2">
-                    <img src="https://freight.cargo.site/t/original/i/eb7592ba1f63f887f8bfefe0682439c59867bdf787af1ada187e871fa91a7447/_Z9A3926.jpg">
-                    <img src="https://freight.cargo.site/t/original/i/2a7cd7086a218f34084b4a2bcba1682f8eeec2272068baf14898a753f0279647/_Z9A3936.jpg">
-                    <img src="https://freight.cargo.site/t/original/i/9f672c4aeda59bf5c45247795ff7f5cf9bbd74b9e5e6043597515054de662b08/_Z9A3872_a.jpg">
-                </section>
-
-                <section id="s_3">
-                    <p>Trasformare uno spazio in un luogo<br>
-                    di senso che faccia star bene chi<br>
-                    ci trascorre del tempo è per me<br>
-                    una gioia, ma non solo: è il mezzo<br>
-                    con cui faccio la mia parte nella<br>
-                    società civile.</p>
-                </section>
-
-                <!-- <section id="s_4">
-                    <div class="imagesGroup">
-                        <div class="image img_1">
-                            <img src="https://freight.cargo.site/t/original/i/732eeab1c9250de3f02831b0394e080d320572e9d2862790526c9316502d9a77/_Z9A3996---dimensioni-grandi.jpeg">
-                            <p>Piazzale Aquileia</p>
-                        </div>
-                        <div class="image img_2">
-                            <img src="https://freight.cargo.site/t/original/i/034d4e19749dd252d9aed8dc1bc27a7cb97f5772074058f5ce47bbadc76728c0/Friuli30-Cristina-Galliena-Bohman---dimensioni-grandi.jpeg">
-                            <p>Via Friuli</p>
-                        </div>
-                        <div class="image img_3">
-                            <img src="https://freight.cargo.site/t/original/i/963733fd202bfec2c4118f44497e3c0530553b8376d34b0b4ad659f9c3bd6792/Londonio004-Casamenu---dimensioni-grandi.jpeg">
-                            <p>Via Londonio</p>
-                        </div>
-                        <div class="image img_4">
-                            <img src="https://freight.cargo.site/t/original/i/034d4e19749dd252d9aed8dc1bc27a7cb97f5772074058f5ce47bbadc76728c0/Friuli30-Cristina-Galliena-Bohman---dimensioni-grandi.jpeg">
-                            <p>Via Friuli</p>
-                        </div>
-                    </div>
-                </section> -->
-
-                <section id="s_4">
-                    <template v-for="project in myData" :key="project._key">
-                    <a v-bind:href="'/progetti/'+ project.slug.current"
-                    class="flex"
-                    :style="project.gridSpan ? {
-                        gridColumn: project.gridSpan.columnStart + ' / span ' + project.gridSpan.columnSpan,
-                        gridRow: project.gridSpan.rowStart + ' / span ' + project.gridSpan.rowSpan
-                    } : {}">
-                        <!-- <p v-html="project.title"></p> -->
-                        <figure
-                        class="group">
-                            <p class="projectName opacity-0 group-hover:opacity-100 transition-opacity duration-500
-                            fixed pointer-events-none cursor-follower">
-                                <span class="circle"></span>
-                                <span v-html="project.title"></span>
-                            </p>
-                            <img v-if="project.cover_image"
-                            :src="imageBuilder.image (project.cover_image)"
-                            class="pic w-full h-full object-cover"/>
-                        </figure>
-                    </a>
-                    </template>
-                </section>
-            </main>
-
-        </div>
-    </transition>
 </template>
   
 
 <script setup>
 import { ref, onMounted, nextTick } from 'vue';
+import { useRoute } from 'vue-router';
 import sanity from "../sanity/sanity.js";
 import imageUrlBuilder from "@sanity/image-url";
 import groq from "groq"; // Ensure you have groq imported if used in your setup
@@ -91,6 +97,7 @@ const imageBuilder = imageUrlBuilder(sanity);
 
 const loading = ref(true);
 const myData = ref([]);
+const route = useRoute();
 
 const fetchData = async () => {
     loading.value = true;
@@ -185,19 +192,56 @@ const setupVisibilityToggle = () => {
     });
 };
 
+
+
+const smoothScrollTo = (element, duration = 1000) => {    
+    const start = 0;
+    const targetPosition = element.getBoundingClientRect().top;
+    const startTime = performance.now();
+    function animateScroll(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        document.getElementById('mainHome').scrollTo(0, start + targetPosition * progress);
+        if (elapsed < duration) {
+            requestAnimationFrame(animateScroll);
+        }
+    }
+    requestAnimationFrame(animateScroll);
+};
+
+
+
 onMounted(async () => {
     await fetchData();
     await nextTick();
     changeBackgroundColor();
     setupVisibilityToggle();
 
+    const scrollToHash = () => {
+        const hash = route.hash;
+        if (hash) {
+            const element = document.querySelector(hash);
+            if (element) {
+                document.getElementById('overlay').classList.add('show');
+                element.scrollIntoView({ behavior: 'smooth' });
+                //smoothScrollTo(element, 1000);
+                
+                setTimeout(() => {
+                    document.getElementById('overlay').classList.remove('show')
+                }, 1000)
+            }
+        }
+    };
+    setTimeout(() => {
+        scrollToHash(), 600
+    })
+
+
 
     const followers = document.querySelectorAll('.cursor-follower');
-
     const updateFollowerPositions = (event) => {
         const x = event.clientX;
         const y = event.clientY;
-
         followers.forEach((follower) => {
         follower.style.left = `${x}px`;
         follower.style.top = `${y}px`;
@@ -223,12 +267,12 @@ export default {
     },
     enter(el, done) {
       el.offsetHeight; // Trigger reflow
-      el.style.transition = 'opacity 0.5s';
+      el.style.transition = 'opacity 2s';
       el.style.opacity = 1;
       done();
     },
     leave(el, done) {
-      el.style.transition = 'opacity 0.5s';
+      el.style.transition = 'opacity 2s';
       el.style.opacity = 0;
       done();
     },
