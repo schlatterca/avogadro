@@ -20,10 +20,19 @@ export default defineType({
       options: {
         source: 'title',
       },
-      description: `Link dal quale sarà possibile raggiungere il progetto (es. www.miosito.it/progett/LINK).`,
+      description: `Link dal quale sarà possibile raggiungere il progetto (es. www.miosito.it/progetti/LINK).`,
     },
 
 
+    {
+      name: 'homepage_image',
+      type: 'image',
+      title: 'Immagine in Homepage',
+      options: {
+          hotspot: true,
+      },
+      description: `Caricare qui l’immagine di copertina del progetto, da inserire in Homepage.`,
+    },
     { name: 'gridSpan',
         title: 'Posizione in Homepage',
         type: 'object',
@@ -72,7 +81,7 @@ export default defineType({
         options: {
             hotspot: true,
         },
-        description: `Caricare qui l’immagine di copertina del progetto.`,
+        description: `Caricare qui la prima immagine che comparirà dentro il progetto.`,
     },
     {
         name: 'planimetria',
@@ -87,7 +96,7 @@ export default defineType({
         name: 'description',
         type: 'text',
         title: 'Descrizione',
-        description: `Descrizione del progetto.`,
+        description: `Breve descrizione del progetto. Inserire <br> per andare a capo.`,
     },
     {
         name: 'altre_info',

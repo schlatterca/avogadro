@@ -26,7 +26,7 @@ const onHomepage = () => {
   return route.path === '/';
 };
 const onProject = () => {
-  return route.path.includes('/progetti/');
+  return (route.path.includes('/progetti/') || (route.path === '/'));
 };
 const onAbout = () => {
   return route.path.includes('/about');

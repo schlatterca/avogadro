@@ -19,10 +19,24 @@
                     <section id="s_1">
                     </section>
 
-                    <section id="s_2">
-                        <img src="https://freight.cargo.site/t/original/i/eb7592ba1f63f887f8bfefe0682439c59867bdf787af1ada187e871fa91a7447/_Z9A3926.jpg">
-                        <img src="https://freight.cargo.site/t/original/i/2a7cd7086a218f34084b4a2bcba1682f8eeec2272068baf14898a753f0279647/_Z9A3936.jpg">
-                        <img src="https://freight.cargo.site/t/original/i/9f672c4aeda59bf5c45247795ff7f5cf9bbd74b9e5e6043597515054de662b08/_Z9A3872_a.jpg">
+                    <div id="leftArrow" class="arrow"></div>
+                    <div id="rightArrow" class="arrow"></div>
+                    <div class="overlay bg-white" id="overlay_slide"></div>
+
+                    <section id="s_2"
+                    @mousemove="handleMouseMove" 
+                    @mouseleave="handleMouseLeave"
+                    @mouseenter="handleMouseEnter"
+                    @click="handleClick">
+                        <figure class="slide">
+                            <img src="https://freight.cargo.site/t/original/i/eb7592ba1f63f887f8bfefe0682439c59867bdf787af1ada187e871fa91a7447/_Z9A3926.jpg">
+                        </figure>
+                        <figure class="slide">
+                            <img src="https://freight.cargo.site/t/original/i/2a7cd7086a218f34084b4a2bcba1682f8eeec2272068baf14898a753f0279647/_Z9A3936.jpg">
+                        </figure>
+                        <figure class="slide">
+                            <img src="https://freight.cargo.site/t/original/i/9f672c4aeda59bf5c45247795ff7f5cf9bbd74b9e5e6043597515054de662b08/_Z9A3872_a.jpg">
+                        </figure>
                     </section>
 
                     <section id="s_3">
@@ -71,8 +85,8 @@
                                     <span class="circle"></span>
                                     <span v-html="project.title"></span>
                                 </p>
-                                <img v-if="project.cover_image"
-                                :src="imageBuilder.image (project.cover_image)"
+                                <img v-if="project.homepage_image"
+                                :src="imageBuilder.image (project.homepage_image)"
                                 class="pic w-full h-full object-cover"/>
                             </figure>
                         </a>
@@ -133,6 +147,12 @@ const setupVisibilityToggle = () => {
             const myMains = document.querySelectorAll('#head a.main');
 
             if (entry.isIntersecting) {
+                if (entry.target.id == "s_2") {
+                    entry.target.classList.add("inView")
+                } else {
+                    document.getElementById('s_2').classList.remove("inView")
+                }
+
                 if (entry.target.id == "s_4") {
                     spansRow.classList.add('visible');
                     spansMenu.forEach(span => {
@@ -194,23 +214,6 @@ const setupVisibilityToggle = () => {
 
 
 
-const smoothScrollTo = (element, duration = 1000) => {    
-    const start = 0;
-    const targetPosition = element.getBoundingClientRect().top;
-    const startTime = performance.now();
-    function animateScroll(currentTime) {
-        const elapsed = currentTime - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-        document.getElementById('mainHome').scrollTo(0, start + targetPosition * progress);
-        if (elapsed < duration) {
-            requestAnimationFrame(animateScroll);
-        }
-    }
-    requestAnimationFrame(animateScroll);
-};
-
-
-
 onMounted(async () => {
     await fetchData();
     await nextTick();
@@ -224,7 +227,6 @@ onMounted(async () => {
             if (element) {
                 document.getElementById('overlay').classList.add('show');
                 element.scrollIntoView({ behavior: 'smooth' });
-                //smoothScrollTo(element, 1000);
                 
                 setTimeout(() => {
                     document.getElementById('overlay').classList.remove('show')
@@ -260,6 +262,8 @@ onMounted(async () => {
 
 
 <script>
+const { width, height } = useWindowSize();
+
 export default {
   methods: {
     beforeEnter(el) {
@@ -280,5 +284,144 @@ export default {
       return `path/to/images/${image}`;
     }
   }
+};
+
+//S_2 -> mouseMove, mouseLeave, mouseEnter, handleClick
+//S_2 -> also has idleScroll
+let firstTimeout;
+let myTimeout;
+let myInterval;
+let currentIndex = 0;
+let figures;
+firstTimeout = setTimeout(() => {
+    figures = document.querySelectorAll('#s_2 .slide');
+
+    if(document.querySelector('#s_2').classList.contains('inView')){
+        myTimeout = setTimeout(() => {
+            idleScroll()
+        }, 3000);
+    }
+}, 1000);
+
+function idleScroll() {
+    myInterval = setInterval(() => {
+        //currentIndex = (currentIndex + 1) % figures.length;
+        //figures[currentIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        
+        //replicate click
+        const container = document.getElementById('s_2');
+        const overlay = document.getElementById('overlay_slide');
+        if (overlay.classList.contains('show')) {
+            return;
+        }
+        const slides = Array.from(container.children).filter(child => child.classList.contains('slide'));
+        const currentIndex = slides.findIndex(slide => slide.getBoundingClientRect().left >= container.getBoundingClientRect().left - 10);
+        let nextIndex;
+        nextIndex = currentIndex < slides.length - 1 ? currentIndex + 1 : 0;
+        overlay.classList.add('show');
+        setTimeout(() => {
+            if (currentIndex < slides.length - 1) {
+                slides[currentIndex + 1].scrollIntoView({ behavior: 'smooth', inline: 'start' });
+            } else {
+                slides[0].scrollIntoView({ behavior: 'smooth', inline: 'start' });
+            }
+            setTimeout(() => {
+                overlay.classList.remove('show');
+            }, 200);
+        }, 200);
+
+    }, 4000);
+}
+
+const handleMouseMove = (event) => {
+    clearTimeout(myTimeout);
+    if (myInterval) {
+        clearInterval(myInterval);
+    }
+    
+  const container = event.currentTarget;
+  const mouseX = event.clientX;
+  const mouseY = event.clientY;
+
+  document.documentElement.style.setProperty('--mouse-x', `${mouseX}px`);
+  document.documentElement.style.setProperty('--mouse-y', `${mouseY}px`);
+
+  const containerWidth = container.offsetWidth;
+  if (mouseX < containerWidth / 2) {
+    document.querySelector('#leftArrow').classList.add('visible');
+    document.querySelector('#rightArrow').classList.remove('visible');
+  } else {
+    document.querySelector('#leftArrow').classList.remove('visible');
+    document.querySelector('#rightArrow').classList.add('visible');
+  }
+
+    if(document.querySelector('#s_2').classList.contains('inView')){
+        idleScroll()
+    }
+};
+const handleMouseLeave = () => {
+    document.querySelector('#leftArrow').classList.remove('visible');
+    document.querySelector('#rightArrow').classList.remove('visible');
+
+    clearTimeout(myTimeout);
+    if (myInterval) {
+        clearInterval(myInterval);
+    }
+};
+const handleMouseEnter = (event) => {
+    handleMouseMove(event);
+
+    myTimeout = setTimeout(() => {
+        idleScroll()
+    }, 4000);
+};
+
+
+
+
+const handleClick = (event) => {
+    event.preventDefault();
+
+    const container = event.currentTarget;
+    const overlay = document.getElementById('overlay_slide');
+
+    if (overlay.classList.contains('show')) {
+        return;
+    }
+
+    const mouseX = event.clientX - container.getBoundingClientRect().left;
+    const containerWidth = container.offsetWidth;
+
+    const slides = Array.from(container.children).filter(child => child.classList.contains('slide'));
+    const currentIndex = slides.findIndex(slide => slide.getBoundingClientRect().left >= container.getBoundingClientRect().left - 10);
+
+    let nextIndex;
+    if (mouseX < containerWidth / 2) {
+        nextIndex = currentIndex > 0 ? currentIndex - 1 : slides.length - 1;
+    } else {
+        nextIndex = currentIndex < slides.length - 1 ? currentIndex + 1 : 0;
+    }
+
+    overlay.classList.add('show');
+    setTimeout(() => {
+        if (mouseX < containerWidth / 2) {
+            if (currentIndex > 0) {
+                slides[currentIndex - 1].scrollIntoView({ behavior: 'smooth', inline: 'start' });
+            } else {
+                slides[slides.length - 1].scrollIntoView({ behavior: 'smooth', inline: 'start' });
+            }
+        } else {
+            if (currentIndex < slides.length - 1) {
+                slides[currentIndex + 1].scrollIntoView({ behavior: 'smooth', inline: 'start' });
+            } else {
+                slides[0].scrollIntoView({ behavior: 'smooth', inline: 'start' });
+            }
+        }
+
+        setTimeout(() => {
+            overlay.classList.remove('show');
+        }, 200);
+
+    }, 200);
 };
 </script>

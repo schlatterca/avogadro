@@ -20,29 +20,24 @@
             <div id="leftArrow" class="arrow"></div>
             <div id="rightArrow" class="arrow"></div>
 
-            <div id='snapContainer' class="flex snap-mandatory snap-x overflow-hidden absolute left-0 top-0
-            w-screen h-screen cursor-none select-none"
-            @scroll.passive="onScroll"
-            @mousemove="handleMouseMove" 
-            @mouseleave="handleMouseLeave"
-            @mouseenter="handleMouseEnter"
-            @click="handleClick">
-
-
+            <div id='snapContainer' class="flex overflow-scroll snap-mandatory snap-x absolute left-0 top-0
+            w-screen h-screen select-none" ref="snapContainer"
+            @scroll.passive="onScroll">
+            <!--snap-mandatory snap-x-->
 
                 <div class="overlay" id="overlay"></div>
                 <div id="empty" class="slide active pic snap-start w-screen h-screen shrink-0"></div>
 
-                <div id='planimetria' class="slide w-66% ml-33% flex pic snap-end h-screen shrink-0 bg-lightgrey">
-                    <figure class="ml-17vw w-33% bg-lightgrey -translate-x-1/2 mt-auto mb-auto">
+                <div id='planimetria' class="slide w-66% ml-33% grid grid-cols-2 pic snap-end h-screen shrink-0 bg-lightgrey">
+                    <figure class="w-auto mx-20% bg-lightgrey mt-auto mb-auto">
                         <img v-if="myData.planimetria"
                         :src="imageUrlFor(myData.planimetria)"
                         class="pic w-auto h-full m-auto object-cover mix-blend-multiply"/>
                     </figure>
-                    <div class="m-auto w-33% ml-0 DM-Mono leading-tight">
+                    <div class="m-auto w-[20rem] mx-auto DM-Mono leading-tight">
                         <p class="text-base uppercase" v-html="myData.title" v-if="myData.title"></p>
                         <p class="text-s mt-4" v-html="myData.citta" v-if="myData.citta"></p>
-                        <p class="text-base mt-8" v-html="myData.description" v-if="myData.description"></p>
+                        <p class="text-s lg:text-base mt-8" v-html="myData.description" v-if="myData.description"></p>
                         <p class="text-s mt-6" v-html="myData.altre_info" v-if="myData.altre_info"></p>
                     </div>
                 </div>
@@ -75,7 +70,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, computed } from 'vue';
+import { onMounted, ref, nextTick, computed } from 'vue';
 import { useWindowSize } from '@vueuse/core'
 import sanity from "../sanity/sanity.js";
 import imageUrlBuilder from "@sanity/image-url";
@@ -333,8 +328,9 @@ const handleMouseMove = (event) => {
     && document.querySelector('figure[alt_1]').getBoundingClientRect().left < (width._value)){
         changeGifImg(mouseX, width._value);
     }
-    }
+  }
 };
+
 const handleMouseLeave = () => {
     document.querySelector('#leftArrow').classList.remove('visible');
     document.querySelector('#rightArrow').classList.remove('visible');
@@ -393,45 +389,36 @@ const handleClick = (event) => {
 };
 
 
-/* const handleClick = (event) => {
-    const container = event.currentTarget;
-    const mouseX = event.clientX - container.getBoundingClientRect().left;
-    const containerWidth = container.offsetWidth;
 
-    const slides = Array.from(container.children);
-    const currentIndex = slides.findIndex(slide => slide.classList.contains('active'));
-    let nextIndex;
-
-    if (mouseX < containerWidth / 2) {
-        nextIndex = currentIndex > 0 ? currentIndex - 1 : slides.length - 1;
-    } else {
-        nextIndex = currentIndex < slides.length - 1 ? currentIndex + 1 : 0;
-    }
-
-    if (currentIndex === nextIndex) return; // No change in slide
-
-    const currentSlide = slides[currentIndex];
-    const nextSlide = slides[nextIndex];
-
-    currentSlide.classList.add('fade-out');
-    nextSlide.classList.add('fade-in');
-
+/* const snapContainer = ref(null);
+onMounted(async () => {
+    
     setTimeout(() => {
-        currentSlide.classList.remove('active', 'fade-out');
-        currentSlide.classList.add('displayNone');
-        nextSlide.classList.remove('displayNone');
-        nextSlide.classList.add('active');
-        nextSlide.classList.remove('fade-in');
-    }, 600);
-};
- */
+        if (snapContainer.value) {
+            snapContainer.value.addEventListener('wheel', (ev) => {
+                if (ev.deltaY !== 0) {
+                    ev.preventDefault();
+                    snapContainer.value.scrollLeft += ev.deltaY;
 
-
-
+                    // Debugging output
+                    console.log(
+                        'Scroll Amount (Vertical):', ev.deltaY,
+                        'Current ScrollLeft:', snapContainer.value.scrollLeft
+                    );
+                }
+            });
+        } else {
+        console.error('snapContainer.value is null');
+        }
+    }, 100); // 100 ms delay to ensure DOM updates
+}); */
 
 </script>
 
+
+
 <script>
+
 export default {
   methods: {
     beforeEnter(el) {

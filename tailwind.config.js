@@ -18,6 +18,7 @@ export default {
         '10px': '10px',
         '20px': '20px',
         '30px': '30px',
+        '20%': '20%',
         '33%': '33%',
         '66%': '66%',
         '17vw': '17vw',
@@ -34,6 +35,7 @@ export default {
       },
       fontSize: {
         s: '0.8rem',
+        m: '0.9rem',
         base: '1rem',
         l: '1.2rem',
       },
@@ -42,6 +44,7 @@ export default {
       },
       gridTemplateColumns: {
         '24': 'repeat(24, 1fr)',
+        '2': 'repeat(2, 50%)',
       },
       gridAutoRows: {
         '1em': '1em' 
