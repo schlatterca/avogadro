@@ -21,7 +21,7 @@ export default {
         '20%': '20%',
         '33%': '33%',
         '66%': '66%',
-        '17vw': '17vw',
+        '33vw': '33vw',
         '40vw': '40vw',
         '50vw': '50vw',
         '20vh': '20vh',
@@ -38,6 +38,7 @@ export default {
         m: '0.9rem',
         base: '1rem',
         l: '1.2rem',
+        xl: '2.4rem'
       },
       gridColumn: {
         'span-16': 'span 16 / span 16',

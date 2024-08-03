@@ -11,7 +11,7 @@
         <div :class="{'visible':!onHomepage()}" id="spansRow">
             <a v-bind:href="'..#s_4'" :class="{'visible':!onHomepage(), 'hasArrow':onProject()}" class="menu"><span>PROJECTS</span></a>
             <a href='../project-index' :class="{'visible':!onHomepage(), 'hasArrow':onIndex()}" class="menu"><span>INDEX</span></a>
-            <a href='../' :class="{'visible':!onHomepage()}" class="menu"><span>VISION</span></a>
+            <a href='../vision' :class="{'visible':!onHomepage(), 'hasArrow':onVision()}" class="menu"><span>VISION</span></a>
             <a href='../about' :class="{'visible':!onHomepage(), 'hasArrow':onAbout(), 'text-black':onAbout()}" class="menu"><span>ABOUT</span></a>
         </div>
     </div>
@@ -30,6 +30,9 @@ const onProject = () => {
 };
 const onAbout = () => {
   return route.path.includes('/about');
+};
+const onVision = () => {
+  return route.path.includes('/vision');
 };
 const onIndex = () => {
   return route.path.includes('/project-index');
