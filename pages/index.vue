@@ -23,7 +23,7 @@
                     <div id="rightArrow" class="arrow"></div>
                     <div class="overlay bg-white" id="overlay_slide"></div>
 
-                    <section id="s_2"
+                    <section id="s_2" ref="sectionTwo"
                     @mousemove="handleMouseMove" 
                     @mouseleave="handleMouseLeave"
                     @mouseenter="handleMouseEnter"
@@ -293,15 +293,20 @@ let myTimeout;
 let myInterval;
 let currentIndex = 0;
 let figures;
-setTimeout(() => {
-    figures = document.querySelectorAll('.slide');
+const snapContainer = ref(null);
+onMounted(() => {
+    setTimeout(() => {
+        if (snapContainer.value) {
+            figures = snapContainer.value.querySelectorAll('.slide');
 
-    if(document.querySelector('#s_2').classList.contains('inView')){
-        myTimeout = setTimeout(() => {
-            idleScroll()
-        }, 3000);
-    }
-}, 1000);
+            if(snapContainer.value.classList.contains('inView')){
+                myTimeout = setTimeout(() => {
+                    idleScroll()
+                }, 3000);
+            }
+        }
+    }, 1000);
+})
 
 function idleScroll() {
     myInterval = setInterval(() => {
