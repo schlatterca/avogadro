@@ -294,7 +294,7 @@ let myInterval;
 let currentIndex = 0;
 let figures;
 firstTimeout = setTimeout(() => {
-    figures = document.querySelectorAll('#s_2 .slide');
+    figures = document.querySelectorAll('#s_2 > .slide');
 
     if(document.querySelector('#s_2').classList.contains('inView')){
         myTimeout = setTimeout(() => {

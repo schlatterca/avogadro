@@ -671,22 +671,27 @@ const _routes = [
   {
     name: "about",
     path: "/about",
-    component: () => import('./about-CqUg6QzU.mjs').then((m) => m.default || m)
+    component: () => import('./about-D1WdX2Rx.mjs').then((m) => m.default || m)
   },
   {
     name: "index",
     path: "/",
-    component: () => import('./index-D3Oi_oOL.mjs').then((m) => m.default || m)
+    component: () => import('./index-BZarTlTb.mjs').then((m) => m.default || m)
   },
   {
     name: "progetti-slug",
     path: "/progetti/:slug()",
-    component: () => import('./_slug_-BFajKo88.mjs').then((m) => m.default || m)
+    component: () => import('./_slug_-DePDuR7-.mjs').then((m) => m.default || m)
   },
   {
     name: "project-index",
     path: "/project-index",
-    component: () => import('./project-index-B4VsaYAi.mjs').then((m) => m.default || m)
+    component: () => import('./project-index-Dal89lRi.mjs').then((m) => m.default || m)
+  },
+  {
+    name: "vision",
+    path: "/vision",
+    component: () => import('./vision-aYach_wN.mjs').then((m) => m.default || m)
   }
 ];
 const _wrapIf = (component, props, slots) => {
