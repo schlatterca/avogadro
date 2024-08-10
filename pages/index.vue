@@ -293,14 +293,14 @@ let myTimeout;
 let myInterval;
 let currentIndex = 0;
 let figures;
-firstTimeout = setTimeout(() => {
-    /* figures = document.querySelectorAll('#s_2 > .slide');
+setTimeout(() => {
+    figures = document.querySelectorAll('.slide');
 
     if(document.querySelector('#s_2').classList.contains('inView')){
         myTimeout = setTimeout(() => {
             idleScroll()
         }, 3000);
-    } */
+    }
 }, 1000);
 
 function idleScroll() {
@@ -327,7 +327,7 @@ function idleScroll() {
             }
             setTimeout(() => {
                 overlay.classList.remove('show');
-            }, 200);
+            }, 300);
         }, 200);
 
     }, 4000);
