@@ -286,12 +286,12 @@ function onScroll(event) {
 
 const originalImg = ref(null) 
 function changeGifImg(mousePosition, width) {
-    //let GIFs = document.querySelectorAll('figure[alt_1]');
-    let GIFs = originalImg.value;
+    let GIFs = document.querySelectorAll('figure[alt_1]');
+    //let GIFs = originalImg.value;
     console.log(originalImg)
     console.log(originalImg.value)
     
-    const originalImgSrc = GIFs.getElementsByTagName('img')[0].src;
+    /* const originalImgSrc = GIFs.getElementsByTagName('img')[0].src;
     if(!store.myUrlSaved){
         store.myUrl_1 = originalImgSrc;
         store.myUrl_2 = GIFs.getElementsByTagName('img')[0].parentElement.getAttribute('alt_1');
@@ -303,10 +303,10 @@ function changeGifImg(mousePosition, width) {
     } else if(mousePosition <= (width / 2)&&(!GIFs.classList.contains('changed'))) {
         GIFs.classList.add('changed')
         GIFs.getElementsByTagName('img')[0].src = store.myUrl_2;
-    }
+    } */
     
 
-    /* if(GIFs.length > 0){
+    if(GIFs.length > 0){
         const originalImgSrc = GIFs[0].getElementsByTagName('img')[0].src;
         if(!store.myUrlSaved){
             store.myUrl_1 = originalImgSrc;
@@ -320,7 +320,7 @@ function changeGifImg(mousePosition, width) {
             GIFs[0].classList.add('changed')
             GIFs[0].getElementsByTagName('img')[0].src = store.myUrl_2;
         }
-    } */
+    }
 }
 
 
