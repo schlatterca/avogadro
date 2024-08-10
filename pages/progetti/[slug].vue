@@ -286,7 +286,8 @@ function onScroll(event) {
 
 const originalImg = ref(null) 
 function changeGifImg(mousePosition, width) {
-    let GIFs = document.querySelectorAll('figure[alt_1]');
+    //let GIFs = document.querySelectorAll('figure[alt_1]');
+    let GIFs = originalImg.value;
     if(GIFs.length > 0){
         const originalImgSrc = GIFs[0].getElementsByTagName('img')[0].src;
         if(!store.myUrlSaved){
