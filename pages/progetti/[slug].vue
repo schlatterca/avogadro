@@ -321,46 +321,49 @@ onMounted(() => {
             }
         } */
     }
+
+
+    const handleMouseEnter = (event) => {
+        handleMouseMove(event);
+    };
+    const handleMouseMove = (event) => {
+    const container = event.currentTarget;
+    const mouseX = event.clientX;
+    const mouseY = event.clientY;
+
+    /* document.documentElement.style.setProperty('--mouse-x', `${mouseX}px`);
+    document.documentElement.style.setProperty('--mouse-y', `${mouseY}px`);
+
+    const containerWidth = container.offsetWidth;
+    if (mouseX < containerWidth / 2) {
+        document.querySelector('#leftArrow').classList.add('visible');
+        document.querySelector('#rightArrow').classList.remove('visible');
+    } else {
+        document.querySelector('#leftArrow').classList.remove('visible');
+        document.querySelector('#rightArrow').classList.add('visible');
+    } */
+
+    const { width, height } = useWindowSize();
+    if(document.querySelector('figure[alt_1]')){
+    //if(originalImg){
+        //console.log(originalImg, document.querySelector('figure[alt_1]'))
+        if(document.querySelector('figure[alt_1]').getBoundingClientRect().left > 0
+        && document.querySelector('figure[alt_1]').getBoundingClientRect().left < (width._value)){
+            changeGifImg(mouseX, width._value);
+        }
+    }
+    };
+
+    /* const handleMouseLeave = () => {
+        document.querySelector('#leftArrow').classList.remove('visible');
+        document.querySelector('#rightArrow').classList.remove('visible');
+    }; */
 })
 
 
 
 
-const handleMouseEnter = (event) => {
-    handleMouseMove(event);
-};
-const handleMouseMove = (event) => {
-  const container = event.currentTarget;
-  const mouseX = event.clientX;
-  const mouseY = event.clientY;
 
-  /* document.documentElement.style.setProperty('--mouse-x', `${mouseX}px`);
-  document.documentElement.style.setProperty('--mouse-y', `${mouseY}px`);
-
-  const containerWidth = container.offsetWidth;
-  if (mouseX < containerWidth / 2) {
-    document.querySelector('#leftArrow').classList.add('visible');
-    document.querySelector('#rightArrow').classList.remove('visible');
-  } else {
-    document.querySelector('#leftArrow').classList.remove('visible');
-    document.querySelector('#rightArrow').classList.add('visible');
-  } */
-
-  const { width, height } = useWindowSize();
-  if(document.querySelector('figure[alt_1]')){
-  //if(originalImg){
-    //console.log(originalImg, document.querySelector('figure[alt_1]'))
-    if(document.querySelector('figure[alt_1]').getBoundingClientRect().left > 0
-    && document.querySelector('figure[alt_1]').getBoundingClientRect().left < (width._value)){
-        changeGifImg(mouseX, width._value);
-    }
-  }
-};
-
-/* const handleMouseLeave = () => {
-    document.querySelector('#leftArrow').classList.remove('visible');
-    document.querySelector('#rightArrow').classList.remove('visible');
-}; */
 
 
 
