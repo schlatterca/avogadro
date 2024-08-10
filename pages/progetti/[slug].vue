@@ -245,7 +245,7 @@ function onScroll(event) {
     const { width, height } = useWindowSize();
     let firstSlide = document.getElementById('planimetria')
     
-    /* if (firstSlide.getBoundingClientRect().left <= (width._value / 3)) {
+    if (firstSlide.getBoundingClientRect().left <= (width._value / 3)) {
         document.querySelectorAll('#head a:not(.text-black)').forEach(span => {
             span.classList.add('text-black');
         });
@@ -260,7 +260,7 @@ function onScroll(event) {
         document.querySelectorAll('#head a.text-black').forEach(span => {
             span.classList.remove('text-black');
         });
-    } */
+    }
 
     
 
@@ -328,8 +328,9 @@ const handleMouseMove = (event) => {
   } */
 
   const { width, height } = useWindowSize();
-  /* if(document.querySelector('figure[alt_1]')){ */
-  if(originalImg){
+  if(document.querySelector('figure[alt_1]')){
+  //if(originalImg){
+    //console.log(originalImg, document.querySelector('figure[alt_1]'))
     if(document.querySelector('figure[alt_1]').getBoundingClientRect().left > 0
     && document.querySelector('figure[alt_1]').getBoundingClientRect().left < (width._value)){
         changeGifImg(mouseX, width._value);
