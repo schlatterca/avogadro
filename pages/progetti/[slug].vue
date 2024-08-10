@@ -283,44 +283,46 @@ function onScroll(event) {
     } */
 }
 
-
-const originalImg = ref(null) 
-function changeGifImg(mousePosition, width) {
-    //let GIFs = document.querySelectorAll('figure[alt_1]');
-    let GIFs = originalImg.value;
-    console.log(GIFs)
-    
-    const originalImgSrc = GIFs.getElementsByTagName('img')[0].src;
-    if(!store.myUrlSaved){
-        store.myUrl_1 = originalImgSrc;
-        store.myUrl_2 = GIFs.getElementsByTagName('img')[0].parentElement.getAttribute('alt_1');
-        store.myUrlSaved = true;
-    }
-    if(mousePosition > (width / 2)&&(GIFs.classList.contains('changed'))) {
-        GIFs.classList.remove('changed')
-        GIFs.getElementsByTagName('img')[0].src = store.myUrl_1;
-    } else if(mousePosition <= (width / 2)&&(!GIFs.classList.contains('changed'))) {
-        GIFs.classList.add('changed')
-        GIFs.getElementsByTagName('img')[0].src = store.myUrl_2;
-    }
-    
-
-    /* if(GIFs.length > 0){
-        const originalImgSrc = GIFs[0].getElementsByTagName('img')[0].src;
+onMounted(() => {
+    const originalImg = ref(null) 
+    function changeGifImg(mousePosition, width) {
+        //let GIFs = document.querySelectorAll('figure[alt_1]');
+        let GIFs = originalImg.value;
+        console.log(1, GIFs)
+        
+        const originalImgSrc = GIFs.getElementsByTagName('img')[0].src;
         if(!store.myUrlSaved){
             store.myUrl_1 = originalImgSrc;
-            store.myUrl_2 = GIFs[0].getElementsByTagName('img')[0].parentElement.getAttribute('alt_1');
+            store.myUrl_2 = GIFs.getElementsByTagName('img')[0].parentElement.getAttribute('alt_1');
             store.myUrlSaved = true;
         }
-        if((GIFs.length > 0)&&(mousePosition > (width / 2)&&(GIFs[0].classList.contains('changed')))) {
-            GIFs[0].classList.remove('changed')
-            GIFs[0].getElementsByTagName('img')[0].src = store.myUrl_1;
-        } else if((GIFs.length > 0)&&(mousePosition <= (width / 2)&&(!GIFs[0].classList.contains('changed')))) {
-            GIFs[0].classList.add('changed')
-            GIFs[0].getElementsByTagName('img')[0].src = store.myUrl_2;
+        if(mousePosition > (width / 2)&&(GIFs.classList.contains('changed'))) {
+            GIFs.classList.remove('changed')
+            GIFs.getElementsByTagName('img')[0].src = store.myUrl_1;
+        } else if(mousePosition <= (width / 2)&&(!GIFs.classList.contains('changed'))) {
+            GIFs.classList.add('changed')
+            GIFs.getElementsByTagName('img')[0].src = store.myUrl_2;
         }
-    } */
-}
+        
+
+        /* if(GIFs.length > 0){
+            const originalImgSrc = GIFs[0].getElementsByTagName('img')[0].src;
+            if(!store.myUrlSaved){
+                store.myUrl_1 = originalImgSrc;
+                store.myUrl_2 = GIFs[0].getElementsByTagName('img')[0].parentElement.getAttribute('alt_1');
+                store.myUrlSaved = true;
+            }
+            if((GIFs.length > 0)&&(mousePosition > (width / 2)&&(GIFs[0].classList.contains('changed')))) {
+                GIFs[0].classList.remove('changed')
+                GIFs[0].getElementsByTagName('img')[0].src = store.myUrl_1;
+            } else if((GIFs.length > 0)&&(mousePosition <= (width / 2)&&(!GIFs[0].classList.contains('changed')))) {
+                GIFs[0].classList.add('changed')
+                GIFs[0].getElementsByTagName('img')[0].src = store.myUrl_2;
+            }
+        } */
+    }
+})
+
 
 
 
