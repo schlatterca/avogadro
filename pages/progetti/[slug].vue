@@ -283,87 +283,83 @@ function onScroll(event) {
     } */
 }
 
-onMounted(() => {
-    const originalImg = ref(null) 
-    function changeGifImg(mousePosition, width) {
-        //let GIFs = document.querySelectorAll('figure[alt_1]');
-        let GIFs = originalImg.value;
-        console.log(1, GIFs)
-        
-        const originalImgSrc = GIFs.getElementsByTagName('img')[0].src;
+
+const originalImg = ref(null) 
+function changeGifImg(mousePosition, width) {
+    //let GIFs = document.querySelectorAll('figure[alt_1]');
+    let GIFs = originalImg.value;
+    console.log(originalImg)
+    console.log(originalImg.value)
+    
+    const originalImgSrc = GIFs.getElementsByTagName('img')[0].src;
+    if(!store.myUrlSaved){
+        store.myUrl_1 = originalImgSrc;
+        store.myUrl_2 = GIFs.getElementsByTagName('img')[0].parentElement.getAttribute('alt_1');
+        store.myUrlSaved = true;
+    }
+    if(mousePosition > (width / 2)&&(GIFs.classList.contains('changed'))) {
+        GIFs.classList.remove('changed')
+        GIFs.getElementsByTagName('img')[0].src = store.myUrl_1;
+    } else if(mousePosition <= (width / 2)&&(!GIFs.classList.contains('changed'))) {
+        GIFs.classList.add('changed')
+        GIFs.getElementsByTagName('img')[0].src = store.myUrl_2;
+    }
+    
+
+    /* if(GIFs.length > 0){
+        const originalImgSrc = GIFs[0].getElementsByTagName('img')[0].src;
         if(!store.myUrlSaved){
             store.myUrl_1 = originalImgSrc;
-            store.myUrl_2 = GIFs.getElementsByTagName('img')[0].parentElement.getAttribute('alt_1');
+            store.myUrl_2 = GIFs[0].getElementsByTagName('img')[0].parentElement.getAttribute('alt_1');
             store.myUrlSaved = true;
         }
-        if(mousePosition > (width / 2)&&(GIFs.classList.contains('changed'))) {
-            GIFs.classList.remove('changed')
-            GIFs.getElementsByTagName('img')[0].src = store.myUrl_1;
-        } else if(mousePosition <= (width / 2)&&(!GIFs.classList.contains('changed'))) {
-            GIFs.classList.add('changed')
-            GIFs.getElementsByTagName('img')[0].src = store.myUrl_2;
+        if((GIFs.length > 0)&&(mousePosition > (width / 2)&&(GIFs[0].classList.contains('changed')))) {
+            GIFs[0].classList.remove('changed')
+            GIFs[0].getElementsByTagName('img')[0].src = store.myUrl_1;
+        } else if((GIFs.length > 0)&&(mousePosition <= (width / 2)&&(!GIFs[0].classList.contains('changed')))) {
+            GIFs[0].classList.add('changed')
+            GIFs[0].getElementsByTagName('img')[0].src = store.myUrl_2;
         }
-        
-
-        /* if(GIFs.length > 0){
-            const originalImgSrc = GIFs[0].getElementsByTagName('img')[0].src;
-            if(!store.myUrlSaved){
-                store.myUrl_1 = originalImgSrc;
-                store.myUrl_2 = GIFs[0].getElementsByTagName('img')[0].parentElement.getAttribute('alt_1');
-                store.myUrlSaved = true;
-            }
-            if((GIFs.length > 0)&&(mousePosition > (width / 2)&&(GIFs[0].classList.contains('changed')))) {
-                GIFs[0].classList.remove('changed')
-                GIFs[0].getElementsByTagName('img')[0].src = store.myUrl_1;
-            } else if((GIFs.length > 0)&&(mousePosition <= (width / 2)&&(!GIFs[0].classList.contains('changed')))) {
-                GIFs[0].classList.add('changed')
-                GIFs[0].getElementsByTagName('img')[0].src = store.myUrl_2;
-            }
-        } */
-    }
-
-
-    const handleMouseEnter = (event) => {
-        handleMouseMove(event);
-    };
-    const handleMouseMove = (event) => {
-    const container = event.currentTarget;
-    const mouseX = event.clientX;
-    const mouseY = event.clientY;
-
-    /* document.documentElement.style.setProperty('--mouse-x', `${mouseX}px`);
-    document.documentElement.style.setProperty('--mouse-y', `${mouseY}px`);
-
-    const containerWidth = container.offsetWidth;
-    if (mouseX < containerWidth / 2) {
-        document.querySelector('#leftArrow').classList.add('visible');
-        document.querySelector('#rightArrow').classList.remove('visible');
-    } else {
-        document.querySelector('#leftArrow').classList.remove('visible');
-        document.querySelector('#rightArrow').classList.add('visible');
     } */
+}
 
-    const { width, height } = useWindowSize();
-    if(document.querySelector('figure[alt_1]')){
-    //if(originalImg){
-        //console.log(originalImg, document.querySelector('figure[alt_1]'))
-        if(document.querySelector('figure[alt_1]').getBoundingClientRect().left > 0
-        && document.querySelector('figure[alt_1]').getBoundingClientRect().left < (width._value)){
-            changeGifImg(mouseX, width._value);
-        }
+
+
+const handleMouseEnter = (event) => {
+    handleMouseMove(event);
+};
+const handleMouseMove = (event) => {
+  const container = event.currentTarget;
+  const mouseX = event.clientX;
+  const mouseY = event.clientY;
+
+  /* document.documentElement.style.setProperty('--mouse-x', `${mouseX}px`);
+  document.documentElement.style.setProperty('--mouse-y', `${mouseY}px`);
+
+  const containerWidth = container.offsetWidth;
+  if (mouseX < containerWidth / 2) {
+    document.querySelector('#leftArrow').classList.add('visible');
+    document.querySelector('#rightArrow').classList.remove('visible');
+  } else {
+    document.querySelector('#leftArrow').classList.remove('visible');
+    document.querySelector('#rightArrow').classList.add('visible');
+  } */
+
+  const { width, height } = useWindowSize();
+  if(document.querySelector('figure[alt_1]')){
+  //if(originalImg){
+    //console.log(originalImg, document.querySelector('figure[alt_1]'))
+    if(document.querySelector('figure[alt_1]').getBoundingClientRect().left > 0
+    && document.querySelector('figure[alt_1]').getBoundingClientRect().left < (width._value)){
+        changeGifImg(mouseX, width._value);
     }
-    };
+  }
+};
 
-    /* const handleMouseLeave = () => {
-        document.querySelector('#leftArrow').classList.remove('visible');
-        document.querySelector('#rightArrow').classList.remove('visible');
-    }; */
-})
-
-
-
-
-
+/* const handleMouseLeave = () => {
+    document.querySelector('#leftArrow').classList.remove('visible');
+    document.querySelector('#rightArrow').classList.remove('visible');
+}; */
 
 
 
