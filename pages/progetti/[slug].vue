@@ -245,7 +245,7 @@ function onScroll(event) {
     const { width, height } = useWindowSize();
     let firstSlide = document.getElementById('planimetria')
     
-    if (firstSlide.getBoundingClientRect().left <= (width._value / 3)) {
+    /* if (firstSlide.getBoundingClientRect().left <= (width._value / 3)) {
         document.querySelectorAll('#head a:not(.text-black)').forEach(span => {
             span.classList.add('text-black');
         });
@@ -260,7 +260,7 @@ function onScroll(event) {
         document.querySelectorAll('#head a.text-black').forEach(span => {
             span.classList.remove('text-black');
         });
-    }
+    } */
 
     
 
