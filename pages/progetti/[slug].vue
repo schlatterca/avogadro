@@ -288,8 +288,8 @@ const originalImg = ref(null)
 function changeGifImg(mousePosition, width) {
     let GIFs = document.querySelectorAll('figure[alt_1]');
     //let GIFs = originalImg.value;
-    console.log(originalImg)
-    console.log(originalImg.value)
+    /* console.log(originalImg)
+    console.log(originalImg.value) */
     
     /* const originalImgSrc = GIFs.getElementsByTagName('img')[0].src;
     if(!store.myUrlSaved){
