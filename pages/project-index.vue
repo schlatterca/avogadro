@@ -23,7 +23,7 @@
                 <div id="projectIndexText" class="relative h-full w-full DM-Mono leading-tight
                 flex flex-col leading-normal col-start-9 col-span-16">
                     <template v-for="(project, index) in myData" :key="project._rev">
-                        <div class="inline-grid grid-cols-10 gap-6px items-end
+                        <div class="inline-grid grid-cols-10 gap-6px items-end group
                         w-full border-white border-b-.6 py-2 cursor-pointer hover:bg-darkgreyHover"
                         :class="{ 'border-t-.6': index === 0 }"
                         @mouseover="hoveredProject = project._rev"
@@ -33,7 +33,8 @@
                                 <p v-html="project.title" class="truncate"></p>
                             </a>
                             <p v-html="project.citta" class="text-s col-start-7 col-span-3 truncate"></p>
-                            <p class="projectIndexArrow self-center col-start-10 col-span-1 text-right"></p>
+                            <p class="projectIndexArrow self-center col-start-10 col-span-1 text-right
+                            opacity-0 group-hover:opacity-100"></p>
                         </div>
                     </template>
                 </div>

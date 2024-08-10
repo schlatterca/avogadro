@@ -1,7 +1,8 @@
 <template>
     <div>
 
-        <div id="header-component">
+        <div id="headOverlay"></div>
+        <div id="header-component" class="z-50">
             <Header></Header>
         </div>
 
@@ -154,7 +155,7 @@ function onScroll(event) {
         const maxBlur = 20;
         const minBlur = 0;
         const blurStep = 0.06; // Adjust blur per unit of deltaY
-        accumulatedDeltaY += event.deltaY;
+        accumulatedDeltaY += Math.abs(event.deltaY);
         let newBlur = maxBlur - Math.max(0, (accumulatedDeltaY * blurStep) - 60);
         newBlur = Math.max(minBlur, Math.min(maxBlur, newBlur));
 

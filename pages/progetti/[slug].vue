@@ -22,7 +22,9 @@
 
             <div id='snapContainer' class="flex overflow-scroll snap-mandatory snap-x absolute left-0 top-0
             w-screen h-screen select-none" ref="snapContainer"
-            @scroll.passive="onScroll">
+            @scroll.passive="onScroll"
+            @mouseenter="handleMouseEnter"
+            @mousemove="handleMouseMove" >
             <!--snap-mandatory snap-x-->
 
                 <div class="overlay" id="overlay"></div>
@@ -210,7 +212,7 @@ const fetchData = () => {
     loading.value = true;
     sanity.fetch(otherQuery).then(
         (data) => {
-            console.log('ccc', data[0]);
+            //console.log('ccc', data[0]);
             loading.value = false;
             myImages.value = data[0];
             myData.value = data[0];
@@ -228,7 +230,7 @@ onMounted(() => {
 });
 const query = groq`*[_type == "project" && slug.current == "${slug}"]`;
 const { data } = useSanityQuery(query);
-console.log("data:", data);
+//console.log("data:", data);
 
 
 
@@ -282,7 +284,7 @@ function onScroll(event) {
 }
 
 
-
+const originalImg = ref(null) 
 function changeGifImg(mousePosition, width) {
     let GIFs = document.querySelectorAll('figure[alt_1]');
     if(GIFs.length > 0){
@@ -304,13 +306,15 @@ function changeGifImg(mousePosition, width) {
 
 
 
-
+const handleMouseEnter = (event) => {
+    handleMouseMove(event);
+};
 const handleMouseMove = (event) => {
   const container = event.currentTarget;
   const mouseX = event.clientX;
   const mouseY = event.clientY;
 
-  document.documentElement.style.setProperty('--mouse-x', `${mouseX}px`);
+  /* document.documentElement.style.setProperty('--mouse-x', `${mouseX}px`);
   document.documentElement.style.setProperty('--mouse-y', `${mouseY}px`);
 
   const containerWidth = container.offsetWidth;
@@ -320,10 +324,11 @@ const handleMouseMove = (event) => {
   } else {
     document.querySelector('#leftArrow').classList.remove('visible');
     document.querySelector('#rightArrow').classList.add('visible');
-  }
+  } */
 
   const { width, height } = useWindowSize();
-  if(document.querySelector('figure[alt_1]')){
+  /* if(document.querySelector('figure[alt_1]')){ */
+  if(originalImg){
     if(document.querySelector('figure[alt_1]').getBoundingClientRect().left > 0
     && document.querySelector('figure[alt_1]').getBoundingClientRect().left < (width._value)){
         changeGifImg(mouseX, width._value);
@@ -331,13 +336,10 @@ const handleMouseMove = (event) => {
   }
 };
 
-const handleMouseLeave = () => {
+/* const handleMouseLeave = () => {
     document.querySelector('#leftArrow').classList.remove('visible');
     document.querySelector('#rightArrow').classList.remove('visible');
-};
-const handleMouseEnter = (event) => {
-    handleMouseMove(event);
-};
+}; */
 
 
 

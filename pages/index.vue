@@ -253,9 +253,9 @@ onMounted(async () => {
     document.addEventListener('mousemove', updateFollowerPositions);
 
     // Clean up the event listener on unmount
-    onBeforeUnmount(() => {
+    /* onBeforeUnmount(() => {
         document.removeEventListener('mousemove', updateFollowerPositions);
-    });
+    }); */
 });
 </script>
 
@@ -406,21 +406,21 @@ const handleClick = (event) => {
     setTimeout(() => {
         if (mouseX < containerWidth / 2) {
             if (currentIndex > 0) {
-                slides[currentIndex - 1].scrollIntoView({ behavior: 'smooth', inline: 'start' });
+                slides[currentIndex - 1].scrollIntoView({ behavior: 'instant', inline: 'start' });
             } else {
-                slides[slides.length - 1].scrollIntoView({ behavior: 'smooth', inline: 'start' });
+                slides[slides.length - 1].scrollIntoView({ behavior: 'instant', inline: 'start' });
             }
         } else {
             if (currentIndex < slides.length - 1) {
-                slides[currentIndex + 1].scrollIntoView({ behavior: 'smooth', inline: 'start' });
+                slides[currentIndex + 1].scrollIntoView({ behavior: 'instant', inline: 'start' });
             } else {
-                slides[0].scrollIntoView({ behavior: 'smooth', inline: 'start' });
+                slides[0].scrollIntoView({ behavior: 'instant', inline: 'start' });
             }
         }
 
         setTimeout(() => {
             overlay.classList.remove('show');
-        }, 200);
+        }, 300);
 
     }, 200);
 };
