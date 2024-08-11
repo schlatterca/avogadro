@@ -35,7 +35,7 @@
                         <img v-if="myData.planimetria"
                         :src="imageUrlFor(myData.planimetria)"
                         class="pic h-full m-auto object-cover mix-blend-multiply
-                        !w-auto max-h-[80dvh]"/>
+                        !w-auto !max-h-[80dvh]"/>
                     </figure>
                     <div class="m-auto w-[20rem] mx-auto DM-Mono leading-tight">
                         <p class="text-base uppercase" v-html="myData.title" v-if="myData.title"></p>
