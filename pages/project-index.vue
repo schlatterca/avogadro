@@ -20,8 +20,8 @@
                     </template>
                 </div>
 
-                <div id="projectIndexText" class="relative h-full w-full DM-Mono leading-tight
-                flex flex-col leading-normal col-start-9 col-span-16">
+                <div id="projectIndexText" class="relative h-[80dvh] w-full DM-Mono leading-tight
+                flex flex-col leading-normal col-start-9 col-span-16 overflow-scroll pb-20px">
                     <template v-for="(project, index) in myData" :key="project._rev">
                         <div class="inline-grid grid-cols-10 gap-6px items-end group
                         w-full border-white border-b-.6 py-2 cursor-pointer hover:bg-darkgreyHover"
