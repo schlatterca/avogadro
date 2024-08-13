@@ -676,17 +676,17 @@ const _routes = [
   {
     name: "index",
     path: "/",
-    component: () => import('./index-BZarTlTb.mjs').then((m) => m.default || m)
+    component: () => import('./index-Cr_X7XvP.mjs').then((m) => m.default || m)
   },
   {
     name: "progetti-slug",
     path: "/progetti/:slug()",
-    component: () => import('./_slug_-DePDuR7-.mjs').then((m) => m.default || m)
+    component: () => import('./_slug_-CKS-TGN8.mjs').then((m) => m.default || m)
   },
   {
     name: "project-index",
     path: "/project-index",
-    component: () => import('./project-index-Dal89lRi.mjs').then((m) => m.default || m)
+    component: () => import('./project-index-CUB8j0xG.mjs').then((m) => m.default || m)
   },
   {
     name: "vision",

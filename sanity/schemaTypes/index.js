@@ -12,6 +12,7 @@ import slide from './slide'
 import blockContent from './blockContent'
 import about from './about'
 import vision from './vision'
+import homepage from './homepage'
 
 export const schemaTypes = [
   // Document types
@@ -22,6 +23,7 @@ export const schemaTypes = [
   project,
   slide,
   
+  homepage,
   vision,
   blockContent,
   about,

@@ -28,7 +28,20 @@
                     @mouseleave="handleMouseLeave"
                     @mouseenter="handleMouseEnter"
                     @click="handleClick">
-                        <figure class="slide">
+                        <!-- <template v-for="slide in myCarousel.slides" :key="slide._key">
+                            <figure v-if="slide.image" class="slide">
+                                <img :src="urlFor(slide.image.asset._ref).url()" alt="Carousel Image" />
+                            </figure>
+                        </template> -->
+                        <template v-for="slide in myCarousel[0].slides" :key="slide._key">
+
+                            <figure v-if="slide.image" class="slide">
+                                <img :src="imageBuilder.image(slide.image.asset).url()" alt="Carousel Image" />
+                            </figure>
+                            
+                        </template>
+
+                        <!-- <figure class="slide">
                             <img src="https://freight.cargo.site/t/original/i/eb7592ba1f63f887f8bfefe0682439c59867bdf787af1ada187e871fa91a7447/_Z9A3926.jpg">
                         </figure>
                         <figure class="slide">
@@ -36,7 +49,7 @@
                         </figure>
                         <figure class="slide">
                             <img src="https://freight.cargo.site/t/original/i/9f672c4aeda59bf5c45247795ff7f5cf9bbd74b9e5e6043597515054de662b08/_Z9A3872_a.jpg">
-                        </figure>
+                        </figure> -->
                     </section>
 
                     <section id="s_3">
@@ -70,32 +83,42 @@
                     </section> -->
 
                     <section id="s_4">
-                        <template v-for="project in myData" :key="project._key">
-                        <a v-bind:href="'/progetti/'+ project.slug.current"
-                        class="flex"
-                        :style="project.gridSpan ? {
-                            gridColumn: project.gridSpan.columnStart + ' / span ' + project.gridSpan.columnSpan,
-                            gridRow: project.gridSpan.rowStart + ' / span ' + project.gridSpan.rowSpan
-                        } : {}">
-                            <!-- <p v-html="project.title"></p> -->
-                            <figure
-                            class="group">
-                                <p class="projectName opacity-0 group-hover:opacity-100 transition-opacity duration-500
-                                fixed pointer-events-none cursor-follower">
-                                    <span class="circle"></span>
-                                    <span v-html="project.title"></span>
-                                </p>
-                                <img v-if="project.homepage_image"
-                                :src="imageBuilder.image (project.homepage_image)"
-                                class="pic w-full h-full object-cover"/>
-                            </figure>
-                        </a>
-                        </template>
+                        <div class="projectGrid relative h-screen w-screen">
+                            <template v-for="project in myData" :key="project._key">
+                                <a v-bind:href="'/progetti/'+ project.slug.current"
+                                class="flex"
+                                :style="project.gridSpan ? {
+                                    gridColumn: project.gridSpan.columnStart + ' / span ' + project.gridSpan.columnSpan,
+                                    gridRow: project.gridSpan.rowStart + ' / span ' + project.gridSpan.rowSpan
+                                } : {}">
+                                    <!-- <p v-html="project.title"></p> -->
+                                    <figure
+                                    class="group">
+                                        <p class="projectName opacity-0 group-hover:opacity-100 transition-opacity duration-500
+                                        fixed pointer-events-none cursor-follower">
+                                            <span class="circle"></span>
+                                            <span v-html="project.title"></span>
+                                        </p>
+                                        <img v-if="project.homepage_image"
+                                        :src="imageBuilder.image (project.homepage_image)"
+                                        class="pic w-full h-full object-cover"/>
+                                    </figure>
+                                </a>
+                            </template>
+
+
+                            <div id="footer-component" class="absolute l-0 w-screen row-start-[134] row-span-10">
+                                <Footer></Footer>
+                            </div>
+                        </div>
+
                     </section>
                 </main>
 
             </div>
         </transition>
+
+        
     </div>
 </template>
   
@@ -111,6 +134,7 @@ const imageBuilder = imageUrlBuilder(sanity);
 
 const loading = ref(true);
 const myData = ref([]);
+const myCarousel = ref([]);
 const route = useRoute();
 
 const fetchData = async () => {
@@ -118,6 +142,25 @@ const fetchData = async () => {
     try {
         const data = await sanity.fetch(groq`*[_type == "project"]`);
         myData.value = data;
+    } catch (error) {
+        console.error(error);
+    } finally {
+        loading.value = false;
+    }
+};
+const fetchDataCarousel = async () => {
+    loading.value = true;
+    try {
+        const data = await sanity.fetch(groq`*[_type == "homepage"]{
+            slides[]{
+                _key,
+                _type,
+                title,
+                image,
+            }
+        }[0...50]`);
+        myCarousel.value = data;
+        //console.log(myCarousel._rawValue[0].slides)
     } catch (error) {
         console.error(error);
     } finally {
@@ -216,6 +259,7 @@ const setupVisibilityToggle = () => {
 
 onMounted(async () => {
     await fetchData();
+    await fetchDataCarousel();
     await nextTick();
     changeBackgroundColor();
     setupVisibilityToggle();

@@ -38,8 +38,12 @@
                         </div>
                     </template>
                 </div>
-
             </main>
+
+            <div id="footer-component" class="relative l-0 w-screen row-start-[134] row-span-10">
+              <Footer></Footer>
+            </div>
+
         </div>
     </transition>
 </template>

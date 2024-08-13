@@ -2,7 +2,8 @@
 import type { DefineComponent, SlotsType } from 'vue'
 type IslandComponent<T extends DefineComponent> = T & DefineComponent<{}, {refresh: () => Promise<void>}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, SlotsType<{ fallback: { error: unknown } }>>
 interface _GlobalComponents {
-      'Header': typeof import("../components/Header.vue")['default']
+      'Footer': typeof import("../components/Footer.vue")['default']
+    'Header': typeof import("../components/Header.vue")['default']
     'SanityContent': typeof import("../node_modules/@nuxtjs/sanity/dist/runtime/components/sanity-content")['default']
     'SanityFile': typeof import("../node_modules/@nuxtjs/sanity/dist/runtime/components/sanity-file")['default']
     'SanityImage': typeof import("../node_modules/@nuxtjs/sanity/dist/runtime/components/sanity-image")['default']
@@ -29,7 +30,8 @@ interface _GlobalComponents {
     'Body': typeof import("../node_modules/nuxt/dist/head/runtime/components")['Body']
     'NuxtIsland': typeof import("../node_modules/nuxt/dist/app/components/nuxt-island")['default']
     'NuxtRouteAnnouncer': IslandComponent<typeof import("../node_modules/nuxt/dist/app/components/server-placeholder")['default']>
-      'LazyHeader': typeof import("../components/Header.vue")['default']
+      'LazyFooter': typeof import("../components/Footer.vue")['default']
+    'LazyHeader': typeof import("../components/Header.vue")['default']
     'LazySanityContent': typeof import("../node_modules/@nuxtjs/sanity/dist/runtime/components/sanity-content")['default']
     'LazySanityFile': typeof import("../node_modules/@nuxtjs/sanity/dist/runtime/components/sanity-file")['default']
     'LazySanityImage': typeof import("../node_modules/@nuxtjs/sanity/dist/runtime/components/sanity-image")['default']
@@ -70,6 +72,7 @@ declare module 'vue' {
   export interface GlobalComponents extends _GlobalComponents { }
 }
 
+export const Footer: typeof import("../components/Footer.vue")['default']
 export const Header: typeof import("../components/Header.vue")['default']
 export const SanityContent: typeof import("../node_modules/@nuxtjs/sanity/dist/runtime/components/sanity-content")['default']
 export const SanityFile: typeof import("../node_modules/@nuxtjs/sanity/dist/runtime/components/sanity-file")['default']
@@ -97,6 +100,7 @@ export const Html: typeof import("../node_modules/nuxt/dist/head/runtime/compone
 export const Body: typeof import("../node_modules/nuxt/dist/head/runtime/components")['Body']
 export const NuxtIsland: typeof import("../node_modules/nuxt/dist/app/components/nuxt-island")['default']
 export const NuxtRouteAnnouncer: IslandComponent<typeof import("../node_modules/nuxt/dist/app/components/server-placeholder")['default']>
+export const LazyFooter: typeof import("../components/Footer.vue")['default']
 export const LazyHeader: typeof import("../components/Header.vue")['default']
 export const LazySanityContent: typeof import("../node_modules/@nuxtjs/sanity/dist/runtime/components/sanity-content")['default']
 export const LazySanityFile: typeof import("../node_modules/@nuxtjs/sanity/dist/runtime/components/sanity-file")['default']

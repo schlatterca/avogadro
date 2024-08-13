@@ -412,6 +412,19 @@ const handleClick = (event) => {
 };
 
 
+/* const snapContainer = ref(null)
+setTimeout(()=> {
+    if(snapContainer.value){
+        let container = snapContainer._value
+
+        container.addEventListener('wheel', function(e) {
+            if (e.deltaY !== 0) {
+                container.scrollLeft += e.deltaY;
+                e.preventDefault();
+            }
+        });
+    }
+}, 100); */
 
 /* const snapContainer = ref(null);
 onMounted(async () => {
