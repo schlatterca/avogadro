@@ -2,10 +2,10 @@
     <div :class="{'bg-white':onHomepage(), 'text-black':onHomepage(), 'bg-darkgrey':onIndex(), 'text-white':onIndex()}">
         <div id="footer" class="pt-[8em] mb-24">
             <div class="flex flex-col text-[2rem] ml-20% w-66% gap-0 leading-tight" id="footerColumn">
-                <a v-bind:href="'..#s_4'" :class="{'hasArrow':onProject()}"><span>PROJECTS</span></a>
-                <a href='../project-index' :class="{'hasArrow':onIndex()}"><span>INDEX</span></a>
-                <a href='../vision'><span>VISION</span></a>
-                <a href='../about'><span>ABOUT</span></a>
+                <a v-bind:href="'..#s_4'" class="relative w-fit"><span>PROJECTS</span></a>
+                <a href='../project-index' class="relative w-fit"><span>INDEX</span></a>
+                <a href='../vision' class="relative w-fit"><span>VISION</span></a>
+                <a href='../about' class="relative w-fit"><span>ABOUT</span></a>
             </div>
         </div>
         <div id="credits" class="p-10px w-screen flex justify-between">

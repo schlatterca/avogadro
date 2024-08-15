@@ -20,15 +20,15 @@
             <div id="leftArrow" class="arrow"></div>
             <div id="rightArrow" class="arrow"></div>
 
-            <div id='snapContainer' class="flex overflow-scroll snap-mandatory snap-x absolute left-0 top-0
+            <!-- snap-mandatory snap-x -->
+            <div id='snapContainer' class="flex overflow-scroll absolute left-0 top-0
             w-screen h-screen select-none" ref="snapContainer"
             @scroll.passive="onScroll"
             @mouseenter="handleMouseEnter"
             @mousemove="handleMouseMove" >
-            <!--snap-mandatory snap-x-->
 
                 <div class="overlay" id="overlay"></div>
-                <div id="empty" class="slide active pic snap-start w-screen h-screen shrink-0"></div>
+                <div id="empty" class="slide active pic w-screen h-screen shrink-0"></div>
 
                 <div id='planimetria' class="slide w-66% ml-33% grid grid-cols-2 pic snap-end h-screen shrink-0 bg-lightgrey">
                     <figure class="w-auto mx-20% bg-lightgrey mt-auto mb-auto">
@@ -306,26 +306,35 @@ function changeGifImg(mousePosition, width) {
         GIFs.getElementsByTagName('img')[0].src = store.myUrl_2;
     } */
     
-
     if(GIFs.length > 0){
         const originalImgSrc = GIFs[0].getElementsByTagName('img')[0].src;
+        //console.log(originalImgSrc)
         if(!store.myUrlSaved){
             store.myUrl_1 = originalImgSrc;
             store.myUrl_2 = GIFs[0].getElementsByTagName('img')[0].parentElement.getAttribute('alt_1');
             store.myUrlSaved = true;
         }
-        if((GIFs.length > 0)&&(mousePosition > (width / 2)&&(GIFs[0].classList.contains('changed')))) {
+        if((GIFs.length > 0)&&(GIFs[0].classList.contains('changed'))) {
+            GIFs[0].classList.remove('changed')
+            GIFs[0].getElementsByTagName('img')[0].src = store.myUrl_1;
+        } else if((GIFs.length > 0)&&(!GIFs[0].classList.contains('changed'))) {
+            GIFs[0].classList.add('changed')
+            GIFs[0].getElementsByTagName('img')[0].src = store.myUrl_2;
+        }
+        console.log(GIFs[0].classList.contains('changed'))
+        /* if((GIFs.length > 0)&&(mousePosition > (width / 2)&&(GIFs[0].classList.contains('changed')))) {
             GIFs[0].classList.remove('changed')
             GIFs[0].getElementsByTagName('img')[0].src = store.myUrl_1;
         } else if((GIFs.length > 0)&&(mousePosition <= (width / 2)&&(!GIFs[0].classList.contains('changed')))) {
             GIFs[0].classList.add('changed')
             GIFs[0].getElementsByTagName('img')[0].src = store.myUrl_2;
-        }
+        } */
     }
 }
 
 
-
+let intervalIsSetted = false;
+let interval;
 const handleMouseEnter = (event) => {
     handleMouseMove(event);
 };
@@ -350,9 +359,11 @@ const handleMouseMove = (event) => {
   if(document.querySelector('figure[alt_1]')){
   //if(originalImg){
     //console.log(originalImg, document.querySelector('figure[alt_1]'))
-    if(document.querySelector('figure[alt_1]').getBoundingClientRect().left > 0
+    if(!intervalIsSetted && document.querySelector('figure[alt_1]').getBoundingClientRect().left > 0
     && document.querySelector('figure[alt_1]').getBoundingClientRect().left < (width._value)){
-        changeGifImg(mouseX, width._value);
+        //changeGifImg(mouseX, width._value);
+        interval = setInterval(function() {changeGifImg(true, true)}, 2000);
+        intervalIsSetted = true;
     }
   }
 };
@@ -412,19 +423,58 @@ const handleClick = (event) => {
 };
 
 
-/* const snapContainer = ref(null)
-setTimeout(()=> {
-    if(snapContainer.value){
-        let container = snapContainer._value
+//VERTICAL SCROLL
+const snapContainer = ref(null);
+let scrollTimeout;
 
+setTimeout(() => {
+    if (snapContainer.value) {
+        let container = snapContainer._value;
+
+        // Horizontal scroll on vertical scroll
         container.addEventListener('wheel', function(e) {
             if (e.deltaY !== 0) {
                 container.scrollLeft += e.deltaY;
                 e.preventDefault();
             }
+
+            // Reset the timeout on every scroll
+            clearTimeout(scrollTimeout);
+
+            // Set a timeout to run after the user stops scrolling
+            scrollTimeout = setTimeout(() => {
+                snapToMostVisibleSlide(container);
+            }, 100); // Adjust the delay as needed
         });
     }
-}, 100); */
+}, 100);
+
+// Function to calculate the most visible slide and snap to the right margin
+function snapToMostVisibleSlide(container) {
+    const slides = container.querySelectorAll('.slide');
+    let mostVisibleSlide = null;
+    let maxVisibleArea = 0;
+
+    slides.forEach(slide => {
+        const rect = slide.getBoundingClientRect();
+        const visibleArea = Math.max(0, Math.min(rect.right, container.clientWidth) - Math.max(rect.left, 0));
+
+        if (visibleArea > maxVisibleArea) {
+            maxVisibleArea = visibleArea;
+            mostVisibleSlide = slide;
+        }
+    });
+
+    if (mostVisibleSlide) {
+        // Calculate the scroll position needed to align the right edge of the slide with the right edge of the container
+        const scrollPosition = mostVisibleSlide.offsetLeft - (container.clientWidth - mostVisibleSlide.offsetWidth);
+        container.scrollTo({
+            left: scrollPosition,
+            behavior: 'smooth'
+        });
+    }
+}
+
 
 /* const snapContainer = ref(null);
 onMounted(async () => {

@@ -21,7 +21,7 @@
 
                     <div id="leftArrow" class="arrow"></div>
                     <div id="rightArrow" class="arrow"></div>
-                    <div class="overlay bg-white" id="overlay_slide"></div>
+                    <!-- <div class="overlay bg-white" id="overlay_slide"></div> -->
 
                     <section id="s_2" ref="sectionTwo"
                     @mousemove="handleMouseMove" 
@@ -359,24 +359,24 @@ function idleScroll() {
         
         //replicate click
         const container = document.getElementById('s_2');
-        const overlay = document.getElementById('overlay_slide');
+        /* const overlay = document.getElementById('overlay_slide');
         if (overlay.classList.contains('show')) {
             return;
-        }
+        } */
         const slides = Array.from(container.children).filter(child => child.classList.contains('slide'));
         const currentIndex = slides.findIndex(slide => slide.getBoundingClientRect().left >= container.getBoundingClientRect().left - 10);
         let nextIndex;
         nextIndex = currentIndex < slides.length - 1 ? currentIndex + 1 : 0;
-        overlay.classList.add('show');
+        //overlay.classList.add('show');
         setTimeout(() => {
             if (currentIndex < slides.length - 1) {
                 slides[currentIndex + 1].scrollIntoView({ behavior: 'smooth', inline: 'start' });
             } else {
                 slides[0].scrollIntoView({ behavior: 'smooth', inline: 'start' });
             }
-            setTimeout(() => {
+            /* setTimeout(() => {
                 overlay.classList.remove('show');
-            }, 300);
+            }, 300); */
         }, 200);
 
     }, 4000);
@@ -432,11 +432,11 @@ const handleClick = (event) => {
     event.preventDefault();
 
     const container = event.currentTarget;
-    const overlay = document.getElementById('overlay_slide');
+    /* const overlay = document.getElementById('overlay_slide');
 
     if (overlay.classList.contains('show')) {
         return;
-    }
+    } */
 
     const mouseX = event.clientX - container.getBoundingClientRect().left;
     const containerWidth = container.offsetWidth;
@@ -451,25 +451,25 @@ const handleClick = (event) => {
         nextIndex = currentIndex < slides.length - 1 ? currentIndex + 1 : 0;
     }
 
-    overlay.classList.add('show');
+    //overlay.classList.add('show');
     setTimeout(() => {
         if (mouseX < containerWidth / 2) {
             if (currentIndex > 0) {
-                slides[currentIndex - 1].scrollIntoView({ behavior: 'instant', inline: 'start' });
+                slides[currentIndex - 1].scrollIntoView({ behavior: 'smooth', inline: 'start' });
             } else {
-                slides[slides.length - 1].scrollIntoView({ behavior: 'instant', inline: 'start' });
+                slides[slides.length - 1].scrollIntoView({ behavior: 'smooth', inline: 'start' });
             }
         } else {
             if (currentIndex < slides.length - 1) {
-                slides[currentIndex + 1].scrollIntoView({ behavior: 'instant', inline: 'start' });
+                slides[currentIndex + 1].scrollIntoView({ behavior: 'smooth', inline: 'start' });
             } else {
-                slides[0].scrollIntoView({ behavior: 'instant', inline: 'start' });
+                slides[0].scrollIntoView({ behavior: 'smooth', inline: 'start' });
             }
         }
 
-        setTimeout(() => {
+        /* setTimeout(() => {
             overlay.classList.remove('show');
-        }, 300);
+        }, 300); */
 
     }, 200);
 };

@@ -32,7 +32,7 @@
                         <div v-if="slide.description"
                         class="text absolute bottom-0 left-0 w-full z-10 text-white
                         p-20px pr-66% pointer-events-none
-                        leading-tight text-base blur-[20px] transition-[filter] duration-[2000ms]">
+                        leading-tight text-base blur-[20px] transition-[filter] duration-[1200ms]">
                             <p class="text-xl mb-8" v-html="slide.title"></p>
                             <p class="DM-Mono text-base" v-html="slide.description"></p>
                         </div>
