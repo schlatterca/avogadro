@@ -31,7 +31,8 @@ export default {
         'darkgrey': 'rgb(34, 34, 34)',
         'darkgreyHover': 'rgb(55, 55, 55)',
         'grey': 'rgb(195, 194, 190)',
-        'lightgrey': 'rgb(234, 234, 234)',
+        'lightgrey': 'rgb(234, 234, 237)',
+        'softwhite': 'rgb(250, 251, 245)',
       },
       fontSize: {
         s: '0.8rem',

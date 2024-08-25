@@ -10,7 +10,7 @@
             grid gap-6px auto-rows-1em grid-cols-24 pt-20vh text-white">
 
                 <div id="mainImg" class="relative h-full w-full col-start-1 col-span-7">
-                    <template v-for="project in myData" :key="project._rev">
+                    <template v-for="project in sortedProjects" :key="project._rev">
                         <figure class="absolute w-full h-auto"
                         v-show="hoveredProject === project._rev">
                             <img v-if="project.cover_image.asset._ref"
@@ -22,7 +22,7 @@
 
                 <div id="projectIndexText" class="relative h-[80dvh] w-full DM-Mono leading-tight
                 flex flex-col leading-normal col-start-9 col-span-16 overflow-scroll pb-20px">
-                    <template v-for="(project, index) in myData" :key="project._rev">
+                    <template v-for="(project, index) in sortedProjects" :key="project._rev">
                         <div class="inline-grid grid-cols-10 gap-6px items-end group
                         w-full border-white border-b-.6 py-2 cursor-pointer hover:bg-darkgreyHover"
                         :class="{ 'border-t-.6': index === 0 }"
@@ -59,6 +59,19 @@ const imageBuilder = imageUrlBuilder(sanity);
 
 const loading = ref(true);
 const myData = ref([]);
+
+const sortedProjects = computed(() => {
+  // Check if myData is defined and not empty
+  if (!myData.value || myData.value.length === 0) return [];
+
+  // Sort projects by the creation date in descending order
+  return myData.value.slice().sort((a, b) => {
+    const dateA = new Date(a._createdAt);
+    const dateB = new Date(b._createdAt);
+    return dateA - dateB;  // For descending order
+  });
+});
+console.log(sortedProjects)
 
 const fetchData = async () => {
     loading.value = true;

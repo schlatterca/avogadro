@@ -20,15 +20,21 @@
             <div id="leftArrow" class="arrow"></div>
             <div id="rightArrow" class="arrow"></div>
 
-            <!-- snap-mandatory snap-x -->
-            <div id='snapContainer' class="flex overflow-scroll absolute left-0 top-0
-            w-screen h-screen select-none" ref="snapContainer"
-            @scroll.passive="onScroll"
+            <!-- @scroll.passive="onScroll"
             @mouseenter="handleMouseEnter"
-            @mousemove="handleMouseMove" >
+            @mousemove="handleMouseMove" -->
+            <div id='snapContainer' class="flex overflow-scroll absolute left-0 top-0 snap-mandatory snap-x
+            w-screen h-screen select-none" ref="snapContainer"
+            
+            @scroll.passive="onScroll"
+            @mousemove="handleMouseMove" 
+            @mouseleave="handleMouseLeave"
+            @mouseenter="handleMouseEnter"
+            @click="handleClick"
+            >
 
                 <div class="overlay" id="overlay"></div>
-                <div id="empty" class="slide active pic w-screen h-screen shrink-0"></div>
+                <div id="empty" class="slide active pic snap-start w-screen h-screen shrink-0"></div>
 
                 <div id='planimetria' class="slide w-66% ml-33% grid grid-cols-2 pic snap-end h-screen shrink-0 bg-lightgrey">
                     <figure class="w-auto mx-20% bg-lightgrey mt-auto mb-auto">
@@ -46,7 +52,7 @@
                 </div>
 
                 <div v-for="slide in myImages.slides" :key="slide._key"
-                class="slide pic snap-start w-screen h-screen shrink-0 flex gap-20px items-end p-20px bg-lightgrey"
+                class="slide pic snap-start w-screen h-screen shrink-0 flex gap-20px items-end p-20px bg-softwhite"
                 :class="[`place-content-${isContentCenter(slide.justify)}`],
                     [`fixed-height-${isContentHeight(slide.fixed_height)}`]">
                     
@@ -79,6 +85,7 @@ import sanity from "../sanity/sanity.js";
 import imageUrlBuilder from "@sanity/image-url";
 import { useRoute } from 'vue-router';
 import { useMyStore } from '../store/store.js';
+import $ from 'jquery';
 
 const imageBuilder = imageUrlBuilder(sanity);
 const route = useRoute();
@@ -343,7 +350,7 @@ const handleMouseMove = (event) => {
   const mouseX = event.clientX;
   const mouseY = event.clientY;
 
-  /* document.documentElement.style.setProperty('--mouse-x', `${mouseX}px`);
+  document.documentElement.style.setProperty('--mouse-x', `${mouseX}px`);
   document.documentElement.style.setProperty('--mouse-y', `${mouseY}px`);
 
   const containerWidth = container.offsetWidth;
@@ -353,7 +360,7 @@ const handleMouseMove = (event) => {
   } else {
     document.querySelector('#leftArrow').classList.remove('visible');
     document.querySelector('#rightArrow').classList.add('visible');
-  } */
+  }
 
   const { width, height } = useWindowSize();
   if(document.querySelector('figure[alt_1]')){
@@ -368,24 +375,19 @@ const handleMouseMove = (event) => {
   }
 };
 
-/* const handleMouseLeave = () => {
+const handleMouseLeave = () => {
     document.querySelector('#leftArrow').classList.remove('visible');
     document.querySelector('#rightArrow').classList.remove('visible');
-}; */
+};
 
 
 
 
+//VANILLA JS
 const handleClick = (event) => {
     event.preventDefault();
 
     const container = event.currentTarget;
-    const overlay = document.getElementById('overlay');
-
-    if (overlay.classList.contains('show')) {
-        return;
-    }
-
     const mouseX = event.clientX - container.getBoundingClientRect().left;
     const containerWidth = container.offsetWidth;
 
@@ -399,7 +401,6 @@ const handleClick = (event) => {
         nextIndex = currentIndex < slides.length - 1 ? currentIndex + 1 : 0;
     }
 
-    overlay.classList.add('show');
     setTimeout(() => {
         if (mouseX < containerWidth / 2) {
             if (currentIndex > 0) {
@@ -415,19 +416,62 @@ const handleClick = (event) => {
             }
         }
 
-        setTimeout(() => {
-            overlay.classList.remove('show');
-        }, 200);
-
-    }, 200);
+    }, 100);
 };
+//JQUERY
+/* const handleClick = (event) => {
+    event.preventDefault();
+
+    const $container = $(event.currentTarget);
+    const mouseX = event.clientX - $container.offset().left;
+    const containerWidth = $container.width();
+    const viewportWidth = $(window).width();
+    const containerScrollLeft = $container.scrollLeft();
+    const containerScrollWidth = $container[0].scrollWidth;
+    const $slides = $container.children('.slide');
+
+    // Check if the scrolling animation is already in progress
+    if ($container.is(':animated')) return;
+
+    // Determine the direction and calculate the new scroll position
+    let newScrollLeft;
+    if (mouseX < containerWidth / 2) {
+        // Scroll left
+        if (containerScrollLeft <= 0) {
+            // If at the start, jump to the end
+            newScrollLeft = containerScrollWidth - containerWidth;
+        } else {
+            // Otherwise, scroll by viewport width
+            newScrollLeft = Math.max(containerScrollLeft - viewportWidth, 0);
+        }
+    } else {
+        // Scroll right
+        if (containerScrollLeft + containerWidth >= containerScrollWidth) {
+            // If at the end, jump to the start
+            newScrollLeft = 0;
+        } else {
+            // Otherwise, scroll by viewport width
+            newScrollLeft = Math.min(containerScrollLeft + viewportWidth, containerScrollWidth - containerWidth);
+        }
+    }
+
+    // Remove the scroll snap class
+    $container.removeClass('snap-mandatory');
+
+    // Animate scrolling
+    $container.animate({ scrollLeft: newScrollLeft }, 500, function() {
+        // Add the scroll snap class back after the animation completes
+        $container.addClass('snap-mandatory');
+    });
+}; */
+
 
 
 //VERTICAL SCROLL
 const snapContainer = ref(null);
 let scrollTimeout;
 
-setTimeout(() => {
+/* setTimeout(() => {
     if (snapContainer.value) {
         let container = snapContainer._value;
 
@@ -447,7 +491,7 @@ setTimeout(() => {
             }, 100); // Adjust the delay as needed
         });
     }
-}, 100);
+}, 100); */
 
 // Function to calculate the most visible slide and snap to the right margin
 function snapToMostVisibleSlide(container) {
