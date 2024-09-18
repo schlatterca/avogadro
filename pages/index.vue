@@ -86,7 +86,7 @@
                         <div class="projectGrid relative h-screen w-screen">
                             <template v-for="project in myData" :key="project._key">
                                 <a v-bind:href="'/progetti/'+ project.slug.current"
-                                class="flex"
+                                class="flex cursor-none"
                                 :style="project.gridSpan ? {
                                     gridColumn: project.gridSpan.columnStart + ' / span ' + project.gridSpan.columnSpan,
                                     gridRow: project.gridSpan.rowStart + ' / span ' + project.gridSpan.rowSpan
