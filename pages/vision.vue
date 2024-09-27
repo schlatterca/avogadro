@@ -151,9 +151,9 @@ onMounted(() => {
             let newBlur = maxBlur - Math.max(0, (accumulatedDeltaY * blurStep) - 60);
             newBlur = Math.max(minBlur, Math.min(maxBlur, newBlur));
 
-            snapContainer.value.querySelector('img:not(.noblur)').classList.add('blur-0');
-            snapContainer.value.querySelector('.text').classList.add('blur-0');
-            snapContainer.value.querySelector('.text').classList.add('opacity-100');
+            snapContainer.value.querySelector('img:not(.noblur)').classList.replace('blur-[20px]', 'blur-0');
+            snapContainer.value.querySelector('.text').classList.replace('blur-[20px]', 'blur-0');
+            snapContainer.value.querySelector('.text').classList.replace('opacity-0', 'opacity-100');
             //mySlideImg.classList.add('isUnblurred');
         }, 400);
 
@@ -170,8 +170,8 @@ function debounce(func, delay) {
   let timeout;
   return function() {
     //document.querySelectorAll('img:not(.noblur)').forEach((el) => {el.classList.remove('blur-0'); el.classList.add('blur-[20px]')});
-    document.querySelectorAll('.text').forEach((el) => {el.classList.remove('blur-0'); el.classList.add('blur-[20px]')});
-    document.querySelectorAll('.text').forEach((el) => {el.classList.remove('opacity-100'); el.classList.add('opacity-0')});
+    document.querySelectorAll('.text').forEach((el) => {el.classList.replace('blur-0', 'blur-[20px]')});
+    document.querySelectorAll('.text').forEach((el) => {el.classList.replace('opacity-100', 'opacity-0')});
 
     const context = this;
     const args = arguments;
@@ -203,9 +203,9 @@ function onScroll(event) {
         // Check if the slide is fully or partially in view
         if (slideRect.top >= containerRect.top && slideRect.bottom <= containerRect.bottom) {
             //console.log(slide)
-            slide.querySelector('img:not(.noblur)').classList.add('blur-0')
-            slide.querySelector('.text').classList.add('blur-0')
-            slide.querySelector('.text').classList.add('opacity-100')
+            slide.querySelector('img:not(.noblur)').classList.replace('blur-[20px]', 'blur-0')
+            slide.querySelector('.text').classList.replace('blur-[20px]', 'blur-0')
+            slide.querySelector('.text').classList.replace('opacity-0', 'opacity-100')
         }
     });
 
