@@ -19,7 +19,7 @@
 
                 <div id='snapContainer' class="flex flex-col overflow-scroll snap-mandatory snap-y absolute left-0 top-0
                 w-screen h-screen select-none" ref="snapContainer"
-                @wheel="onScroll">
+                @wheel="debouncedScroll">
                 <!--snap-mandatory snap-x-->
 
                     <!-- <div class="overlay" id="overlay"></div> -->
@@ -27,22 +27,28 @@
                     <div v-for="slide in myData.slides"
                     :key="slide._key"
                     class="slide pic relative snap-start w-screen h-screen shrink-0 flex gap-20px items-end p-0
-                    overflow-hidden bg-lightgrey">
+                    overflow-hidden snap-always"><!-- bg-lightgrey -->
 
                         <div v-if="slide.description"
-                        class="text absolute bottom-0 left-0 w-full z-10 text-white
+                        class="text fixed m-0 text-white w-[30vw] left-[calc(calc(23vw-4px))]
+                        top-[50%] text-m DM-Mono z-50
+                        opacity-0 blur-[0] transition-all duration-[1600ms]">
+                        <!-- text absolute bottom-0 left-0 w-full z-10 text-white
                         p-20px pr-66% pointer-events-none
-                        leading-tight text-base blur-[20px] transition-[filter] duration-[1200ms]">
+                        leading-tight text-m blur-[20px] transition-[filter] duration-[1200ms] -->
                             <p class="text-xl mb-8" v-html="slide.title"></p>
-                            <p class="DM-Mono text-base" v-html="slide.description"></p>
+                            <p class="DM-Mono text-m" v-html="slide.description"></p>
                         </div>
+
+                        <div class="absolute bottom-0 left-0 w-full h-full z-[5] pointer-events-none"
+                        style="background: linear-gradient(to top, rgba(0,0,0,0.4) 30%, rgba(255,255,255,0) 60%)"></div>
                         
                         <figure class="pic w-full h-full">
                             <img v-if="slide.image"
                             :src="imageUrlFor(slide.image.asset)"
-                            class="pic vision object-cover transition-[filter] duration-[1200ms]
+                            class="pic vision object-cover transition-[filter] duration-[2000ms]
                             transform scale-[1.2]"
-                            :class="{ 'blur-[20px]': slide.title }" />
+                            :class="{ 'blur-[20px]': slide.title, 'noblur': !slide.description }"/>
                         </figure>
                     </div>
 
@@ -67,6 +73,7 @@ const slug = route.params.slug;
 
 const loading = ref(true);
 const myData = ref([]);
+const snapContainer = ref(null)
 
 useHead({
     title: "Cecilia Avogadro",
@@ -109,8 +116,8 @@ const fetchData = () => {
     loading.value = true;
     sanity.fetch(otherQuery).then(
         (data) => {
-            console.log(otherQuery)
-            console.log('data: ', data[0]);
+            //console.log(otherQuery)
+            //console.log('data: ', data[0]);
             loading.value = false;
             myData.value = data[0];
 
@@ -124,6 +131,34 @@ const fetchData = () => {
 };
 onMounted(() => {
     fetchData();
+
+    //unblur first slide
+    if(snapContainer){
+        setTimeout(() => {
+            const mySlideImg = snapContainer.value.querySelector('img');
+            let imgBlur = mySlideImg.classList.value.split(' ').find(myClass => myClass.includes('blur-')).split('[')[1].split('px')[0];
+            //let imgBlur = mySlideImg.classList.filter.split(/blur\(|px\)/)[1];
+            //console.log(imgBlur)
+            /* if(imgBlur <= 0){
+                setTimeout(() => {
+                    mySlideImg.classList.add('isUnblurred')
+                }, 2000)
+            } */
+            const maxBlur = 20;
+            const minBlur = 0;
+            const blurStep = 0.06; // Adjust blur per unit of deltaY
+            accumulatedDeltaY += Math.abs(0);
+            let newBlur = maxBlur - Math.max(0, (accumulatedDeltaY * blurStep) - 60);
+            newBlur = Math.max(minBlur, Math.min(maxBlur, newBlur));
+
+            snapContainer.value.querySelector('img:not(.noblur)').classList.add('blur-0');
+            snapContainer.value.querySelector('.text').classList.add('blur-0');
+            snapContainer.value.querySelector('.text').classList.add('opacity-100');
+            //mySlideImg.classList.add('isUnblurred');
+        }, 400);
+
+    }
+
 });
 /* const query = groq`*[_type == "vision"]`;
 const { data } = useSanityQuery(query);
@@ -131,17 +166,56 @@ console.log("data:", data); */
 
 
 
+function debounce(func, delay) {
+  let timeout;
+  return function() {
+    //document.querySelectorAll('img:not(.noblur)').forEach((el) => {el.classList.remove('blur-0'); el.classList.add('blur-[20px]')});
+    document.querySelectorAll('.text').forEach((el) => {el.classList.remove('blur-0'); el.classList.add('blur-[20px]')});
+    document.querySelectorAll('.text').forEach((el) => {el.classList.remove('opacity-100'); el.classList.add('opacity-0')});
+
+    const context = this;
+    const args = arguments;
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(context, args), delay);
+  };
+}
+
 //if contains gifs
 const store = useMyStore();
 
 let accumulatedDeltaY = 0; // Track accumulated scroll amount
-
+let mySlides = [];
+const debouncedScroll = debounce(onScroll, 200);
 function onScroll(event) {
-    if(!event.target.parentElement.parentElement.querySelector('.text')){
-        return
+
+    if(mySlides.length < 1){
+        document.querySelectorAll('.slide').forEach((slide) => {
+            mySlides.push(slide);
+        });
     }
-    if(!event.target.classList.contains('isUnblurred')){
+    console.log(event)
+    
+    mySlides.forEach((slide, index) => {
+
+        const slideRect = slide.getBoundingClientRect();
+        const containerRect = snapContainer.value.getBoundingClientRect();
+
+        // Check if the slide is fully or partially in view
+        if (slideRect.top >= containerRect.top && slideRect.bottom <= containerRect.bottom) {
+            //console.log(slide)
+            slide.querySelector('img:not(.noblur)').classList.add('blur-0')
+            slide.querySelector('.text').classList.add('blur-0')
+            slide.querySelector('.text').classList.add('opacity-100')
+        }
+    });
+
+
+    /* if(!event.target.parentElement.parentElement.querySelector('.text')){
+        return
+    } */
+    /* if(!event.target.classList.contains('isUnblurred')){
         
+        console.log('was blurred')
         const mySlideImg = event.target;
         let imgBlur = mySlideImg.style.filter.split(/blur\(|px\)/)[1];
 
@@ -160,27 +234,30 @@ function onScroll(event) {
         newBlur = Math.max(minBlur, Math.min(maxBlur, newBlur));
 
         mySlideImg.style.filter = `blur(${newBlur}px)`;
-        mySlideImg.parentElement.parentElement.querySelector('.text').style.filter = `blur(${newBlur}px)`;
+        //mySlideImg.parentElement.parentElement.querySelector('.text').style.filter = `blur(${newBlur}px)`;
 
         return
-    } else {
+    } else { */
 
-        const container = event.currentTarget;
-        const slides = Array.from(container.querySelectorAll('.slide'));
-        
-        let targetIndex = slides.find(slide => slide.querySelector('img') && !slide.querySelector('img').classList.contains('isUnblurred'));
-        let slidesWithTextStillBlurred = slides.find(slide => slide.querySelector('div.text') && !slide.querySelector('img').classList.contains('isUnblurred'));
-
-        //if there are still slides with text
-        if(slidesWithTextStillBlurred){
-            targetIndex.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start',
-            });
-        }
-
-        return
+    /* const container = event.currentTarget;
+    const slides = Array.from(container.querySelectorAll('.slide'));
+    let targetIndex = slides.find(slide => !slide.querySelector('img').classList.contains('isUnblurred'));
+    if(targetIndex){
+        targetIndex.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start',
+        });
     }
+
+    console.log(targetIndex.querySelector('img'))
+    setTimeout(() => {
+        targetIndex.querySelector('img').style.filter = `blur(0px)`;
+        targetIndex.querySelector('img').classList.add('isUnblurred');
+    }, 1000);
+
+    return */
+    
+    /* } */
 
 }
 

@@ -33,7 +33,7 @@
                                 <img :src="urlFor(slide.image.asset._ref).url()" alt="Carousel Image" />
                             </figure>
                         </template> -->
-                        <template v-for="slide in myCarousel[0].slides" :key="slide._key">
+                        <template v-if="myCarousel[0]" v-for="slide in myCarousel[0].slides" :key="slide._key">
 
                             <figure v-if="slide.image" class="slide">
                                 <img :src="imageBuilder.image(slide.image.asset).url()" alt="Carousel Image" />
@@ -93,7 +93,7 @@
                                 } : {}">
                                     <!-- <p v-html="project.title"></p> -->
                                     <figure
-                                    class="group">
+                                    class="w-full group">
                                         <p class="projectName opacity-0 group-hover:opacity-100 transition-opacity duration-500
                                         fixed pointer-events-none cursor-follower">
                                             <span class="circle"></span>
@@ -282,8 +282,6 @@ onMounted(async () => {
         scrollToHash(), 600
     })
 
-
-
     const followers = document.querySelectorAll('.cursor-follower');
     const updateFollowerPositions = (event) => {
         const x = event.clientX;
@@ -300,6 +298,14 @@ onMounted(async () => {
     /* onBeforeUnmount(() => {
         document.removeEventListener('mousemove', updateFollowerPositions);
     }); */
+
+    window.addEventListener('keydown', (event) => {
+        if (event.key === 'ArrowLeft') {
+            handleClick('left');
+        } else if (event.key === 'ArrowRight') {
+            handleClick('right');
+        }
+    });
 });
 </script>
 
@@ -428,24 +434,35 @@ const handleMouseEnter = (event) => {
 
 
 
-const handleClick = (event) => {
-    event.preventDefault();
 
-    const container = event.currentTarget;
+
+
+const handleClick = (event) => {
+
     /* const overlay = document.getElementById('overlay_slide');
 
     if (overlay.classList.contains('show')) {
         return;
     } */
 
-    const mouseX = event.clientX - container.getBoundingClientRect().left;
-    const containerWidth = container.offsetWidth;
+    let mouseX
+    let container
+    let containerWidth
+
+    if(event != 'left' && event != 'right'){
+        event.preventDefault();
+        container = event.currentTarget;
+        mouseX = event.clientX - container.getBoundingClientRect().left;
+        containerWidth = container.offsetWidth;
+    } else {
+        container = document.getElementById('s_2');
+    }
 
     const slides = Array.from(container.children).filter(child => child.classList.contains('slide'));
     const currentIndex = slides.findIndex(slide => slide.getBoundingClientRect().left >= container.getBoundingClientRect().left - 10);
 
     let nextIndex;
-    if (mouseX < containerWidth / 2) {
+    if (mouseX < containerWidth / 2 || event=='left') {
         nextIndex = currentIndex > 0 ? currentIndex - 1 : slides.length - 1;
     } else {
         nextIndex = currentIndex < slides.length - 1 ? currentIndex + 1 : 0;
@@ -453,7 +470,7 @@ const handleClick = (event) => {
 
     //overlay.classList.add('show');
     setTimeout(() => {
-        if (mouseX < containerWidth / 2) {
+        if (mouseX < containerWidth / 2 || event=='left') {
             if (currentIndex > 0) {
                 slides[currentIndex - 1].scrollIntoView({ behavior: 'smooth', inline: 'start' });
             } else {

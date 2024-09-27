@@ -24,7 +24,9 @@
             @mouseenter="handleMouseEnter"
             @mousemove="handleMouseMove" -->
             <div id='snapContainer' class="flex overflow-scroll absolute left-0 top-0 snap-mandatory snap-x
-            w-screen h-screen select-none" ref="snapContainer"
+            w-screen h-screen select-none"
+            ref="snapContainer"
+            tabindex="0"
             
             @scroll.passive="onScroll"
             @mousemove="handleMouseMove" 
@@ -235,6 +237,11 @@ const fetchData = () => {
 };
 onMounted(() => {
     fetchData();
+    console.log(snapContainer)
+    setTimeout(() => {
+        console.log('hello')
+        snapContainer.value.focus();
+    }, 100);
 });
 const query = groq`*[_type == "project" && slug.current == "${slug}"]`;
 const { data } = useSanityQuery(query);
@@ -250,6 +257,8 @@ const { data } = useSanityQuery(query);
 const store = useMyStore();
 
 function onScroll(event) {
+    //handleMouseMove();
+
     const { width, height } = useWindowSize();
     let firstSlide = document.getElementById('planimetria')
     
