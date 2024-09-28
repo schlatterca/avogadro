@@ -191,7 +191,7 @@ const changeBackgroundColor = () => {
 
 const setupVisibilityToggle = () => {
     const observer = new IntersectionObserver(entries => {
-        if(isMobile){return}
+        if(isMobile.value){return}
         entries.forEach(entry => {
             const sectionId = entry.target.getAttribute('id');
             const spansRow = document.querySelector('#spansRow');
@@ -432,6 +432,7 @@ const handleMouseEnter = (event) => {
 const s_3 = ref(null);
 const mainHome = ref(null);
 function checkVisibilityMobile() {
+    if(!isMobile.value){return}
     console.log(store.headerBlack)
     if(s_3.value.getBoundingClientRect().top < window.innerHeight){
         store.headerBlack = true;
