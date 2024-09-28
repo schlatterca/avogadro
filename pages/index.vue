@@ -23,7 +23,7 @@
                     <div v-if="!isMobile" id="rightArrow" class="arrow"></div>
                     <!-- <div class="overlay bg-white" id="overlay_slide"></div> -->
 
-                    <section id="s_2" ref="sectionTwo"
+                    <section id="s_2" ref="sectionTwo" class="snap-always"
                     @mousemove="handleMouseMove" 
                     @mouseleave="handleMouseLeave"
                     @mouseenter="handleMouseEnter"

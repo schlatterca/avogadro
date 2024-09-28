@@ -417,6 +417,7 @@ const handleMouseMove = (event) => {
         //console.log(originalImg, document.querySelector('figure[alt_1]'))
         if(!intervalIsSetted && document.querySelector('figure[alt_1]').getBoundingClientRect().left > 0
         && document.querySelector('figure[alt_1]').getBoundingClientRect().left < (width._value)){
+            console.log('ok')
             //changeGifImg(mouseX, width._value);
             interval = setInterval(function() {changeGifImg(true, true)}, 2000);
             intervalIsSetted = true;
