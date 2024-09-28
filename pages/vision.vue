@@ -19,7 +19,7 @@
 
                 <div id='snapContainer' class="flex flex-col overflow-scroll snap-mandatory snap-y absolute left-0 top-0
                 w-screen h-[100dvh] select-none" ref="snapContainer"
-                @wheel="onScroll">
+                @scroll.passive="onScroll">
                 <!--snap-mandatory snap-x @wheel="debouncedScroll"-->
 
                     <!-- <div class="overlay" id="overlay"></div> -->

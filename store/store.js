@@ -9,5 +9,6 @@ export const useMyStore = defineStore('myStore', {
     myUrlSaved2: false,
     isMobile: ref(false),
     menuIsOpen: ref(false),
+    headerBlack: false,
   })
 });

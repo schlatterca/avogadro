@@ -8,7 +8,7 @@
                 <a href='../about' class="relative w-fit"><span>ABOUT</span></a>
             </div>
         </div>
-        <div id="credits" class="flex justify-between
+        <div id="credits" class="hidden md:flex justify-between
         w-[calc(100vw-40px)] md:w-screen p-0 md:p-10px mt-16 md:mt-0">
             <p>©2024</p>
             <div class="flex w-[70vw] justify-end

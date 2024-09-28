@@ -15,7 +15,9 @@
             </div>
             <div v-else>
 
-                <main id="mainHome">
+                <main id="mainHome"
+                @scroll.passive="checkVisibilityMobile"
+                ref="mainHome">
                     <section id="s_1">
                     </section>
 
@@ -52,7 +54,7 @@
                         </figure> -->
                     </section>
 
-                    <section id="s_3">
+                    <section id="s_3" ref="s_3">
                         <p>Trasformare uno spazio in un luogo<br>
                         di senso che faccia star bene chi<br>
                         ci trascorre del tempo è per me<br>
@@ -189,10 +191,10 @@ const changeBackgroundColor = () => {
 
 const setupVisibilityToggle = () => {
     const observer = new IntersectionObserver(entries => {
+        if(isMobile){return}
         entries.forEach(entry => {
             const sectionId = entry.target.getAttribute('id');
             const spansRow = document.querySelector('#spansRow');
-            const spansRowMobile = document.querySelector('#spansRowMobile');
             const spans = document.querySelectorAll('#head a.first');
             const spansMenu = document.querySelectorAll('#head a.menu');
             const spansMenuMobile = document.querySelector('#head #spansRowMobile p.menu');
@@ -206,15 +208,11 @@ const setupVisibilityToggle = () => {
                 }
 
                 if (entry.target.id == "s_4") {
-                    if(!isMobile.value){
-                        spansRow.classList.add('visible');
-                        spansMenu.forEach(span => {
-                            span.classList.add('visible');
-                        });
-                    } else if(isMobile.value){
-                        spansRowMobile.classList.add('visible');
-                        spansMenuMobile.classList.add('visible');
-                    }
+                    spansRow.classList.add('visible');
+                    spansMenu.forEach(span => {
+                        span.classList.add('visible');
+                    });
+
                     document.querySelector('#head p.arch').classList.add('invisible');
                     myMains[0].classList.add('small');
                     myMains[1].classList.add('small');
@@ -222,15 +220,11 @@ const setupVisibilityToggle = () => {
                     document.querySelector('#head a.blankSpace').classList.add('invisible');
                     document.querySelector('#head a.first').classList.add('invisible');
                 } else {
-                    if(!isMobile.value){
-                        spansRow.classList.remove('visible');
-                        spansMenu.forEach(span => {
-                            span.classList.remove('visible');
-                        });
-                    } else if(isMobile.value){
-                        spansRowMobile.classList.remove('visible');
-                        spansMenuMobile.classList.remove('visible');
-                    }
+                    spansRow.classList.remove('visible');
+                    spansMenu.forEach(span => {
+                        span.classList.remove('visible');
+                    });
+                    
                     document.querySelector('#head p.arch').classList.remove('invisible');
                     myMains[0].classList.remove('small');
                     myMains[1].classList.remove('small');
@@ -432,6 +426,19 @@ const handleMouseEnter = (event) => {
         idleScroll()
     }, 4000);
 };
+
+
+
+const s_3 = ref(null);
+const mainHome = ref(null);
+function checkVisibilityMobile() {
+    console.log(store.headerBlack)
+    if(s_3.value.getBoundingClientRect().top < window.innerHeight){
+        store.headerBlack = true;
+    } else {
+        store.headerBlack = false;
+    }
+}
 </script>
 
 
