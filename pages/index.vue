@@ -240,6 +240,9 @@ const setupVisibilityToggle = () => {
                 }
 
                 if (entry.target.id == "s_4") {
+                    spans.forEach(span => {
+                        span.classList.add('!hidden');
+                    });
                     document.getElementById("head").style.color = 'white';
                     document.getElementById("head").style.mixBlendMode = 'difference';
                     document.getElementById("head").classList.add('s4');
@@ -258,6 +261,7 @@ const setupVisibilityToggle = () => {
                     document.getElementById("head").style.color = 'black';
                     document.getElementById("head").style.mixBlendMode = 'normal';
                     spans.forEach(span => {
+                        span.classList.remove('!hidden');
                         span.style.opacity = '0';
                         span.style.pointerEvents = 'none';
                     });
