@@ -30,9 +30,13 @@
                     overflow-hidden snap-always"><!-- bg-lightgrey -->
 
                         <div v-if="slide.description"
-                        class="text fixed m-0 text-white w-[30vw] left-[calc(calc(23vw-4px))]
-                        top-[50%] text-m DM-Mono z-50
-                        opacity-0 blur-[0] transition-all duration-[1600ms]">
+                        class="text fixed m-0 text-white
+                        text-m DM-Mono z-50
+                        opacity-0 blur-[0] transition-all duration-[1600ms]
+                        left-20px md:left-[calc(calc(23vw-4px))]
+                        top-[unset] md:top-[50%]
+                        bottom-20px md:bottom-[unset]
+                        w-auto md:w-[30vw] max-w-[80vw] md:max-w-[unset]">
                         <!-- text absolute bottom-0 left-0 w-full z-10 text-white
                         p-20px pr-66% pointer-events-none
                         leading-tight text-m blur-[20px] transition-[filter] duration-[1200ms] -->

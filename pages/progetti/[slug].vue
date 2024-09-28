@@ -17,14 +17,15 @@
                 />
             </figure>
         
-            <div id="leftArrow" class="arrow"></div>
-            <div id="rightArrow" class="arrow"></div>
+            <div v-if="!isMobile" id="leftArrow" class="arrow"></div>
+            <div v-if="!isMobile" id="rightArrow" class="arrow"></div>
 
             <!-- @scroll.passive="onScroll"
             @mouseenter="handleMouseEnter"
             @mousemove="handleMouseMove" -->
             <div id='snapContainer' class="flex overflow-scroll absolute left-0 top-0 snap-mandatory snap-x
-            w-screen h-screen select-none"
+            w-screen h-screen select-none
+            flex-col md:flex-row snap-y md:snap-x"
             ref="snapContainer"
             tabindex="0"
             
@@ -36,16 +37,22 @@
             >
 
                 <div class="overlay" id="overlay"></div>
-                <div id="empty" class="slide active pic snap-start w-screen h-screen shrink-0"></div>
+                <div id="empty" class="slide active pic snap-start w-screen shrink-0
+                h-[100dvh] md:h-screen"></div>
 
-                <div id='planimetria' class="slide w-66% ml-33% grid grid-cols-2 pic snap-end h-screen shrink-0 bg-lightgrey">
-                    <figure class="w-auto mx-20% bg-lightgrey mt-auto mb-auto">
+                <div id='planimetria' class="slide relative grid-cols-2 pic snap-end shrink-0 bg-lightgrey
+                w-screen md:w-66% ml-0 md:ml-33% flex md:grid flex-col h-[100dvh] md:h-screen
+                snap-always">
+                    <figure class="w-auto mx-20% bg-lightgrey mb-auto
+                    h-[50dvh] md:h-auto mt-[10dvh] md:mt-auto">
                         <img v-if="myData.planimetria"
                         :src="imageUrlFor(myData.planimetria)"
                         class="pic h-full m-auto object-contain mix-blend-multiply
                         !w-auto !max-h-[80dvh]"/>
                     </figure>
-                    <div class="m-auto w-[20rem] mx-auto DM-Mono leading-tight">
+                    <div class="relative DM-Mono leading-tight
+                    w-auto md:w-[20rem] max-w-[80vw] md:max-w-[unset]
+                    ml-20px mb-20px md:m-auto md:mx-auto h-[40dvh] md:h-auto content-end md:content-auto">
                         <p class="text-base uppercase" v-html="myData.title" v-if="myData.title"></p>
                         <p class="text-s mt-4" v-html="myData.citta" v-if="myData.citta"></p>
                         <p class="text-s lg:text-base mt-8" v-html="myData.description" v-if="myData.description"></p>
@@ -53,7 +60,8 @@
                     </div>
                 </div>
 
-                <div v-for="slide in myImages.slides" :key="slide._key"
+                <!-- DESKTOP -->
+                <div v-if="!isMobile" v-for="slide in myImages.slides" :key="slide._key"
                 class="slide pic snap-start w-screen h-screen shrink-0 flex gap-20px items-end p-20px bg-softwhite"
                 :class="[`place-content-${isContentCenter(slide.justify)}`],
                     [`fixed-height-${isContentHeight(slide.fixed_height)}`]">
@@ -73,6 +81,24 @@
                         class="pic object-cover"
                         />
                     </figure>
+                </div>
+
+                <!-- MOBILE -->
+                <div v-if="isMobile"
+                class="slide pic snap-start w-screen h-[100dvh] shrink-0 flex flex-col gap-20px items-end p-20px bg-lightgrey
+                overflow-y-scroll snap-always">
+                    <template v-for="slide in myImages.slides" :key="slide._key">
+                        <figure class="pic h-auto" v-for="imageObj in slide.images" :key="imageObj._key"
+                        v-bind="{
+                        alt_1: imageObj.image_2 ? imageUrlFor(imageObj.image_2) : undefined,
+                        ref: imageObj.image_2 ? 'originalImg' : undefined
+                        }">
+                            <img v-if="imageObj.image.asset"
+                            :src="imageUrlFor(imageObj.image.asset)"
+                            class="pic object-cover"
+                            />
+                        </figure>
+                    </template>
                 </div>
 
             </div>
@@ -96,6 +122,9 @@ const slug = route.params.slug;
 const loading = ref(true);
 const myImages = ref([]);
 const myData = ref([]);
+
+const store = useMyStore();
+let isMobile = computed(() => store.isMobile)
 
 useHead({
     title: "Cecilia Avogadro",
@@ -239,7 +268,6 @@ onMounted(() => {
     fetchData();
     console.log(snapContainer)
     setTimeout(() => {
-        console.log('hello')
         snapContainer.value.focus();
     }, 100);
 });
@@ -253,30 +281,39 @@ const { data } = useSanityQuery(query);
 
 
 
-//if contains gifs
-const store = useMyStore();
-
 function onScroll(event) {
     //handleMouseMove();
 
     const { width, height } = useWindowSize();
     let firstSlide = document.getElementById('planimetria')
-    
-    if (firstSlide.getBoundingClientRect().left <= (width._value / 3)) {
-        document.querySelectorAll('#head a:not(.text-black)').forEach(span => {
-            span.classList.add('text-black');
-        });
-    } else if (firstSlide.getBoundingClientRect().left <= ((width._value / 3)*2 + 10)) {
-        document.querySelectorAll('#head a:not(.menu).text-black').forEach(span => {
-            span.classList.remove('text-black');
-        });
-        document.querySelectorAll('#head a.menu:not(.text-black)').forEach(span => {
-            span.classList.add('text-black');
-        });
-    } else {
-        document.querySelectorAll('#head a.text-black').forEach(span => {
-            span.classList.remove('text-black');
-        });
+
+    if(!isMobile.value){
+        if (firstSlide.getBoundingClientRect().left <= (width._value / 3)) {
+            document.querySelectorAll('#head a:not(.text-black)').forEach(span => {
+                span.classList.add('text-black');
+            });
+        } else if (firstSlide.getBoundingClientRect().left <= ((width._value / 3)*2 + 10)) {
+            document.querySelectorAll('#head a:not(.menu).text-black').forEach(span => {
+                span.classList.remove('text-black');
+            });
+            document.querySelectorAll('#head a.menu:not(.text-black)').forEach(span => {
+                span.classList.add('text-black');
+            });
+        } else {
+            document.querySelectorAll('#head a.text-black').forEach(span => {
+                span.classList.remove('text-black');
+            });
+        }
+    } else if(isMobile.value){
+        if (firstSlide.getBoundingClientRect().top <= (height._value / 10)) {
+            document.querySelectorAll('#head a:not(.text-black)').forEach(span => {
+                span.classList.add('text-black');
+            });
+        } else {
+            document.querySelectorAll('#head a.text-black').forEach(span => {
+                span.classList.remove('text-black');
+            });
+        }
     }
 
     
@@ -355,36 +392,40 @@ const handleMouseEnter = (event) => {
     handleMouseMove(event);
 };
 const handleMouseMove = (event) => {
-  const container = event.currentTarget;
-  const mouseX = event.clientX;
-  const mouseY = event.clientY;
+    
+    if(isMobile.value){return}
 
-  document.documentElement.style.setProperty('--mouse-x', `${mouseX}px`);
-  document.documentElement.style.setProperty('--mouse-y', `${mouseY}px`);
+    const container = event.currentTarget;
+    const mouseX = event.clientX;
+    const mouseY = event.clientY;
 
-  const containerWidth = container.offsetWidth;
-  if (mouseX < containerWidth / 2) {
-    document.querySelector('#leftArrow').classList.add('visible');
-    document.querySelector('#rightArrow').classList.remove('visible');
-  } else {
-    document.querySelector('#leftArrow').classList.remove('visible');
-    document.querySelector('#rightArrow').classList.add('visible');
-  }
+    document.documentElement.style.setProperty('--mouse-x', `${mouseX}px`);
+    document.documentElement.style.setProperty('--mouse-y', `${mouseY}px`);
 
-  const { width, height } = useWindowSize();
-  if(document.querySelector('figure[alt_1]')){
-  //if(originalImg){
-    //console.log(originalImg, document.querySelector('figure[alt_1]'))
-    if(!intervalIsSetted && document.querySelector('figure[alt_1]').getBoundingClientRect().left > 0
-    && document.querySelector('figure[alt_1]').getBoundingClientRect().left < (width._value)){
-        //changeGifImg(mouseX, width._value);
-        interval = setInterval(function() {changeGifImg(true, true)}, 2000);
-        intervalIsSetted = true;
+    const containerWidth = container.offsetWidth;
+    if (mouseX < containerWidth / 2) {
+        document.querySelector('#leftArrow').classList.add('visible');
+        document.querySelector('#rightArrow').classList.remove('visible');
+    } else {
+        document.querySelector('#leftArrow').classList.remove('visible');
+        document.querySelector('#rightArrow').classList.add('visible');
     }
-  }
+
+    const { width, height } = useWindowSize();
+    if(document.querySelector('figure[alt_1]')){
+    //if(originalImg){
+        //console.log(originalImg, document.querySelector('figure[alt_1]'))
+        if(!intervalIsSetted && document.querySelector('figure[alt_1]').getBoundingClientRect().left > 0
+        && document.querySelector('figure[alt_1]').getBoundingClientRect().left < (width._value)){
+            //changeGifImg(mouseX, width._value);
+            interval = setInterval(function() {changeGifImg(true, true)}, 2000);
+            intervalIsSetted = true;
+        }
+    }
 };
 
 const handleMouseLeave = () => {
+    if(isMobile.value){return}
     document.querySelector('#leftArrow').classList.remove('visible');
     document.querySelector('#rightArrow').classList.remove('visible');
 };

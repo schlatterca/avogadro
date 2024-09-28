@@ -19,8 +19,8 @@
                     <section id="s_1">
                     </section>
 
-                    <div id="leftArrow" class="arrow"></div>
-                    <div id="rightArrow" class="arrow"></div>
+                    <div v-if="!isMobile" id="leftArrow" class="arrow"></div>
+                    <div v-if="!isMobile" id="rightArrow" class="arrow"></div>
                     <!-- <div class="overlay bg-white" id="overlay_slide"></div> -->
 
                     <section id="s_2" ref="sectionTwo"
@@ -86,7 +86,8 @@
                         <div class="projectGrid relative h-screen w-screen">
                             <template v-for="project in myData" :key="project._key">
                                 <a v-bind:href="'/progetti/'+ project.slug.current"
-                                class="flex cursor-none"
+                                class="flex cursor-none
+                                flex-col md:flex-row"
                                 :style="project.gridSpan ? {
                                     gridColumn: project.gridSpan.columnStart + ' / span ' + project.gridSpan.columnSpan,
                                     gridRow: project.gridSpan.rowStart + ' / span ' + project.gridSpan.rowSpan
@@ -103,11 +104,13 @@
                                         :src="imageBuilder.image (project.homepage_image)"
                                         class="pic w-full h-full object-cover"/>
                                     </figure>
+                                    <p v-if="isMobile" v-html="project.title"></p>
                                 </a>
                             </template>
 
 
-                            <div id="footer-component" class="absolute l-0 w-screen row-start-[134] row-span-10">
+                            <div id="footer-component" class="l-0 row-start-[134] row-span-10
+                            relative md:absolute w-[calc(100vw-40px)] md:w-screen">
                                 <Footer></Footer>
                             </div>
                         </div>
@@ -128,6 +131,7 @@ import { ref, onMounted, nextTick } from 'vue';
 import { useRoute } from 'vue-router';
 import sanity from "../sanity/sanity.js";
 import imageUrlBuilder from "@sanity/image-url";
+import { useMyStore } from '/store/store.js';
 import groq from "groq"; // Ensure you have groq imported if used in your setup
 
 const imageBuilder = imageUrlBuilder(sanity);
@@ -136,6 +140,9 @@ const loading = ref(true);
 const myData = ref([]);
 const myCarousel = ref([]);
 const route = useRoute();
+const store = useMyStore();
+let isMobile = computed(() => store.isMobile)
+
 
 const fetchData = async () => {
     loading.value = true;
@@ -185,8 +192,10 @@ const setupVisibilityToggle = () => {
         entries.forEach(entry => {
             const sectionId = entry.target.getAttribute('id');
             const spansRow = document.querySelector('#spansRow');
+            const spansRowMobile = document.querySelector('#spansRowMobile');
             const spans = document.querySelectorAll('#head a.first');
             const spansMenu = document.querySelectorAll('#head a.menu');
+            const spansMenuMobile = document.querySelector('#head #spansRowMobile p.menu');
             const myMains = document.querySelectorAll('#head a.main');
 
             if (entry.isIntersecting) {
@@ -197,10 +206,15 @@ const setupVisibilityToggle = () => {
                 }
 
                 if (entry.target.id == "s_4") {
-                    spansRow.classList.add('visible');
-                    spansMenu.forEach(span => {
-                        span.classList.add('visible');
-                    });
+                    if(!isMobile.value){
+                        spansRow.classList.add('visible');
+                        spansMenu.forEach(span => {
+                            span.classList.add('visible');
+                        });
+                    } else if(isMobile.value){
+                        spansRowMobile.classList.add('visible');
+                        spansMenuMobile.classList.add('visible');
+                    }
                     document.querySelector('#head p.arch').classList.add('invisible');
                     myMains[0].classList.add('small');
                     myMains[1].classList.add('small');
@@ -208,10 +222,15 @@ const setupVisibilityToggle = () => {
                     document.querySelector('#head a.blankSpace').classList.add('invisible');
                     document.querySelector('#head a.first').classList.add('invisible');
                 } else {
-                    spansRow.classList.remove('visible');
-                    spansMenu.forEach(span => {
-                        span.classList.remove('visible');
-                    });
+                    if(!isMobile.value){
+                        spansRow.classList.remove('visible');
+                        spansMenu.forEach(span => {
+                            span.classList.remove('visible');
+                        });
+                    } else if(isMobile.value){
+                        spansRowMobile.classList.remove('visible');
+                        spansMenuMobile.classList.remove('visible');
+                    }
                     document.querySelector('#head p.arch').classList.remove('invisible');
                     myMains[0].classList.remove('small');
                     myMains[1].classList.remove('small');
@@ -284,6 +303,7 @@ onMounted(async () => {
 
     const followers = document.querySelectorAll('.cursor-follower');
     const updateFollowerPositions = (event) => {
+        if(isMobile.value){return}
         const x = event.clientX;
         const y = event.clientY;
         followers.forEach((follower) => {
@@ -307,37 +327,9 @@ onMounted(async () => {
         }
     });
 });
-</script>
 
 
 
-<script>
-const { width, height } = useWindowSize();
-
-export default {
-  methods: {
-    beforeEnter(el) {
-      el.style.opacity = 0;
-    },
-    enter(el, done) {
-      el.offsetHeight; // Trigger reflow
-      el.style.transition = 'opacity 2s';
-      el.style.opacity = 1;
-      done();
-    },
-    leave(el, done) {
-      el.style.transition = 'opacity 2s';
-      el.style.opacity = 0;
-      done();
-    },
-    imageUrlFor(image) {
-      return `path/to/images/${image}`;
-    }
-  }
-};
-
-//S_2 -> mouseMove, mouseLeave, mouseEnter, handleClick
-//S_2 -> also has idleScroll
 let firstTimeout;
 let myTimeout;
 let myInterval;
@@ -346,6 +338,7 @@ let figures;
 const snapContainer = ref(null);
 onMounted(() => {
     setTimeout(() => {
+        if(isMobile.value){return}
         if (snapContainer.value) {
             figures = snapContainer.value.querySelectorAll('.slide');
 
@@ -389,32 +382,36 @@ function idleScroll() {
 }
 
 const handleMouseMove = (event) => {
+    if(isMobile.value){return}
+
     clearTimeout(myTimeout);
     if (myInterval) {
         clearInterval(myInterval);
     }
     
-  const container = event.currentTarget;
-  const mouseX = event.clientX;
-  const mouseY = event.clientY;
+    const container = event.currentTarget;
+    const mouseX = event.clientX;
+    const mouseY = event.clientY;
 
-  document.documentElement.style.setProperty('--mouse-x', `${mouseX}px`);
-  document.documentElement.style.setProperty('--mouse-y', `${mouseY}px`);
+    document.documentElement.style.setProperty('--mouse-x', `${mouseX}px`);
+    document.documentElement.style.setProperty('--mouse-y', `${mouseY}px`);
 
-  const containerWidth = container.offsetWidth;
-  if (mouseX < containerWidth / 2) {
-    document.querySelector('#leftArrow').classList.add('visible');
-    document.querySelector('#rightArrow').classList.remove('visible');
-  } else {
-    document.querySelector('#leftArrow').classList.remove('visible');
-    document.querySelector('#rightArrow').classList.add('visible');
-  }
+    const containerWidth = container.offsetWidth;
+    if (mouseX < containerWidth / 2) {
+        document.querySelector('#leftArrow').classList.add('visible');
+        document.querySelector('#rightArrow').classList.remove('visible');
+    } else {
+        document.querySelector('#leftArrow').classList.remove('visible');
+        document.querySelector('#rightArrow').classList.add('visible');
+    }
 
     if(document.querySelector('#s_2').classList.contains('inView')){
         idleScroll()
     }
 };
 const handleMouseLeave = () => {
+    if(isMobile.value){return}
+    
     document.querySelector('#leftArrow').classList.remove('visible');
     document.querySelector('#rightArrow').classList.remove('visible');
 
@@ -424,12 +421,45 @@ const handleMouseLeave = () => {
     }
 };
 const handleMouseEnter = (event) => {
+    if(isMobile.value){return}
     handleMouseMove(event);
 
     myTimeout = setTimeout(() => {
         idleScroll()
     }, 4000);
 };
+</script>
+
+
+
+<script>
+const { width, height } = useWindowSize();
+
+export default {
+  methods: {
+    beforeEnter(el) {
+      el.style.opacity = 0;
+    },
+    enter(el, done) {
+      el.offsetHeight; // Trigger reflow
+      el.style.transition = 'opacity 2s';
+      el.style.opacity = 1;
+      done();
+    },
+    leave(el, done) {
+      el.style.transition = 'opacity 2s';
+      el.style.opacity = 0;
+      done();
+    },
+    imageUrlFor(image) {
+      return `path/to/images/${image}`;
+    }
+  }
+};
+
+//S_2 -> mouseMove, mouseLeave, mouseEnter, handleClick
+//S_2 -> also has idleScroll
+
 
 
 

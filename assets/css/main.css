@@ -8,6 +8,7 @@
 
 :root {
     --margin: 20px;
+    --margin2: 40px;
     --mouse-x: 0px;
     --mouse-y: 0px;
 }
@@ -42,7 +43,7 @@ main#mainHome {
     margin: 0!important;
     top: 0;
     
-    height: 100vh;
+    height: 100dvh;
     overflow-y: scroll;
   	scroll-snap-type: y mandatory;
 }
@@ -130,7 +131,8 @@ div:has(#projectIndex) #head {
     width: 70vw;
     gap: 12vw;
 }
-#head a.menu {
+#head a.menu,
+#head p.menu {
 	opacity: 0;
     pointer-events: none;
     /*transition: opacity .6s ease;*/
@@ -139,7 +141,8 @@ div:has(#projectIndex) #head {
     
     font-size: 16px;
 }
-#head a.menu.visible {
+#head a.menu.visible,
+#head p.menu.visible {
 	opacity: 1;
     pointer-events: all;
     width: auto;
@@ -148,7 +151,7 @@ div:has(#projectIndex) #head {
 }
 
 section {
-    height: 100vh;
+    height: 100dvh;
     scroll-snap-align: start;
     background-color: #723137;
     position: relative;
@@ -167,14 +170,14 @@ section#s_2 {
 }
 section#s_2 figure {
     width: 100vw;
-    height: 100vh;
+    height: 100dvh;
     display: inline-flex;
     margin: 0;
     scroll-snap-align: start;
 }
 section#s_2 figure img {
     min-width: 100vw;
-    min-height: 100vh;
+    min-height: 100dvh;
     width: auto;
     height: auto;
     object-fit: cover;
@@ -372,7 +375,7 @@ body:has(#planimetria) {
     top: 0;
     left: 0;
     width: 100vw;
-    height: 100vh;
+    height: 100dvh;
     background-color: rgb(234, 234, 234);
     opacity: 0;
     transition: opacity 0.2s ease-in-out;
@@ -457,7 +460,7 @@ body:has(#planimetria) {
 .mg-right-20 {margin-right: 0px}
 .mg-right-40 {margin-right: 20px}
 .mg-right-max {margin-right: auto}
-.mg-top-no {height: 100vh}
+.mg-top-no {height: 100dvh}
 .mg-top-0 {max-height: 85vh; overflow: hidden; display: flex; justify-content: center;}
 .mg-top-max {margin-top: auto}
 .mg-bottom-no {margin-bottom: -20px}
@@ -515,4 +518,32 @@ body:has(.vision) #head {
 img.pic.vision {
     min-height: 100%;
     min-width: 100%;
+}
+
+
+
+
+/* MOBILE */
+@media screen and (max-width: 768px) {
+	section#s_2 {
+        overflow: scroll;
+        scroll-snap-type: x mandatory;
+    }
+    section#s_2 figure {
+        scroll-snap-stop: always;
+    }
+
+    section#s_3 p {
+        left: 20px;
+        top: 40%;
+        width: auto;
+        max-width: 80vw;
+    }
+
+    section#s_4 > div.projectGrid {
+        display: flex;
+        flex-direction: column;
+        padding-bottom: var(--margin);
+        gap: var(--margin2)
+    }
 }
