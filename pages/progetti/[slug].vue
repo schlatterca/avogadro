@@ -4,13 +4,13 @@
     @before-enter="beforeEnter"
     @enter="enter"
     @leave="leave">
-        <div v-if="loading" class="bg-white w-screen h-screen fixed top-0 left-0">
+        <div v-if="loading" class="bg-white w-screen h-[100dvh] fixed top-0 left-0">
         </div>
         <div v-else>
             <div id="header-component" class="pointer-events-none">
                 <Header></Header>
             </div>
-            <figure id='background' class="pic snap-start w-screen h-screen shrink-0">
+            <figure id='background' class="pic snap-start w-screen h-[100dvh] shrink-0">
                 <img v-if="myData.cover_image"
                     :src="imageUrlFor(myData.cover_image)"
                     class="pic w-full h-full object-cover"
@@ -24,7 +24,7 @@
             @mouseenter="handleMouseEnter"
             @mousemove="handleMouseMove" -->
             <div id='snapContainer' class="flex overflow-scroll absolute left-0 top-0 snap-mandatory snap-x
-            w-screen h-screen select-none
+            w-screen h-[100dvh] select-none
             flex-col md:flex-row snap-y md:snap-x"
             ref="snapContainer"
             tabindex="0"
@@ -38,10 +38,10 @@
 
                 <div class="overlay" id="overlay"></div>
                 <div id="empty" class="slide active pic snap-start w-screen shrink-0
-                h-[100dvh] md:h-screen"></div>
+                h-[100dvh] md:h-[100dvh]"></div>
 
                 <div id='planimetria' class="slide relative grid-cols-2 pic snap-end shrink-0 bg-lightgrey
-                w-screen md:w-66% ml-0 md:ml-33% flex md:grid flex-col h-[100dvh] md:h-screen
+                w-screen md:w-66% ml-0 md:ml-33% flex md:grid flex-col h-[100dvh] md:h-[100dvh]
                 snap-always">
                     <figure class="w-auto mx-20% bg-lightgrey mb-auto
                     h-[50dvh] md:h-auto mt-[10dvh] md:mt-auto">
@@ -62,7 +62,7 @@
 
                 <!-- DESKTOP -->
                 <div v-if="!isMobile" v-for="slide in myImages.slides" :key="slide._key"
-                class="slide pic snap-start w-screen h-screen shrink-0 flex gap-20px items-end p-20px bg-softwhite"
+                class="slide pic snap-start w-screen h-[100dvh] shrink-0 flex gap-20px items-end p-20px bg-softwhite"
                 :class="[`place-content-${isContentCenter(slide.justify)}`],
                     [`fixed-height-${isContentHeight(slide.fixed_height)}`]">
                     
@@ -341,27 +341,34 @@ function onScroll(event) {
 const originalImg = ref(null) 
 function changeGifImg(mousePosition, width) {
     let GIFs = document.querySelectorAll('figure[alt_1]');
-    //let GIFs = originalImg.value;
-    /* console.log(originalImg)
-    console.log(originalImg.value) */
-    
-    /* const originalImgSrc = GIFs.getElementsByTagName('img')[0].src;
-    if(!store.myUrlSaved){
-        store.myUrl_1 = originalImgSrc;
-        store.myUrl_2 = GIFs.getElementsByTagName('img')[0].parentElement.getAttribute('alt_1');
-        store.myUrlSaved = true;
-    }
-    if(mousePosition > (width / 2)&&(GIFs.classList.contains('changed'))) {
-        GIFs.classList.remove('changed')
-        GIFs.getElementsByTagName('img')[0].src = store.myUrl_1;
-    } else if(mousePosition <= (width / 2)&&(!GIFs.classList.contains('changed'))) {
-        GIFs.classList.add('changed')
-        GIFs.getElementsByTagName('img')[0].src = store.myUrl_2;
-    } */
-    
-    if(GIFs.length > 0){
+
+    if(GIFs.length > 1){
         const originalImgSrc = GIFs[0].getElementsByTagName('img')[0].src;
-        //console.log(originalImgSrc)
+        const originalImgSrc2 = GIFs[1].getElementsByTagName('img')[0].src;
+        if(!store.myUrlSaved){
+            store.myUrl_1 = originalImgSrc;
+            store.myUrl_2 = GIFs[0].getElementsByTagName('img')[0].parentElement.getAttribute('alt_1');
+            store.myUrlSaved = true;
+
+            store.myUrl_1_2 = originalImgSrc2;
+            store.myUrl_2_2 = GIFs[1].getElementsByTagName('img')[0].parentElement.getAttribute('alt_1');
+            store.myUrlSaved2 = true;
+        }
+        if((GIFs.length > 0)&&(GIFs[0].classList.contains('changed'))) {
+            GIFs[0].classList.remove('changed')
+            GIFs[0].getElementsByTagName('img')[0].src = store.myUrl_1;
+
+            GIFs[1].classList.remove('changed')
+            GIFs[1].getElementsByTagName('img')[0].src = store.myUrl_1_2;
+
+        } else if((GIFs.length > 0)&&(!GIFs[0].classList.contains('changed'))) {
+            GIFs[0].classList.add('changed')
+            GIFs[0].getElementsByTagName('img')[0].src = store.myUrl_2;
+            GIFs[1].classList.add('changed')
+            GIFs[1].getElementsByTagName('img')[0].src = store.myUrl_2_2;
+        } 
+    } else if(GIFs.length > 0){
+        const originalImgSrc = GIFs[0].getElementsByTagName('img')[0].src;
         if(!store.myUrlSaved){
             store.myUrl_1 = originalImgSrc;
             store.myUrl_2 = GIFs[0].getElementsByTagName('img')[0].parentElement.getAttribute('alt_1');
@@ -373,15 +380,7 @@ function changeGifImg(mousePosition, width) {
         } else if((GIFs.length > 0)&&(!GIFs[0].classList.contains('changed'))) {
             GIFs[0].classList.add('changed')
             GIFs[0].getElementsByTagName('img')[0].src = store.myUrl_2;
-        }
-        console.log(GIFs[0].classList.contains('changed'))
-        /* if((GIFs.length > 0)&&(mousePosition > (width / 2)&&(GIFs[0].classList.contains('changed')))) {
-            GIFs[0].classList.remove('changed')
-            GIFs[0].getElementsByTagName('img')[0].src = store.myUrl_1;
-        } else if((GIFs.length > 0)&&(mousePosition <= (width / 2)&&(!GIFs[0].classList.contains('changed')))) {
-            GIFs[0].classList.add('changed')
-            GIFs[0].getElementsByTagName('img')[0].src = store.myUrl_2;
-        } */
+        } 
     }
 }
 
@@ -412,16 +411,22 @@ const handleMouseMove = (event) => {
     }
 
     const { width, height } = useWindowSize();
-    if(document.querySelector('figure[alt_1]')){
+    if(document.querySelectorAll('figure[alt_1]')){
     //if(originalImg){
-        //console.log(originalImg, document.querySelector('figure[alt_1]'))
-        if(!intervalIsSetted && document.querySelector('figure[alt_1]').getBoundingClientRect().left > 0
+        /* if(!intervalIsSetted && document.querySelector('figure[alt_1]').getBoundingClientRect().left > 0
         && document.querySelector('figure[alt_1]').getBoundingClientRect().left < (width._value)){
-            console.log('ok')
             //changeGifImg(mouseX, width._value);
             interval = setInterval(function() {changeGifImg(true, true)}, 2000);
             intervalIsSetted = true;
-        }
+        } */
+        document.querySelectorAll('figure[alt_1]').forEach(imageGIF => {
+            if(!intervalIsSetted && imageGIF.getBoundingClientRect().left > 0
+            && imageGIF.getBoundingClientRect().left < (width._value)){
+                //changeGifImg(mouseX, width._value);
+                interval = setInterval(function() {changeGifImg(true, true)}, 2000);
+                intervalIsSetted = true;
+            }
+        })
     }
 };
 

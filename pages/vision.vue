@@ -10,7 +10,7 @@
         @before-enter="beforeEnter"
         @enter="enter"
         @leave="leave">
-            <div v-if="loading" class="bg-white w-screen h-screen fixed top-0 left-0">
+            <div v-if="loading" class="bg-white w-screen h-[100dvh] fixed top-0 left-0">
             </div>
             <div v-else>
                 <div id="header-component" class="pointer-events-none">
@@ -18,7 +18,7 @@
                 </div>
 
                 <div id='snapContainer' class="flex flex-col overflow-scroll snap-mandatory snap-y absolute left-0 top-0
-                w-screen h-screen select-none" ref="snapContainer"
+                w-screen h-[100dvh] select-none" ref="snapContainer"
                 @wheel="onScroll">
                 <!--snap-mandatory snap-x @wheel="debouncedScroll"-->
 
@@ -26,7 +26,7 @@
 
                     <div v-for="slide in myData.slides"
                     :key="slide._key"
-                    class="slide pic relative snap-start w-screen h-screen shrink-0 flex gap-20px items-end p-0
+                    class="slide pic relative snap-start w-screen h-[100dvh] shrink-0 flex gap-20px items-end p-0
                     overflow-hidden snap-always"><!-- bg-lightgrey -->
 
                         <div v-if="slide.description"

@@ -11,7 +11,7 @@
         @before-enter="beforeEnter"
         @enter="enter"
         @leave="leave">
-            <div v-if="loading" class="bg-white w-screen h-screen fixed top-0 left-0">
+            <div v-if="loading" class="bg-white w-screen h-[100dvh] fixed top-0 left-0">
             </div>
             <div v-else>
 
@@ -83,7 +83,7 @@
                     </section> -->
 
                     <section id="s_4">
-                        <div class="projectGrid relative h-screen w-screen">
+                        <div class="projectGrid relative h-[100dvh] w-screen">
                             <template v-for="project in myData" :key="project._key">
                                 <a v-bind:href="'/progetti/'+ project.slug.current"
                                 class="flex cursor-none

@@ -1,12 +1,12 @@
 <template>
 
     <transition name="fade" @before-enter="beforeEnter" @enter="enter" @leave="leave">
-        <div v-if="loading" class="bg-white w-screen h-screen fixed top-0 left-0"></div>
+        <div v-if="loading" class="bg-white w-screen h-[100dvh] fixed top-0 left-0"></div>
         <div v-else>
             <div id="header-component">
                 <Header></Header>
             </div>
-            <main id="projectIndex" class="bg-darkgrey w-auto h-screen p-20px
+            <main id="projectIndex" class="bg-darkgrey w-auto h-[100dvh] p-20px
             grid gap-6px auto-rows-1em grid-cols-24 pt-20vh text-white">
 
                 <div id="mainImg" class="relative h-full w-full col-start-1 col-span-7">
