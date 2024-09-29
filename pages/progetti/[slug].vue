@@ -85,20 +85,22 @@
 
                 <!-- MOBILE -->
                 <div v-if="isMobile"
-                class="slide pic snap-start w-screen h-[100dvh] shrink-0 flex flex-col gap-20px items-end p-20px bg-lightgrey
-                overflow-y-scroll snap-always">
-                    <template v-for="slide in myImages.slides" :key="slide._key">
-                        <figure class="pic h-auto" v-for="imageObj in slide.images" :key="imageObj._key"
-                        v-bind="{
-                        alt_1: imageObj.image_2 ? imageUrlFor(imageObj.image_2) : undefined,
-                        ref: imageObj.image_2 ? 'originalImg' : undefined
-                        }">
-                            <img v-if="imageObj.image.asset"
-                            :src="imageUrlFor(imageObj.image.asset)"
-                            class="pic object-cover"
-                            />
-                        </figure>
-                    </template>
+                class="slide pic snap-start w-screen h-auto shrink-0 flex flex-col gap-20px items-end p-20px bg-lightgrey snap-always">
+                    <div class="slide pic snap-start w-auto h-auto shrink-0 flex flex-col gap-20px items-end
+                    overflow-y-scroll">
+                        <template v-for="slide in myImages.slides" :key="slide._key">
+                            <figure class="pic h-auto" v-for="imageObj in slide.images" :key="imageObj._key"
+                            v-bind="{
+                            alt_1: imageObj.image_2 ? imageUrlFor(imageObj.image_2) : undefined,
+                            ref: imageObj.image_2 ? 'originalImg' : undefined
+                            }">
+                                <img v-if="imageObj.image.asset"
+                                :src="imageUrlFor(imageObj.image.asset)"
+                                class="pic object-cover"
+                                />
+                            </figure>
+                        </template>
+                    </div>
                 </div>
 
             </div>
