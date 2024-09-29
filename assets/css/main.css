@@ -545,6 +545,7 @@ img.pic.vision {
 
     section#s_4 {
         height: auto;
+        scroll-snap-stop: unset;
     }
     section#s_4 > div.projectGrid {
         height: auto;

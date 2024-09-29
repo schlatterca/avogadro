@@ -85,7 +85,7 @@
 
                 <!-- MOBILE -->
                 <div v-if="isMobile"
-                class="slide pic snap-start w-screen h-auto shrink-0 flex flex-col gap-20px items-end p-20px bg-lightgrey snap-always">
+                class="slide pic snap-start w-screen h-auto shrink-0 flex flex-col gap-20px items-end p-20px bg-lightgrey snap-unset">
                     <div class="slide pic snap-start w-auto h-auto shrink-0 flex flex-col gap-20px items-end
                     overflow-y-scroll">
                         <template v-for="slide in myImages.slides" :key="slide._key">
