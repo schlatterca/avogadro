@@ -527,7 +527,6 @@ img.pic.vision {
     section {
         scroll-snap-stop: always;
     }
-
 	section#s_2 {
         overflow: scroll;
         scroll-snap-type: x mandatory;
@@ -543,14 +542,10 @@ img.pic.vision {
         max-width: 80vw;
     }
 
-    section#s_4 {
-        height: auto;
-        scroll-snap-stop: unset;
-    }
     section#s_4 > div.projectGrid {
-        height: auto;
         display: flex;
         flex-direction: column;
+        padding-top: 4rem;
         padding-bottom: var(--margin);
         gap: var(--margin2)
     }
