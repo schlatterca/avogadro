@@ -111,7 +111,7 @@
                             </template>
 
 
-                            <div id="footer-component" class="l-0 row-start-[134] row-span-10
+                            <div id="footer-component" class="mt-4 l-0 row-start-[134] row-span-10
                             relative md:absolute w-[calc(100vw-40px)] md:w-screen">
                                 <Footer></Footer>
                             </div>

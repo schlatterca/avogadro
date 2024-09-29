@@ -52,7 +52,8 @@
                             :src="imageUrlFor(slide.image.asset)"
                             class="pic vision object-cover transition-[filter] duration-[600ms]
                             transform scale-[1.2]"
-                            :class="{ 'blur-[20px]': slide.title, 'noblur': !slide.description }"/>
+                            />
+                            <!-- :class="{ 'blur-[20px]': slide.title, 'noblur': !slide.description }" -->
                         </figure>
                     </div>
 
@@ -154,7 +155,7 @@ onMounted(() => {
         let newBlur = maxBlur - Math.max(0, (accumulatedDeltaY * blurStep) - 60);
         newBlur = Math.max(minBlur, Math.min(maxBlur, newBlur)); */
 
-        snapContainer.value.querySelectorAll('img:not(.noblur)')[0].classList.replace('blur-[20px]', 'blur-0');
+        //snapContainer.value.querySelectorAll('img:not(.noblur)')[0].classList.replace('blur-[20px]', 'blur-0');
         snapContainer.value.querySelectorAll('.text')[0].classList.replace('blur-[20px]', 'blur-0');
         snapContainer.value.querySelectorAll('.text')[0].classList.replace('opacity-0', 'opacity-100');
         //mySlideImg.classList.add('isUnblurred');
@@ -215,7 +216,7 @@ function onScroll(event) {
             const text = mySlides[mySlideIndex].querySelector('.text');
 
             if (text && text.classList.contains('blur-[20px]')) {
-                img.classList.replace('blur-[20px]', 'blur-0');
+                //img.classList.replace('blur-[20px]', 'blur-0');
                 text.classList.replace('blur-[20px]', 'blur-0');
                 text.classList.replace('opacity-0', 'opacity-100');
 
