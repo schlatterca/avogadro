@@ -7,7 +7,7 @@
         <div v-if="loading" class="bg-white w-screen h-[100dvh] fixed top-0 left-0">
         </div>
         <div v-else>
-            <div id="header-component" class="pointer-events-none">
+            <div id="header-component" class="md:pointer-events-none">
                 <Header></Header>
             </div>
             <figure id='background' class="pic snap-start w-screen h-[100dvh] shrink-0">
@@ -268,6 +268,7 @@ onMounted(() => {
     fetchData();
     console.log(snapContainer)
     setTimeout(() => {
+        if(isMobile.value){return}
         snapContainer.value.focus();
     }, 100);
 });
@@ -306,13 +307,11 @@ function onScroll(event) {
         }
     } else if(isMobile.value){
         if (firstSlide.getBoundingClientRect().top <= (height._value / 10)) {
-            document.querySelectorAll('#head a:not(.text-black)').forEach(span => {
-                span.classList.add('text-black');
-            });
+            document.querySelector('#homeLinkMobile').classList.add('text-black');
+            document.querySelector('#menuButtonMobile').classList.add('text-black');
         } else {
-            document.querySelectorAll('#head a.text-black').forEach(span => {
-                span.classList.remove('text-black');
-            });
+            document.querySelector('#homeLinkMobile').classList.remove('text-black');
+            document.querySelector('#menuButtonMobile').classList.remove('text-black');
         }
     }
 

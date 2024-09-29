@@ -7,24 +7,47 @@
                 <Header></Header>
             </div>
             <main id="projectIndex" class="bg-darkgrey w-auto h-[100dvh] p-20px
-            grid gap-6px auto-rows-1em grid-cols-24 pt-20vh text-white">
+            auto-rows-1em grid-cols-24 text-white
+            flex md:grid flex-col pt-16 md:pt-20vh gap-[16px] md:gap-6px">
 
-                <div id="mainImg" class="relative h-full w-full col-start-1 col-span-7">
+                <!-- DESKTOP -->
+                <div v-if="!isMobile" id="mainImg" class="relative w-full col-start-1 col-span-7
+                h-[50%] md:h-full">
                     <template v-for="project in sortedProjects" :key="project._rev">
-                        <figure class="absolute w-full h-auto"
-                        v-show="hoveredProject === project._rev">
+                        <figure class="absolute w-full
+                        h-full md:h-auto content-center md:content-[unset]"
+                        v-show="(!isMobile && hoveredProject === project._rev)">
                             <img v-if="project.cover_image.asset._ref"
                                 :src="imageBuilder.image (project.cover_image.asset._ref)"
-                                class="pic w-full h-full object-cover"/>
+                                class="pic object-cover
+                                w-auto md:w-full h-auto max-h-[100%] md:max-h-[unset] md:h-full m-auto md:m-[unset]"/>
                         </figure>
                     </template>
                 </div>
 
-                <div id="projectIndexText" class="relative h-[80dvh] w-full DM-Mono leading-tight
-                flex flex-col leading-normal col-start-9 col-span-16 overflow-scroll pb-20px">
+                <!-- MOBILE -->
+                <div v-if="isMobile" id="mainImg" class="relative w-full col-start-1 col-span-7
+                h-[50%] md:h-full">
+                    <template v-for="(project, index) in sortedProjects" :key="index">
+                        <figure class="absolute w-full
+                        h-full md:h-auto content-center md:content-[unset]"
+                        v-show="(isMobile && scrolledProject === index)">
+                            <img v-if="project.cover_image.asset._ref"
+                                :src="imageBuilder.image (project.cover_image.asset._ref)"
+                                class="pic object-cover
+                                w-auto md:w-full h-auto max-h-[100%] md:max-h-[unset] md:h-full m-auto md:m-[unset]"/>
+                        </figure>
+                    </template>
+                </div>
+
+                <div id="projectIndexText" class="relative w-full DM-Mono leading-tight
+                flex flex-col leading-normal col-start-9 col-span-16 overflow-scroll pb-20px
+                h-[50%] md:h-[80dvh]"
+                @scroll.passive="indexScrollMobile"
+                ref="indexScroll">
                     <template v-for="(project, index) in sortedProjects" :key="project._rev">
-                        <div class="inline-grid grid-cols-10 gap-6px items-end group
-                        w-full border-white border-b-.6 py-2 cursor-pointer hover:bg-darkgreyHover"
+                        <div class="singleproject inline-grid grid-cols-10 gap-6px items-end group
+                        w-full border-white border-b-.6 py-2 cursor-pointer md:hover:bg-darkgreyHover"
                         :class="{ 'border-t-.6': index === 0 }"
                         @mouseover="hoveredProject = project._rev"
                         @mouseleave="hoveredProject = null">
@@ -34,7 +57,7 @@
                             </a>
                             <p v-html="project.citta" class="text-s col-start-7 col-span-3 truncate"></p>
                             <p class="projectIndexArrow self-center col-start-10 col-span-1 text-right
-                            opacity-0 group-hover:opacity-100"></p>
+                            opacity-0 md:group-hover:opacity-100"></p>
                         </div>
                     </template>
                 </div>
@@ -54,11 +77,17 @@ import { ref, onMounted, nextTick } from 'vue';
 import sanity from "../sanity/sanity.js";
 import imageUrlBuilder from "@sanity/image-url";
 import groq from "groq"; // Ensure you have groq imported if used in your setup
+import { useMyStore } from '../store/store.js';
 
 const imageBuilder = imageUrlBuilder(sanity);
+const store = useMyStore();
+let isMobile = computed(() => store.isMobile)
 
 const loading = ref(true);
 const myData = ref([]);
+const indexScroll = ref(null)
+
+let scrolledProject = ref(0);
 
 const sortedProjects = computed(() => {
   // Check if myData is defined and not empty
@@ -76,19 +105,51 @@ console.log(sortedProjects)
 const fetchData = async () => {
     loading.value = true;
     try {
-        const data = await sanity.fetch(groq`*[_type == "project"]`);
-        myData.value = data;
-        console.log(myData._value);
+      const data = await sanity.fetch(groq`*[_type == "project"]`);
+      myData.value = data;
+      console.log(myData._value);
     } catch (error) {
-        console.error(error);
+      console.error(error);
     } finally {
-        loading.value = false;
+      loading.value = false;
     }
 };
 
 onMounted(async () => {
     await fetchData();
 });
+
+function indexScrollMobile() {
+  if(!isMobile.value){return}
+
+  let elements = indexScroll.value.querySelectorAll('.singleproject');
+
+  elements.forEach(span => {
+    span.classList.remove('bg-darkgreyHover');
+    span.querySelector('.projectIndexArrow').classList.remove('opacity-100');
+  });
+
+  let percent = indexScroll.value.scrollTop / (indexScroll.value.scrollHeight - indexScroll.value.clientHeight);
+  let steps = 1 / elements.length;
+  let actualStep = Math.floor(percent/steps);
+
+  //console.log(percent, steps, actualStep, scrolledProject.value);
+  
+  if(actualStep < 0){
+    scrolledProject.value = 0;
+    elements[0].classList.add('bg-darkgreyHover');
+    elements[0].querySelector('.projectIndexArrow').classList.add('opacity-100');
+  } else if((actualStep >= 0)&&(actualStep < elements.length)){
+    scrolledProject.value = actualStep;
+    elements[actualStep].classList.add('bg-darkgreyHover');
+    elements[actualStep].querySelector('.projectIndexArrow').classList.add('opacity-100');
+  } else if(actualStep <= elements.length) {
+    scrolledProject.value = actualStep - 1;
+    elements[actualStep - 1].classList.add('bg-darkgreyHover');
+    elements[actualStep - 1].querySelector('.projectIndexArrow').classList.add('opacity-100');
+  }
+
+}
 </script>
 
 <script>

@@ -77,7 +77,7 @@ div:has(#projectIndex) #head {
 	margin-left: auto;
 }
 #head p.arch:not(.invisible) {
-    transition: .2s ease-in-out;
+    transition: .6s ease-in-out, color 0s;
 }
 #head p.arch.invisible {
 	display: none;

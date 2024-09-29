@@ -20,12 +20,12 @@
     <div v-if="isMobile" id="head"
     :class="{'!text-black': onAbout(), 'text-black': headerBlack, 'text-white': !headerBlack}">
         <p>
-          <a href='../'><span class="text-l">Cecilia Avogadro</span></a>
+          <a id="homeLinkMobile" href='../'><span class="text-l transition-all">Cecilia Avogadro</span></a>
         </p>
-        <p class="cursor-pointer relative w-[40vw] text-right" @click="toggleMenu">
+        <p class="relative w-[40vw] text-right">
           <span class="absolute right-0 text-l transition-all"
           :class="{'opacity-0': headerBlack || !onHomepage(), 'pointer-events-none': headerBlack || !onHomepage() }">Arch.</span>
-          <span class="absolute right-0 text-l transition-all"
+          <span id="menuButtonMobile" class="absolute right-0 text-l transition-all cursor-pointer" @click="toggleMenu"
           :class="{'opacity-0': !headerBlack, 'pointer-events-none': !headerBlack, '!opacity-100': !onHomepage(), '!pointer-events-auto': !onHomepage()}">Menu</span>
         </p>
     </div>

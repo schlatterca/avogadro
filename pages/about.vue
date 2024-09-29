@@ -6,8 +6,11 @@
             <div id="header-component">
                 <Header></Header>
             </div>
-            <main id="about" class="bg-lightgrey w-auto h-[100dvh] p-20px flex justify-between gap-20px pt-20vh">
-                <div id="aboutText" class="relative h-full w-50vw flex flex-col justify-between leading-normal">
+            <main id="about" class="bg-lightgrey w-auto p-20px flex gap-20px pt-20vh
+            flex-col-reverse md:flex-row
+            overflow-y-scroll md:overflow-y-unset justify-unset md:justify-between h-auto md:h-[100dvh]">
+                <div id="aboutText" class="relative h-full flex flex-col justify-between leading-normal
+                w-full md:w-50vw">
                     <div class="upper text-s *:mb-4">
                         <template v-for="block in myData.text_top" :key="block._key">
                             <PortableText
@@ -18,8 +21,17 @@
                         </template>
                     </div>
 
+                    <figure id="mainImg" class="h-full w-auto
+                    md:max-w-40vw"
+                    v-if="isMobile">
+                        <img v-if="myData.cover_image.asset._ref"
+                            :src="imageBuilder.image (myData.cover_image.asset._ref)"
+                            class="pic w-full h-full object-cover"/>
+                    </figure>
+
                     <!-- <p v-html="myData.text_top"></p> -->
-                    <div class="bottom text-base">
+                    <div class="bottom text-base
+                    mt-4 mb-8 md:mt-0 md:mb-0">
                         <template v-for="block in myData.text_bottom" :key="block._key">
                             <PortableText
                                 :value="[
@@ -30,7 +42,9 @@
                     </div>
                 </div>
 
-                <figure id="mainImg" class="h-full w-auto max-w-40vw">
+                <figure id="mainImg" class="h-full w-auto
+                md:max-w-40vw"
+                v-if="!isMobile">
                     <img v-if="myData.cover_image.asset._ref"
                         :src="imageBuilder.image (myData.cover_image.asset._ref)"
                         class="pic w-full h-full object-cover"/>
@@ -47,11 +61,14 @@ import sanity from "../sanity/sanity.js";
 import imageUrlBuilder from "@sanity/image-url";
 import groq from "groq"; // Ensure you have groq imported if used in your setup
 import { PortableText } from '@portabletext/vue';
+import { useMyStore } from '../store/store.js';
 
 const imageBuilder = imageUrlBuilder(sanity);
 
 const loading = ref(true);
 const myData = ref([]);
+const store = useMyStore();
+let isMobile = computed(() => store.isMobile)
 
 const fetchData = async () => {
     loading.value = true;

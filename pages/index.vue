@@ -433,8 +433,7 @@ const s_3 = ref(null);
 const mainHome = ref(null);
 function checkVisibilityMobile() {
     if(!isMobile.value){return}
-    console.log(store.headerBlack)
-    if(s_3.value.getBoundingClientRect().top < window.innerHeight){
+    if(s_3.value.getBoundingClientRect().top < window.innerHeight / 2){
         store.headerBlack = true;
     } else {
         store.headerBlack = false;
