@@ -189,7 +189,7 @@ section#s_3 p {
     margin: 0;
     position: absolute;
     top: 50%;
-    left: calc(23vw - 4px);
+    left: calc(23vw + 2px);
     width: 30vw;
     font-size: 14px;
     font-family: "DM Mono", monospace!important;

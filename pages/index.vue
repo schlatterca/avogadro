@@ -86,7 +86,7 @@
 
                     <section id="s_4">
                         <div class="projectGrid relative h-[100dvh] w-screen">
-                            <template v-for="project in myData" :key="project._key">
+                            <template v-for="project in sortedProjects" :key="project._key">
                                 <a v-bind:href="'/progetti/'+ project.slug.current"
                                 class="flex cursor-none
                                 flex-col md:flex-row"
@@ -176,6 +176,18 @@ const fetchDataCarousel = async () => {
         loading.value = false;
     }
 };
+
+const sortedProjects = computed(() => {
+  // Check if myData is defined and not empty
+  if (!myData.value || myData.value.length === 0) return [];
+
+  // Sort projects by the creation date in descending order
+  return myData.value.slice().sort((a, b) => {
+    const dateA = new Date(a._createdAt);
+    const dateB = new Date(b._createdAt);
+    return dateA - dateB;  // For descending order
+  });
+});
 
 const changeBackgroundColor = () => {
     const colors = ["#723137", "#7d91a0", "#c3c2be"];

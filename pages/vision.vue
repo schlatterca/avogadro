@@ -1,7 +1,7 @@
 <template>
-    <div>
+    <div id="mainVision">
 
-        <div id="headOverlay"></div>
+        <div id="headOverlay" class="transition-opacity duration-[2000ms] opacity-0"></div>
         <div id="header-component" class="z-50">
             <Header></Header>
         </div>
@@ -18,13 +18,13 @@
                 </div>
 
                 <div id='snapContainer' class="flex flex-col overflow-scroll snap-mandatory snap-y absolute left-0 top-0
-                w-screen h-[100dvh] select-none" ref="snapContainer"
+                w-screen h-[100dvh] select-none overflow-y-hidden" ref="snapContainer"
                 @scroll.passive="onScroll">
                 <!--snap-mandatory snap-x @wheel="debouncedScroll"-->
 
                     <!-- <div class="overlay" id="overlay"></div> -->
 
-                    <div v-for="slide in myData.slides"
+                    <div v-for="(slide, index) in myData.slides"
                     :key="slide._key"
                     class="slide pic relative snap-start w-screen h-[100dvh] shrink-0 flex gap-20px items-end p-0
                     overflow-hidden snap-always"><!-- bg-lightgrey -->
@@ -33,7 +33,7 @@
                         class="text fixed m-0 text-white pointer-events-none
                         text-m DM-Mono z-50
                         opacity-0 blur-0 transition-all duration-[600ms]
-                        left-20px md:left-[calc(calc(23vw-4px))]
+                        left-20px md:left-[calc(calc(23vw+2px))]
                         top-[unset] md:top-[50%]
                         bottom-20px md:bottom-[unset]
                         w-auto md:w-[30vw] max-w-[80vw] md:max-w-[unset]">
@@ -44,14 +44,16 @@
                             <p class="DM-Mono text-m" v-html="slide.description"></p>
                         </div>
 
-                        <div class="absolute bottom-0 left-0 w-full h-full z-[5] pointer-events-none"
+                        <div class="absolute bottom-0 left-0 w-full h-full z-[5] pointer-events-none transition-opacity duration-[2000ms]"
+                        :class="{'opacity-0':index == 0, 'firstBackground':index == 0}"
                         style="background: linear-gradient(to top, rgba(0,0,0,0.4) 30%, rgba(255,255,255,0) 60%)"></div>
                         
                         <figure class="pic w-full h-full">
                             <img v-if="slide.image"
                             :src="imageUrlFor(slide.image.asset)"
-                            class="pic vision object-cover transition-[filter] duration-[600ms]
+                            class="pic vision object-cover transition-opacity duration-[2000ms]
                             transform scale-[1.2]"
+                            :class="{'opacity-0':index == 0, 'firstImage':index == 0}"
                             />
                             <!-- :class="{ 'blur-[20px]': slide.title, 'noblur': !slide.description }" -->
                         </figure>
@@ -156,10 +158,16 @@ onMounted(() => {
         newBlur = Math.max(minBlur, Math.min(maxBlur, newBlur)); */
 
         //snapContainer.value.querySelectorAll('img:not(.noblur)')[0].classList.replace('blur-[20px]', 'blur-0');
+        document.querySelector('#headOverlay').classList.replace('opacity-0', 'opacity-100');
+        snapContainer.value.querySelectorAll('.firstBackground')[0].classList.replace('opacity-0', 'opacity-100');
+        snapContainer.value.querySelectorAll('.firstImage')[0].classList.replace('opacity-0', 'opacity-100');
         snapContainer.value.querySelectorAll('.text')[0].classList.replace('blur-[20px]', 'blur-0');
         snapContainer.value.querySelectorAll('.text')[0].classList.replace('opacity-0', 'opacity-100');
         //mySlideImg.classList.add('isUnblurred');
-    }, 600);
+    }, 1000);
+    setTimeout(() => {
+        snapContainer.value.classList.replace('overflow-y-hidden', 'overflow-y-scroll');
+    }, 2000);
 
 });
 /* const query = groq`*[_type == "vision"]`;

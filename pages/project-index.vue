@@ -46,19 +46,18 @@
                 @scroll.passive="indexScrollMobile"
                 ref="indexScroll">
                     <template v-for="(project, index) in sortedProjects" :key="project._rev">
-                        <div class="singleproject inline-grid grid-cols-10 gap-6px items-end group
-                        w-full border-white border-b-.6 py-2 cursor-pointer md:hover:bg-darkgreyHover"
-                        :class="{ 'border-t-.6': index === 0 }"
-                        @mouseover="hoveredProject = project._rev"
-                        @mouseleave="hoveredProject = null">
-                            <a v-bind:href="'/progetti/'+ project.slug.current"
-                            class="col-span-6">
-                                <p v-html="project.title" class="truncate"></p>
-                            </a>
-                            <p v-html="project.citta" class="text-s col-start-7 col-span-3 truncate"></p>
-                            <p class="projectIndexArrow self-center col-start-10 col-span-1 text-right
-                            opacity-0 md:group-hover:opacity-100"></p>
-                        </div>
+                        <a v-bind:href="'/progetti/'+ project.slug.current">
+                          <div class="singleproject inline-grid grid-cols-10 gap-6px items-end group
+                          w-full border-white border-b-.6 py-2 cursor-pointer md:hover:bg-darkgreyHover"
+                          :class="{ 'border-t-.6': index === 0 }"
+                          @mouseover="hoveredProject = project._rev"
+                          @mouseleave="hoveredProject = null">
+                              <p v-html="project.title" class="text-[.8rem] md:text-base col-span-6 truncate"></p>
+                              <p v-html="project.citta" class="text-[.6rem] md:text-s col-start-7 col-span-3 truncate"></p>
+                              <p class="projectIndexArrow self-center col-start-10 col-span-1 text-right
+                              opacity-0 md:group-hover:opacity-100 text-[15px] md:text-base"></p>
+                          </div>
+                        </a>
                     </template>
                 </div>
             </main>
@@ -100,7 +99,7 @@ const sortedProjects = computed(() => {
     return dateA - dateB;  // For descending order
   });
 });
-console.log(sortedProjects)
+//console.log(sortedProjects)
 
 const fetchData = async () => {
     loading.value = true;

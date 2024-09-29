@@ -309,6 +309,25 @@ function onScroll(event) {
                 span.classList.remove('text-black');
             });
         }
+
+        //START GIF
+        if(document.querySelectorAll('figure[alt_1]')){
+        //if(originalImg){
+            /* if(!intervalIsSetted && document.querySelector('figure[alt_1]').getBoundingClientRect().left > 0
+            && document.querySelector('figure[alt_1]').getBoundingClientRect().left < (width._value)){
+                //changeGifImg(mouseX, width._value);
+                interval = setInterval(function() {changeGifImg(true, true)}, 2000);
+                intervalIsSetted = true;
+            } */
+            document.querySelectorAll('figure[alt_1]').forEach(imageGIF => {
+                if(!intervalIsSetted && imageGIF.getBoundingClientRect().left > 0){
+                    //&& imageGIF.getBoundingClientRect().left < (width._value) + 10
+                    //changeGifImg(mouseX, width._value);
+                    interval = setInterval(function() {changeGifImg(true, true)}, 2000);
+                    intervalIsSetted = true;
+                }
+            })
+        }
     } else if(isMobile.value){
         if (firstSlide.getBoundingClientRect().top <= (height._value / 10)) {
             document.querySelector('#homeLinkMobile').classList.add('text-black');
@@ -416,23 +435,6 @@ const handleMouseMove = (event) => {
     }
 
     const { width, height } = useWindowSize();
-    if(document.querySelectorAll('figure[alt_1]')){
-    //if(originalImg){
-        /* if(!intervalIsSetted && document.querySelector('figure[alt_1]').getBoundingClientRect().left > 0
-        && document.querySelector('figure[alt_1]').getBoundingClientRect().left < (width._value)){
-            //changeGifImg(mouseX, width._value);
-            interval = setInterval(function() {changeGifImg(true, true)}, 2000);
-            intervalIsSetted = true;
-        } */
-        document.querySelectorAll('figure[alt_1]').forEach(imageGIF => {
-            if(!intervalIsSetted && imageGIF.getBoundingClientRect().left > 0
-            && imageGIF.getBoundingClientRect().left < (width._value)){
-                //changeGifImg(mouseX, width._value);
-                interval = setInterval(function() {changeGifImg(true, true)}, 2000);
-                intervalIsSetted = true;
-            }
-        })
-    }
 };
 
 const handleMouseLeave = () => {
