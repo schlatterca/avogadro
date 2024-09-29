@@ -4,13 +4,14 @@
     @before-enter="beforeEnter"
     @enter="enter"
     @leave="leave">
-        <div v-if="loading" class="bg-white w-screen h-[100dvh] fixed top-0 left-0">
+        <div v-if="loading" class="bg-lightgrey md:bg-softwhite w-screen h-[100dvh] fixed top-0 left-0">
         </div>
-        <div v-else>
-            <div id="header-component" class="md:pointer-events-none">
+        <div v-else class="bg-lightgrey md:bg-softwhite">
+            <div id="header-component" class="bg-lightgrey md:bg-softwhite md:pointer-events-none">
                 <Header></Header>
             </div>
-            <figure id='background' class="pic snap-start w-screen h-[100dvh] shrink-0">
+            <figure id='background' class="pic bg-lightgrey md:bg-softwhite snap-start w-screen h-[100dvh] shrink-0
+            transition-opacity duration-500 md:duration-0">
                 <img v-if="myData.cover_image"
                     :src="imageUrlFor(myData.cover_image)"
                     class="pic w-full h-full object-cover"
@@ -289,10 +290,13 @@ function onScroll(event) {
     let firstSlide = document.getElementById('planimetria')
 
     if(!isMobile.value){
-        if (firstSlide.getBoundingClientRect().left <= (width._value / 3)) {
+        if (firstSlide.getBoundingClientRect().left < 0) {
+            document.querySelector('#background').classList.add('opacity-0');
+        } else if (firstSlide.getBoundingClientRect().left <= (width._value / 3)) {
             document.querySelectorAll('#head a:not(.text-black)').forEach(span => {
                 span.classList.add('text-black');
             });
+            document.querySelector('#background').classList.remove('opacity-0');
         } else if (firstSlide.getBoundingClientRect().left <= ((width._value / 3)*2 + 10)) {
             document.querySelectorAll('#head a:not(.menu).text-black').forEach(span => {
                 span.classList.remove('text-black');
@@ -309,9 +313,11 @@ function onScroll(event) {
         if (firstSlide.getBoundingClientRect().top <= (height._value / 10)) {
             document.querySelector('#homeLinkMobile').classList.add('text-black');
             document.querySelector('#menuButtonMobile').classList.add('text-black');
+            document.querySelector('#background').classList.add('opacity-0');
         } else {
             document.querySelector('#homeLinkMobile').classList.remove('text-black');
             document.querySelector('#menuButtonMobile').classList.remove('text-black');
+            document.querySelector('#background').classList.remove('opacity-0');
         }
     }
 
