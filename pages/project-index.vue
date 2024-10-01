@@ -17,8 +17,8 @@
                         <figure class="absolute w-full
                         h-full md:h-auto content-center md:content-[unset]"
                         v-show="(!isMobile && hoveredProject === project._rev)">
-                            <img v-if="project.cover_image.asset._ref"
-                                :src="imageBuilder.image (project.cover_image.asset._ref)"
+                            <img v-if="project.homepage_image.asset._ref"
+                                :src="imageBuilder.image (project.homepage_image.asset._ref)"
                                 class="pic object-cover
                                 w-auto md:w-full h-auto max-h-[100%] md:max-h-[unset] md:h-full m-auto md:m-[unset]"/>
                         </figure>
@@ -32,8 +32,8 @@
                         <figure class="absolute w-full
                         h-full md:h-auto content-center md:content-[unset]"
                         v-show="(isMobile && scrolledProject === index)">
-                            <img v-if="project.cover_image.asset._ref"
-                                :src="imageBuilder.image (project.cover_image.asset._ref)"
+                            <img v-if="project.homepage_image_mobile.asset._ref"
+                                :src="imageBuilder.image (project.homepage_image_mobile.asset._ref)"
                                 class="pic object-cover
                                 w-auto md:w-full h-auto max-h-[100%] md:max-h-[unset] md:h-full m-auto md:m-[unset]"/>
                         </figure>
