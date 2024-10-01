@@ -557,7 +557,4 @@ export default {
     }
   }
 };
-
-//S_2 -> mouseMove, mouseLeave, mouseEnter, handleClick
-//S_2 -> also has idleScroll
 </script>
