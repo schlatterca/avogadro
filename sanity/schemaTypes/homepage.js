@@ -32,6 +32,14 @@ export default defineType({
                 options: {
                     hotspot: true,
                     },
+                },
+                {
+                name: 'image_mobile',
+                type: 'image',
+                title: 'Immagine_mobile',
+                options: {
+                    hotspot: true,
+                    },
                 }
             ]
             }],

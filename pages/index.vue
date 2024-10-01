@@ -37,8 +37,12 @@
                         </template> -->
                         <template v-if="myCarousel[0]" v-for="slide in myCarousel[0].slides" :key="slide._key">
 
-                            <figure v-if="slide.image" class="slide">
+                            <figure v-if="!isMobile && slide.image" class="slide">
                                 <img :src="imageBuilder.image(slide.image.asset).url()" alt="Carousel Image" />
+                            </figure>
+
+                            <figure v-if="isMobile && slide.image_mobile" class="slide">
+                                <img :src="imageBuilder.image(slide.image_mobile.asset).url()" alt="Carousel Image" />
                             </figure>
                             
                         </template>
@@ -63,27 +67,6 @@
                         società civile.</p>
                     </section>
 
-                    <!-- <section id="s_4">
-                        <div class="imagesGroup">
-                            <div class="image img_1">
-                                <img src="https://freight.cargo.site/t/original/i/732eeab1c9250de3f02831b0394e080d320572e9d2862790526c9316502d9a77/_Z9A3996---dimensioni-grandi.jpeg">
-                                <p>Piazzale Aquileia</p>
-                            </div>
-                            <div class="image img_2">
-                                <img src="https://freight.cargo.site/t/original/i/034d4e19749dd252d9aed8dc1bc27a7cb97f5772074058f5ce47bbadc76728c0/Friuli30-Cristina-Galliena-Bohman---dimensioni-grandi.jpeg">
-                                <p>Via Friuli</p>
-                            </div>
-                            <div class="image img_3">
-                                <img src="https://freight.cargo.site/t/original/i/963733fd202bfec2c4118f44497e3c0530553b8376d34b0b4ad659f9c3bd6792/Londonio004-Casamenu---dimensioni-grandi.jpeg">
-                                <p>Via Londonio</p>
-                            </div>
-                            <div class="image img_4">
-                                <img src="https://freight.cargo.site/t/original/i/034d4e19749dd252d9aed8dc1bc27a7cb97f5772074058f5ce47bbadc76728c0/Friuli30-Cristina-Galliena-Bohman---dimensioni-grandi.jpeg">
-                                <p>Via Friuli</p>
-                            </div>
-                        </div>
-                    </section> -->
-
                     <section id="s_4">
                         <div class="projectGrid relative h-[100dvh] w-screen">
                             <template v-for="project in sortedProjects" :key="project._key">
@@ -95,15 +78,26 @@
                                     gridRow: project.gridSpan.rowStart + ' / span ' + project.gridSpan.rowSpan
                                 } : {}">
                                     <!-- <p v-html="project.title"></p> -->
-                                    <figure
+                                    <figure v-if="!isMobile && project.homepage_image"
                                     class="w-full group">
                                         <p class="projectName opacity-0 group-hover:opacity-100 transition-opacity duration-500
                                         fixed pointer-events-none cursor-follower">
                                             <span class="circle"></span>
                                             <span v-html="project.title"></span>
                                         </p>
-                                        <img v-if="project.homepage_image"
+                                        <img
                                         :src="imageBuilder.image (project.homepage_image)"
+                                        class="pic w-full h-full object-cover"/>
+                                    </figure>
+                                    <figure v-if="isMobile && project.homepage_image_mobile"
+                                    class="w-full group">
+                                        <p class="projectName opacity-0 group-hover:opacity-100 transition-opacity duration-500
+                                        fixed pointer-events-none cursor-follower">
+                                            <span class="circle"></span>
+                                            <span v-html="project.title"></span>
+                                        </p>
+                                        <img
+                                        :src="imageBuilder.image (project.homepage_image_mobile)"
                                         class="pic w-full h-full object-cover"/>
                                     </figure>
                                     <p v-if="isMobile" v-html="project.title"></p>
@@ -166,6 +160,7 @@ const fetchDataCarousel = async () => {
                 _type,
                 title,
                 image,
+                image_mobile,
             }
         }[0...50]`);
         myCarousel.value = data;

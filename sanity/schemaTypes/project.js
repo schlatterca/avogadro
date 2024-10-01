@@ -33,6 +33,15 @@ export default defineType({
       },
       description: `Caricare qui l’immagine di copertina del progetto, da inserire in Homepage.`,
     },
+    {
+      name: 'homepage_image_mobile',
+      type: 'image',
+      title: 'Immagine in Homepage (Mobile)',
+      options: {
+          hotspot: true,
+      },
+      description: `Immagine in Homepage su schermi mobile.`,
+    },
     { name: 'gridSpan',
         title: 'Posizione in Homepage',
         type: 'object',

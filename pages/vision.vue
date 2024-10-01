@@ -49,8 +49,14 @@
                         style="background: linear-gradient(to top, rgba(0,0,0,0.4) 30%, rgba(255,255,255,0) 60%)"></div>
                         
                         <figure class="pic w-full h-full">
-                            <img v-if="slide.image"
+                            <img v-if="!isMobile && slide.image"
                             :src="imageUrlFor(slide.image.asset)"
+                            class="pic vision object-cover transition-opacity duration-[2000ms]
+                            transform scale-[1.2]"
+                            :class="{'opacity-0':index == 0, 'firstImage':index == 0}"
+                            />
+                            <img v-if="isMobile && slide.image_mobile"
+                            :src="imageUrlFor(slide.image_mobile.asset)"
                             class="pic vision object-cover transition-opacity duration-[2000ms]
                             transform scale-[1.2]"
                             :class="{'opacity-0':index == 0, 'firstImage':index == 0}"
@@ -73,6 +79,7 @@ import sanity from "../sanity/sanity.js";
 import imageUrlBuilder from "@sanity/image-url";
 import { useRoute } from 'vue-router';
 import { useMyStore } from '../store/store.js';
+const { width } = useWindowSize();
 
 const imageBuilder = imageUrlBuilder(sanity);
 const route = useRoute();
@@ -80,7 +87,8 @@ const slug = route.params.slug;
 
 const loading = ref(true);
 const myData = ref([]);
-const snapContainer = ref(null)
+const snapContainer = ref(null);
+let isMobile = computed(() => width.value <= 768);
 
 useHead({
     title: "Cecilia Avogadro",
@@ -96,6 +104,7 @@ const otherQuery = `*[_type == "vision"]{
         _type,
         title,
         image,
+        image_mobile,
         description,
     }
 }[0...50]`;
