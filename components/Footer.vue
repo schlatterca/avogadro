@@ -9,15 +9,24 @@
             </div>
         </div>
         <div id="credits" class="hidden md:flex justify-between
-        w-[calc(100vw-40px)] md:w-screen p-0 md:p-10px mt-16 md:mt-0">
+        w-full p-10px mt-0">
             <p>©2024</p>
             <div class="flex w-[70vw] justify-end
             gap-20px md:gap-[12vw]">
                 <p>&nbsp;</p>
-                <a href="mailto:test@test.it">E—MAIL</a>
-                <a href="https://www.instagram.com" target="_blank" class="w-">IG</a>
+                <a href="mailto:cecilia.avogadro@gmail.com">E—MAIL</a>
+                <a href="https://www.instagram.com/ceciliaavogadroarchitetto/" target="_blank" class="w-">IG</a>
                 <p @click="doSomething" class="cursor-pointer w-">CREDITS</p>
             </div>
+        </div>
+        <div id="creditsOpen" class="hidden md:flex justify-start
+        w-full -mt-10px
+        overflow-hidden transition-all duration-500 gap-0"
+        :class="{'p-0 h-0 opacity-0':isAboutClosed,
+          'p-10px pt-0 h-8 opacity-100':!isAboutClosed
+        }">
+            <p>Design: <a class="underline" href="http://studiosecondo.com/" target="_blank">Studio Secondo</a> / 
+            Sviluppo: <a class="underline" href="https://schlatterca.com" target="_blank">Carlo Andrea Schlatter</a></p>
         </div>
     </div>
 </template>
@@ -26,9 +35,16 @@
 import { useRoute } from 'vue-router';
 const route = useRoute();
 const slug = route.params.slug;
+let isAboutClosed = ref(true);
 
 const doSomething = () => {
-  //alert('test')
+  isAboutClosed.value = !isAboutClosed.value;
+  setTimeout(() => {
+    document.getElementById('creditsOpen').scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    });
+  }, 500)
 }
 
 const onHomepage = () => {

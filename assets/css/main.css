@@ -541,12 +541,14 @@ img.pic.vision {
         width: auto;
         max-width: 80vw;
     }
-
     section#s_4 > div.projectGrid {
         display: flex;
         flex-direction: column;
         padding-top: 4rem;
         padding-bottom: var(--margin);
         gap: var(--margin2)
+    }
+    #aboutTopText br {
+        display: none;
     }
 }

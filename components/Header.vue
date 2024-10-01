@@ -40,18 +40,24 @@
         <a href='../vision' :class="{'hasArrow':onVision()}"><span>VISION</span></a>
         <a href='../about' :class="{'hasArrow':onAbout()}"><span>ABOUT</span></a>
       </div>
-      <div id="creditsMobile" class="md:hidden flex absolute justify-between
+      <div id="creditsMobile" class="md:hidden absolute
       w-[calc(100vw-40px)] p-0 mt-16 bottom-20px">
-          <p>©2024</p>
-          <div class="flex w-[70vw] justify-end
+        <div class="w-full flex justify-between"></div>
+          <p class="inline-block w-auto">©2024</p>
+          <div class="inline-flex w-[70vw] justify-end
           gap-20px md:gap-[12vw]">
               <p>&nbsp;</p>
-              <a href="mailto:test@test.it">E—MAIL</a>
-              <a href="https://www.instagram.com" target="_blank" class="w-">IG</a>
-              <p @click="doSomething" class="cursor-pointer w-">CREDITS</p>
+              <a href="mailto:cecilia.avogadro@gmail.com">E—MAIL</a>
+              <a href="https://www.instagram.com/ceciliaavogadroarchitetto/" target="_blank" class="w-">IG</a>
+              <p @click="isAboutClosedMobile = !isAboutClosedMobile" class="cursor-pointer w-">CREDITS</p>
           </div>
+          <p class="transition-all duration-500"
+            :class="{'opacity-0 h-0': isAboutClosedMobile,
+            'opacity-100 h-14': !isAboutClosedMobile}">
+            Design: <a class="underline" href="http://studiosecondo.com/" target="_blank">Studio Secondo</a>
+            <br>Sviluppo: <a class="underline" href="https://schlatterca.com" target="_blank">Carlo Andrea Schlatter</a></p>
+        </div>
       </div>
-    </div>
 </template>
 
 <script setup>
@@ -62,7 +68,8 @@ const slug = route.params.slug;
 const store = useMyStore();
 let isMobile = computed(() => store.isMobile)
 let menuIsOpen = computed(() => store.menuIsOpen);
-let headerBlack = computed(() => store.headerBlack)
+let headerBlack = computed(() => store.headerBlack);
+let isAboutClosedMobile = ref(true);
 
 const onHomepage = () => {
   return route.path === '/';

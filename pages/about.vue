@@ -11,12 +11,10 @@
             overflow-y-scroll md:overflow-y-unset justify-unset md:justify-between h-auto md:h-[100dvh]">
                 <div id="aboutText" class="relative h-full flex flex-col justify-between leading-normal
                 w-full md:w-50vw">
-                    <div class="upper text-[.9rem] leading-[120%] *:mb-4">
+                    <div id="aboutTopText" class="upper text-[.9rem] leading-[120%] *:mb-4">
                         <template v-for="block in myData.text_top" :key="block._key">
                             <PortableText
-                                :value="[
-                                    block
-                                ]"
+                                :value="[block]"
                             />
                         </template>
                     </div>
@@ -112,4 +110,3 @@ export default {
   }
 };
 </script>
-

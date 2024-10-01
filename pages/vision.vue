@@ -161,13 +161,13 @@ onMounted(() => {
         document.querySelector('#headOverlay').classList.replace('opacity-0', 'opacity-100');
         snapContainer.value.querySelectorAll('.firstBackground')[0].classList.replace('opacity-0', 'opacity-100');
         snapContainer.value.querySelectorAll('.firstImage')[0].classList.replace('opacity-0', 'opacity-100');
-        snapContainer.value.querySelectorAll('.text')[0].classList.replace('blur-[20px]', 'blur-0');
-        snapContainer.value.querySelectorAll('.text')[0].classList.replace('opacity-0', 'opacity-100');
         //mySlideImg.classList.add('isUnblurred');
     }, 1000);
     setTimeout(() => {
+        snapContainer.value.querySelectorAll('.text')[0].classList.replace('blur-[20px]', 'blur-0');
+        snapContainer.value.querySelectorAll('.text')[0].classList.replace('opacity-0', 'opacity-100');
         snapContainer.value.classList.replace('overflow-y-hidden', 'overflow-y-scroll');
-    }, 2000);
+    }, 3000);
 
 });
 /* const query = groq`*[_type == "vision"]`;
@@ -211,8 +211,8 @@ function onScroll(event) {
 
     clearTimeout(debounceTimeout);
 
-    document.querySelectorAll('.text.blur-0').forEach((el) => {console.log(el); el.classList.replace('blur-0', 'blur-[20px]')});
-    document.querySelectorAll('.text.opacity-100').forEach((el) => {console.log(el); el.classList.replace('opacity-100', 'opacity-0')});
+    document.querySelectorAll('.text.blur-0').forEach((el) => {el.classList.replace('blur-0', 'blur-[20px]')});
+    document.querySelectorAll('.text.opacity-100').forEach((el) => {el.classList.replace('opacity-100', 'opacity-0')});
 
     debounceTimeout = setTimeout(() => {
         let mySlideIndex = Math.round(snapContainer.value.scrollTop / window.innerHeight);

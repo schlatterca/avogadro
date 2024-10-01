@@ -25,7 +25,7 @@
                     <div v-if="!isMobile" id="rightArrow" class="arrow"></div>
                     <!-- <div class="overlay bg-white" id="overlay_slide"></div> -->
 
-                    <section id="s_2" ref="sectionTwo" class="snap-always"
+                    <section id="s_2" ref="s_2" class="snap-always"
                     @mousemove="handleMouseMove" 
                     @mouseleave="handleMouseLeave"
                     @mouseenter="handleMouseEnter"
@@ -55,11 +55,11 @@
                     </section>
 
                     <section id="s_3" ref="s_3">
-                        <p>Trasformare uno spazio in un luogo<br>
-                        di senso che faccia star bene chi<br>
-                        ci trascorre del tempo è per me<br>
-                        una gioia, ma non solo: è il mezzo<br>
-                        con cui faccio la mia parte nella<br>
+                        <p>Trasformare uno spazio in un luogo<template v-if="!isMobile"><br></template>
+                        di senso che faccia star bene chi<template v-if="!isMobile"><br></template>
+                        ci trascorre del tempo è per me<template v-if="!isMobile"><br></template>
+                        una gioia, ma non solo: è il mezzo<template v-if="!isMobile"><br></template>
+                        con cui faccio la mia parte nella<template v-if="!isMobile"><br></template>
                         società civile.</p>
                     </section>
 
@@ -346,6 +346,10 @@ let myInterval;
 let currentIndex = 0;
 let figures;
 const snapContainer = ref(null);
+
+let timeScroll = 200;
+let stopForeverScrollMobile = false;
+
 onMounted(() => {
     setTimeout(() => {
         if(isMobile.value){return}
@@ -362,7 +366,20 @@ onMounted(() => {
 })
 
 function idleScroll() {
+
+    if(isMobile.value){
+        timeScroll = 2000;
+    } else {
+        timeScroll = 200;
+    }
     myInterval = setInterval(() => {
+        if(stopForeverScrollMobile == true){
+            clearTimeout(myTimeout);
+            if (myInterval) {
+                clearInterval(myInterval);
+            }
+            return
+        }
         //currentIndex = (currentIndex + 1) % figures.length;
         //figures[currentIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
         
@@ -379,14 +396,13 @@ function idleScroll() {
         //overlay.classList.add('show');
         setTimeout(() => {
             if (currentIndex < slides.length - 1) {
+                //console.log(currentIndex, 'a')
                 slides[currentIndex + 1].scrollIntoView({ behavior: 'smooth', inline: 'start' });
             } else {
+                //console.log(currentIndex, 'a')
                 slides[0].scrollIntoView({ behavior: 'smooth', inline: 'start' });
             }
-            /* setTimeout(() => {
-                overlay.classList.remove('show');
-            }, 300); */
-        }, 200);
+        }, timeScroll);
 
     }, 4000);
 }
@@ -440,53 +456,25 @@ const handleMouseEnter = (event) => {
 };
 
 
-
+const s_2 = ref(null);
 const s_3 = ref(null);
 const mainHome = ref(null);
 function checkVisibilityMobile() {
     if(!isMobile.value){return}
+
     if(s_3.value.getBoundingClientRect().top < window.innerHeight / 2){
         store.headerBlack = true;
     } else {
         store.headerBlack = false;
     }
-}
-</script>
 
-
-
-<script>
-const { width, height } = useWindowSize();
-
-export default {
-  methods: {
-    beforeEnter(el) {
-      el.style.opacity = 0;
-    },
-    enter(el, done) {
-      el.offsetHeight; // Trigger reflow
-      el.style.transition = 'opacity 2s';
-      el.style.opacity = 1;
-      done();
-    },
-    leave(el, done) {
-      el.style.transition = 'opacity 2s';
-      el.style.opacity = 0;
-      done();
-    },
-    imageUrlFor(image) {
-      return `path/to/images/${image}`;
+    if((s_2.value.getBoundingClientRect().top < window.innerHeight / 2) && (s_2.value.getBoundingClientRect().bottom > 0)){
+        idleScroll();
+    } else if(s_2.value.getBoundingClientRect().top < 0) {
+        stopForeverScrollMobile = true;
     }
-  }
-};
-
-//S_2 -> mouseMove, mouseLeave, mouseEnter, handleClick
-//S_2 -> also has idleScroll
-
-
-
-
-
+    
+}
 
 
 
@@ -497,6 +485,8 @@ const handleClick = (event) => {
     if (overlay.classList.contains('show')) {
         return;
     } */
+
+    stopForeverScrollMobile = true
 
     let mouseX
     let container
@@ -543,4 +533,36 @@ const handleClick = (event) => {
 
     }, 200);
 };
+
+</script>
+
+
+
+<script>
+const { width, height } = useWindowSize();
+
+export default {
+  methods: {
+    beforeEnter(el) {
+      el.style.opacity = 0;
+    },
+    enter(el, done) {
+      el.offsetHeight; // Trigger reflow
+      el.style.transition = 'opacity 2s';
+      el.style.opacity = 1;
+      done();
+    },
+    leave(el, done) {
+      el.style.transition = 'opacity 2s';
+      el.style.opacity = 0;
+      done();
+    },
+    imageUrlFor(image) {
+      return `path/to/images/${image}`;
+    }
+  }
+};
+
+//S_2 -> mouseMove, mouseLeave, mouseEnter, handleClick
+//S_2 -> also has idleScroll
 </script>

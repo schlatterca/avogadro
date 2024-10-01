@@ -46,10 +46,11 @@
                 @scroll.passive="indexScrollMobile"
                 ref="indexScroll">
                     <template v-for="(project, index) in sortedProjects" :key="project._rev">
-                        <a v-bind:href="'/progetti/'+ project.slug.current">
+                        <a v-bind:href="'/progetti/'+ project.slug.current"
+                        class="border-b-[1px]"
+                        :class="{ 'border-t-[1px]': index === 0 }">
                           <div class="singleproject inline-grid grid-cols-10 gap-6px items-end group
-                          w-full border-white border-b-.6 py-2 cursor-pointer md:hover:bg-darkgreyHover"
-                          :class="{ 'border-t-.6': index === 0 }"
+                          w-full border-white py-2 cursor-pointer md:hover:bg-darkgreyHover"
                           @mouseover="hoveredProject = project._rev"
                           @mouseleave="hoveredProject = null">
                               <p v-html="project.title" class="text-[.8rem] md:text-base col-span-6 truncate"></p>
