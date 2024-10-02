@@ -22,8 +22,8 @@
         <div id="creditsOpen" class="hidden md:flex justify-start
         w-full -mt-10px
         overflow-hidden transition-all duration-500 gap-0"
-        :class="{'p-0 h-0 opacity-0':isAboutClosed,
-          'p-10px pt-0 h-8 opacity-100':!isAboutClosed
+        :class="{'p-0 h-0 opacity-0 pointer-events-none':isAboutClosed,
+          'p-10px pt-0 h-8 opacity-100 pointer-events-all':!isAboutClosed
         }">
             <p>Design: <a class="underline" href="http://studiosecondo.com/" target="_blank">Studio Secondo</a> / 
             Sviluppo: <a class="underline" href="https://schlatterca.com" target="_blank">Carlo Andrea Schlatter</a></p>
