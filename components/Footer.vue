@@ -25,7 +25,7 @@
         :class="{'p-0 h-0 opacity-0 pointer-events-none':isAboutClosed,
           'p-10px pt-0 h-8 opacity-100 pointer-events-all':!isAboutClosed
         }">
-            <p>Design: <a class="underline" href="http://studiosecondo.com/" target="_blank">Studio Secondo</a> / 
+            <p>Design: <a class="underline" href="https://www.instagram.com/studio_secondo/" target="_blank">Studio Secondo</a> / 
             Sviluppo: <a class="underline" href="https://schlatterca.com" target="_blank">Carlo Andrea Schlatter</a></p>
         </div>
     </div>

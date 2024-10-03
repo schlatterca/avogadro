@@ -54,7 +54,7 @@
           <p class="transition-all duration-500"
             :class="{'opacity-0 h-0 pointer-events-none': isAboutClosedMobile,
             'opacity-100 h-14 pointer-events-all': !isAboutClosedMobile}">
-            Design: <a class="underline" href="http://studiosecondo.com/" target="_blank">Studio Secondo</a>
+            Design: <a class="underline" href="https://www.instagram.com/studio_secondo/" target="_blank">Studio Secondo</a>
             <br>Sviluppo: <a class="underline" href="https://schlatterca.com" target="_blank">Carlo Andrea Schlatter</a></p>
         </div>
       </div>
