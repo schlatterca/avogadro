@@ -52,11 +52,11 @@
                         !w-auto !max-h-[80dvh]"/>
                     </figure>
                     <div class="relative DM-Mono leading-tight
-                    w-auto md:w-[20rem] max-w-[80vw] md:max-w-[unset]
+                    w-auto md:w-[20rem] max-w-[calc(100vw-40px)] md:max-w-[unset]
                     ml-20px mb-20px md:m-auto md:mx-auto h-[40dvh] md:h-auto content-end md:content-auto">
                         <p class="text-base uppercase" v-html="myData.title" v-if="myData.title"></p>
                         <p class="text-s mt-4" v-html="myData.citta" v-if="myData.citta"></p>
-                        <p class="text-s lg:text-base mt-8" v-html="myData.description" v-if="myData.description"></p>
+                        <p id="projectDescriptionText" class="text-s lg:text-base mt-8" v-html="myData.description" v-if="myData.description"></p>
                         <p class="text-s mt-6" v-html="myData.altre_info" v-if="myData.altre_info"></p>
                     </div>
                 </div>
@@ -69,8 +69,10 @@
                     
                     <figure class="pic h-auto" v-for="imageObj in slide.images" :key="imageObj._key"
                     v-bind="{
-                        alt_1: imageObj.image_2 ? imageUrlFor(imageObj.image_2) : undefined,
-                        ref: imageObj.image_2 ? 'originalImg' : undefined
+                        'alt_2': imageObj.image_3 ? imageUrlFor(imageObj.image_3) : undefined,
+                        'alt_1': imageObj.image_2 ? imageUrlFor(imageObj.image_2) : undefined,
+                        ref: imageObj.image_2 ? 'originalImg' : undefined,
+                        'data-id': `gif_${imageObj._key}`
                         }"
                     :class="[`image-width-${getImageWidthClass(imageObj.image_width)}`,
                         `mg-left-${getMargin(imageObj.margin_left)}`,
@@ -91,8 +93,10 @@
                     <template v-for="slide in myImages.slides" :key="slide._key">
                         <figure class="pic h-auto" v-for="imageObj in slide.images" :key="imageObj._key"
                         v-bind="{
-                        alt_1: imageObj.image_2 ? imageUrlFor(imageObj.image_2) : undefined,
-                        ref: imageObj.image_2 ? 'originalImg' : undefined
+                            'alt_2': imageObj.image_3 ? imageUrlFor(imageObj.image_3) : undefined,
+                            'alt_1': imageObj.image_2 ? imageUrlFor(imageObj.image_2) : undefined,
+                            ref: imageObj.image_2 ? 'originalImg' : undefined,
+                            'data-id': `gif_${imageObj._key}`
                         }">
                             <img v-if="imageObj.image.asset"
                             :src="imageUrlFor(imageObj.image.asset)"
@@ -267,7 +271,7 @@ const fetchData = () => {
 };
 onMounted(() => {
     fetchData();
-    console.log(snapContainer)
+    //console.log(snapContainer)
     setTimeout(() => {
         if(isMobile.value){return}
         snapContainer.value.focus();
@@ -282,6 +286,8 @@ const { data } = useSanityQuery(query);
 
 
 
+let interval; // Declare interval outside the function to control its scope
+let intervalIsSetted = false;
 
 function onScroll(event) {
     //handleMouseMove();
@@ -311,23 +317,23 @@ function onScroll(event) {
         }
 
         //START GIF
-        if(document.querySelectorAll('figure[alt_1]')){
-        //if(originalImg){
-            /* if(!intervalIsSetted && document.querySelector('figure[alt_1]').getBoundingClientRect().left > 0
-            && document.querySelector('figure[alt_1]').getBoundingClientRect().left < (width._value)){
-                //changeGifImg(mouseX, width._value);
-                interval = setInterval(function() {changeGifImg(true, true)}, 2000);
-                intervalIsSetted = true;
-            } */
-            document.querySelectorAll('figure[alt_1]').forEach(imageGIF => {
-                if(!intervalIsSetted && imageGIF.getBoundingClientRect().left > 0){
-                    //&& imageGIF.getBoundingClientRect().left < (width._value) + 10
-                    //changeGifImg(mouseX, width._value);
-                    interval = setInterval(function() {changeGifImg(true, true)}, 2000);
-                    intervalIsSetted = true;
-                }
-            })
-        }
+        // if(document.querySelectorAll('figure[alt_1]')){
+        // //if(originalImg){
+        //     /* if(!intervalIsSetted && document.querySelector('figure[alt_1]').getBoundingClientRect().left > 0
+        //     && document.querySelector('figure[alt_1]').getBoundingClientRect().left < (width._value)){
+        //         //changeGifImg(mouseX, width._value);
+        //         interval = setInterval(function() {changeGifImg(true, true)}, 2000);
+        //         intervalIsSetted = true;
+        //     } */
+        //     document.querySelectorAll('figure[alt_1]').forEach(imageGIF => {
+        //         if(!intervalIsSetted && imageGIF.getBoundingClientRect().left > 0){
+        //             //&& imageGIF.getBoundingClientRect().left < (width._value) + 10
+        //             //changeGifImg(mouseX, width._value);
+        //             interval = setInterval(function() {changeGifImg(true, true)}, 2000);
+        //             intervalIsSetted = true;
+        //         }
+        //     })
+        // }
     } else if(isMobile.value){
         if (firstSlide.getBoundingClientRect().top <= (height._value / 10)) {
             document.querySelector('#homeLinkMobile').classList.add('text-black');
@@ -338,7 +344,49 @@ function onScroll(event) {
             document.querySelector('#menuButtonMobile').classList.remove('text-black');
             document.querySelector('#background').classList.remove('opacity-0');
         }
+
+        //START GIF
+        /* if(document.querySelectorAll('figure[alt_1]')){
+            document.querySelectorAll('figure[alt_1]').forEach(imageGIF => {
+                if(!intervalIsSetted && imageGIF.getBoundingClientRect().left > 0){
+                    interval = setInterval(function() {changeGifImg(true, true)}, 2000);
+                    intervalIsSetted = true;
+                }
+            })
+        } */
     }
+
+    
+    let gifElements = document.querySelectorAll('figure[data-id]');
+    gifElements.forEach(gifElement => {
+        let gifId = gifElement.getAttribute('data-id');
+        let imgElement = gifElement.querySelector('img');
+        let alt1 = gifElement.getAttribute('alt_1');
+        let alt2 = gifElement.getAttribute('alt_2');
+
+        // Initialize GIF store if it hasn't been set up
+        if (gifId && imgElement && (alt1 || alt2)) {
+            initializeGifInStore(gifId, imgElement);
+        }
+
+        // Ensure store.gifs[gifId] exists before accessing its properties
+        if (store.gifs[gifId]) {
+            // Check if the interval hasn't been set for this specific gif
+            if (!store.gifs[gifId].intervalIsSet) {
+                // Start changing images automatically for this specific gif
+                store.gifs[gifId].interval = setInterval(() => {
+                    cycleGifImage(gifId); // Cycle the image for this specific GIF
+                }, 2000); // Change every 2 seconds
+                
+                // Mark that the interval is set for this specific GIF
+                store.gifs[gifId].intervalIsSet = true; // Keep track of the interval being set
+            }
+        } else {
+            console.error(`GIF with ID ${gifId} is not initialized in store.`);
+        }
+    });
+
+
 
     
 
@@ -361,12 +409,85 @@ function onScroll(event) {
     } */
 }
 
+function initializeGifInStore(gifId, imgElement) {
+    if (!store.gifs[gifId]) {
+        const alt1 = imgElement.parentElement.getAttribute('alt_1');
+        const alt2 = imgElement.parentElement.getAttribute('alt_2');
+
+        store.gifs[gifId] = {
+            myUrl_1: imgElement.src,
+            myUrl_2: alt1 || '',
+            myUrl_3: alt2 || '',
+            currentImage: 1,
+            myUrlSaved: true
+        };
+        //console.log('GIF initialized:', store.gifs[gifId]);
+    } else {
+        //console.log(`GIF ID: ${gifId} already initialized. Current state:`, store.gifs[gifId]);
+    }
+}
+
+function updateGifImage(gifId) {
+    const gif = store.gifs[gifId];
+    const gifElement = document.querySelector(`figure[data-id='${gifId}'] img`);
+
+    if (gif && gifElement) {
+        // Set the src based on the currentImage index
+        gifElement.src = gif.currentImage === 1 ? gif.myUrl_1 :
+                         gif.currentImage === 2 ? gif.myUrl_2 :
+                         gif.myUrl_3; // Assuming you have 3 images
+        //console.log(`Image source updated to: ${gifElement.src}`); // Debugging output
+    } else {
+        console.error(`GIF ID: ${gifId} not found or image element missing.`);
+    }
+}
+function cycleGifImage(gifId) {
+    const gif = store.gifs[gifId];
+    //console.log(store.gifs, gifId)
+
+    if (gif) {
+        // Determine whether this GIF has 2 or 3 images
+        if (gif.myUrl_3) {
+            // Cycle through 3 images
+            gif.currentImage = (gif.currentImage % 3) + 1; // Change the image (1, 2, 3)
+        } else {
+            // Cycle through 2 images
+            gif.currentImage = (gif.currentImage % 2) + 1; // Change the image (1, 2)
+        }
+
+        //console.log(`Cycling GIF ID: ${gifId}, Current Image: ${gif.currentImage}`); // Debugging output
+        updateGifImage(gifId); // Update the image displayed
+    }
+}
 
 const originalImg = ref(null) 
 function changeGifImg(mousePosition, width) {
-    let GIFs = document.querySelectorAll('figure[alt_1]');
+    
+    if (!store.gifs[gifId]) {
+        console.error(`Gif with ID ${gifId} does not exist in store.`);
+        return;
+    }
 
+    // Access the gif's data
+    let gifData = store.gifs[gifId];
+    let imgElement = document.querySelector(`figure[data-id="${gifId}"] img`);
+
+    // Cycle through images (1 -> 2 -> 3 -> 1)
+    if (gifData.currentImage === 1) {
+        imgElement.src = gifData.myUrl_2;
+        gifData.currentImage = 2;
+    } else if (gifData.currentImage === 2) {
+        imgElement.src = gifData.myUrl_3;
+        gifData.currentImage = 3;
+    } else {
+        imgElement.src = gifData.myUrl_1;
+        gifData.currentImage = 1;
+    }
+
+    /*let GIFs = document.querySelectorAll('figure[alt_1]');
+    
     if(GIFs.length > 1){
+        console.log('>1', GIFs.length)
         const originalImgSrc = GIFs[0].getElementsByTagName('img')[0].src;
         const originalImgSrc2 = GIFs[1].getElementsByTagName('img')[0].src;
         if(!store.myUrlSaved){
@@ -392,6 +513,7 @@ function changeGifImg(mousePosition, width) {
             GIFs[1].getElementsByTagName('img')[0].src = store.myUrl_2_2;
         } 
     } else if(GIFs.length > 0){
+        console.log('>0', GIFs.length)
         const originalImgSrc = GIFs[0].getElementsByTagName('img')[0].src;
         if(!store.myUrlSaved){
             store.myUrl_1 = originalImgSrc;
@@ -405,12 +527,10 @@ function changeGifImg(mousePosition, width) {
             GIFs[0].classList.add('changed')
             GIFs[0].getElementsByTagName('img')[0].src = store.myUrl_2;
         } 
-    }
+    } */
 }
 
 
-let intervalIsSetted = false;
-let interval;
 const handleMouseEnter = (event) => {
     handleMouseMove(event);
 };

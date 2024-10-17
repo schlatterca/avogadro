@@ -1,4 +1,4 @@
-import { version, unref, inject, defineComponent, ref, provide, createElementBlock, h, computed, shallowReactive, watch, Suspense, nextTick, Fragment, Transition, hasInjectionContext, getCurrentInstance, mergeProps, createApp, effectScope, reactive, getCurrentScope, isRef, isReactive, toRaw, onErrorCaptured, onServerPrefetch, createVNode, resolveDynamicComponent, useSSRContext, toRef, onScopeDispose, withCtx, defineAsyncComponent, shallowRef, isReadonly, toRefs, markRaw, isShallow } from 'vue';
+import { version, unref, inject, defineComponent, ref, provide, createElementBlock, h, computed, shallowReactive, watch, Suspense, nextTick, Fragment, Transition, hasInjectionContext, getCurrentInstance, mergeProps, watchEffect, createApp, effectScope, reactive, getCurrentScope, onScopeDispose, onErrorCaptured, onServerPrefetch, createVNode, resolveDynamicComponent, useSSRContext, toRef, isRef, isReactive, toRaw, withCtx, defineAsyncComponent, shallowRef, isReadonly, isShallow, markRaw, toRefs } from 'vue';
 import { $ as $fetch, l as hasProtocol, m as isScriptProtocol, n as joinURL, w as withQuery, h as createError$1, o as defu, p as sanitizeStatusCode, q as createHooks, t as toRouteMatcher, r as createRouter$1 } from '../runtime.mjs';
 import { b as baseURL } from '../routes/renderer.mjs';
 import { getActiveHead, CapoPlugin } from 'unhead';
@@ -120,11 +120,11 @@ if (!globalThis.$fetch) {
 const appPageTransition = { "name": "page", "mode": "out-in" };
 const appLayoutTransition = false;
 const appKeepalive = false;
-const nuxtLinkDefaults = { "componentName": "NuxtLink" };
+const nuxtLinkDefaults = { "componentName": "NuxtLink", "prefetch": true, "prefetchOn": { "visibility": true } };
 const asyncDataDefaults = { "value": null, "errorValue": null, "deep": true };
 const appId = "nuxt-app";
-function getNuxtAppCtx(appName = appId) {
-  return getContext(appName, {
+function getNuxtAppCtx(id = appId) {
+  return getContext(id, {
     asyncContext: false
   });
 }
@@ -132,13 +132,13 @@ const NuxtPluginIndicator = "__nuxt_plugin";
 function createNuxtApp(options) {
   let hydratingCount = 0;
   const nuxtApp = {
-    _name: appId,
+    _id: options.id || appId || "nuxt-app",
     _scope: effectScope(),
     provide: void 0,
     globalName: "nuxt",
     versions: {
       get nuxt() {
-        return "3.12.3";
+        return "3.13.0";
       },
       get vue() {
         return nuxtApp.vueApp.version;
@@ -308,22 +308,22 @@ function defineNuxtPlugin(plugin2) {
 }
 function callWithNuxt(nuxt, setup, args) {
   const fn = () => setup();
-  const nuxtAppCtx = getNuxtAppCtx(nuxt._name);
+  const nuxtAppCtx = getNuxtAppCtx(nuxt._id);
   {
     return nuxt.vueApp.runWithContext(() => nuxtAppCtx.callAsync(nuxt, fn));
   }
 }
-function tryUseNuxtApp(appName) {
+function tryUseNuxtApp(id) {
   var _a;
   let nuxtAppInstance;
   if (hasInjectionContext()) {
     nuxtAppInstance = (_a = getCurrentInstance()) == null ? void 0 : _a.appContext.app.$nuxt;
   }
-  nuxtAppInstance = nuxtAppInstance || getNuxtAppCtx(appName).tryUse();
+  nuxtAppInstance = nuxtAppInstance || getNuxtAppCtx(id).tryUse();
   return nuxtAppInstance || null;
 }
-function useNuxtApp(appName) {
-  const nuxtAppInstance = tryUseNuxtApp(appName);
+function useNuxtApp(id) {
+  const nuxtAppInstance = tryUseNuxtApp(id);
   if (!nuxtAppInstance) {
     {
       throw new Error("[nuxt] instance unavailable");
@@ -463,32 +463,37 @@ const createError = (error) => {
   });
   return nuxtError;
 };
-version.startsWith("3");
+version[0] === "3";
 function resolveUnref(r) {
   return typeof r === "function" ? r() : unref(r);
 }
-function resolveUnrefHeadInput(ref2, lastKey = "") {
+function resolveUnrefHeadInput(ref2) {
   if (ref2 instanceof Promise)
     return ref2;
   const root = resolveUnref(ref2);
   if (!ref2 || !root)
     return root;
   if (Array.isArray(root))
-    return root.map((r) => resolveUnrefHeadInput(r, lastKey));
+    return root.map((r) => resolveUnrefHeadInput(r));
   if (typeof root === "object") {
-    return Object.fromEntries(
-      Object.entries(root).map(([k, v]) => {
-        if (k === "titleTemplate" || k.startsWith("on"))
-          return [k, unref(v)];
-        return [k, resolveUnrefHeadInput(v, k)];
-      })
-    );
+    const resolved = {};
+    for (const k in root) {
+      if (!Object.prototype.hasOwnProperty.call(root, k)) {
+        continue;
+      }
+      if (k === "titleTemplate" || k[0] === "o" && k[1] === "n") {
+        resolved[k] = unref(root[k]);
+        continue;
+      }
+      resolved[k] = resolveUnrefHeadInput(root[k]);
+    }
+    return resolved;
   }
   return root;
 }
 defineHeadPlugin({
   hooks: {
-    "entries:resolve": function(ctx) {
+    "entries:resolve": (ctx) => {
       for (const entry2 of ctx.entries)
         entry2.resolvedInput = resolveUnrefHeadInput(entry2.input);
     }
@@ -671,27 +676,27 @@ const _routes = [
   {
     name: "about",
     path: "/about",
-    component: () => import('./about-D1WdX2Rx.mjs').then((m) => m.default || m)
+    component: () => import('./about-DcbI4Q2Z.mjs').then((m) => m.default || m)
   },
   {
     name: "index",
     path: "/",
-    component: () => import('./index-Cr_X7XvP.mjs').then((m) => m.default || m)
+    component: () => import('./index-BvrjbVxK.mjs').then((m) => m.default || m)
   },
   {
     name: "progetti-slug",
     path: "/progetti/:slug()",
-    component: () => import('./_slug_-CKS-TGN8.mjs').then((m) => m.default || m)
+    component: () => import('./_slug_-BMxz5cEw.mjs').then((m) => m.default || m)
   },
   {
     name: "project-index",
     path: "/project-index",
-    component: () => import('./project-index-CUB8j0xG.mjs').then((m) => m.default || m)
+    component: () => import('./project-index-qjqoifea.mjs').then((m) => m.default || m)
   },
   {
     name: "vision",
     path: "/vision",
-    component: () => import('./vision-aYach_wN.mjs').then((m) => m.default || m)
+    component: () => import('./vision-aQxU2_AR.mjs').then((m) => m.default || m)
   }
 ];
 const _wrapIf = (component, props, slots) => {
@@ -762,7 +767,7 @@ function _getHashElementScrollMarginTop(selector) {
   try {
     const elem = (void 0).querySelector(selector);
     if (elem) {
-      return Number.parseFloat(getComputedStyle(elem).scrollMarginTop);
+      return (Number.parseFloat(getComputedStyle(elem).scrollMarginTop) || 0) + (Number.parseFloat(getComputedStyle((void 0).documentElement).scrollPaddingTop) || 0);
     }
   } catch {
   }
@@ -782,15 +787,29 @@ const validate = /* @__PURE__ */ defineNuxtRouteMiddleware(async (to) => {
   if (!((_a = to.meta) == null ? void 0 : _a.validate)) {
     return;
   }
-  useNuxtApp();
-  useRouter();
+  const nuxtApp = useNuxtApp();
+  const router = useRouter();
   const result = ([__temp, __restore] = executeAsync(() => Promise.resolve(to.meta.validate(to))), __temp = await __temp, __restore(), __temp);
   if (result === true) {
     return;
   }
-  {
-    return result;
-  }
+  const error = createError({
+    statusCode: result && result.statusCode || 404,
+    statusMessage: result && result.statusMessage || `Page Not Found: ${to.fullPath}`,
+    data: {
+      path: to.fullPath
+    }
+  });
+  const unsub = router.beforeResolve((final) => {
+    unsub();
+    if (final === to) {
+      const unsub2 = router.afterEach(async () => {
+        unsub2();
+        await nuxtApp.runWithContext(() => showError(error));
+      });
+      return false;
+    }
+  });
 });
 const manifest_45route_45rule = /* @__PURE__ */ defineNuxtRouteMiddleware(async (to) => {
   {
@@ -806,14 +825,14 @@ const plugin$1 = /* @__PURE__ */ defineNuxtPlugin({
   name: "nuxt:router",
   enforce: "pre",
   async setup(nuxtApp) {
-    var _a, _b, _c, _d;
+    var _a, _b, _c;
     let __temp, __restore;
     let routerBase = (/* @__PURE__ */ useRuntimeConfig()).app.baseURL;
     if (routerOptions.hashMode && !routerBase.includes("#")) {
       routerBase += "#";
     }
     const history = ((_a = routerOptions.history) == null ? void 0 : _a.call(routerOptions, routerBase)) ?? createMemoryHistory(routerBase);
-    const routes = ((_b = routerOptions.routes) == null ? void 0 : _b.call(routerOptions, _routes)) ?? _routes;
+    const routes = routerOptions.routes ? ([__temp, __restore] = executeAsync(() => routerOptions.routes(_routes)), __temp = await __temp, __restore(), __temp) ?? _routes : _routes;
     let startPosition;
     const router = createRouter({
       ...routerOptions,
@@ -851,8 +870,8 @@ const plugin$1 = /* @__PURE__ */ defineNuxtPlugin({
     };
     nuxtApp.hook("page:finish", syncCurrentRoute);
     router.afterEach((to, from) => {
-      var _a2, _b2, _c2, _d2;
-      if (((_b2 = (_a2 = to.matched[0]) == null ? void 0 : _a2.components) == null ? void 0 : _b2.default) === ((_d2 = (_c2 = from.matched[0]) == null ? void 0 : _c2.components) == null ? void 0 : _d2.default)) {
+      var _a2, _b2, _c2, _d;
+      if (((_b2 = (_a2 = to.matched[0]) == null ? void 0 : _a2.components) == null ? void 0 : _b2.default) === ((_d = (_c2 = from.matched[0]) == null ? void 0 : _c2.components) == null ? void 0 : _d.default)) {
         syncCurrentRoute();
       }
     });
@@ -868,7 +887,7 @@ const plugin$1 = /* @__PURE__ */ defineNuxtPlugin({
       named: {}
     };
     useError();
-    if (!((_c = nuxtApp.ssrContext) == null ? void 0 : _c.islandContext)) {
+    if (!((_b = nuxtApp.ssrContext) == null ? void 0 : _b.islandContext)) {
       router.afterEach(async (to, _from, failure) => {
         delete nuxtApp._processingMiddleware;
         if (failure) {
@@ -905,7 +924,7 @@ const plugin$1 = /* @__PURE__ */ defineNuxtPlugin({
     }
     const resolvedInitialRoute = router.currentRoute.value;
     syncCurrentRoute();
-    if ((_d = nuxtApp.ssrContext) == null ? void 0 : _d.islandContext) {
+    if ((_c = nuxtApp.ssrContext) == null ? void 0 : _c.islandContext) {
       return { provide: { router } };
     }
     const initialLayout = nuxtApp.payload.state._layout;
@@ -1063,9 +1082,9 @@ function createPinia() {
   });
   return pinia;
 }
-const noop = () => {
+const noop$1 = () => {
 };
-function addSubscription(subscriptions, callback, detached, onCleanup = noop) {
+function addSubscription(subscriptions, callback, detached, onCleanup = noop$1) {
   subscriptions.push(callback);
   const removeSubscription = () => {
     const idx = subscriptions.indexOf(callback);
@@ -1121,7 +1140,7 @@ function createOptionsStore(id, options, pinia, hot) {
   const initialState = pinia.state.value[id];
   let store;
   function setup() {
-    if (!initialState && (!("production" !== "production") )) {
+    if (!initialState && (!("production" !== "production"))) {
       {
         pinia.state.value[id] = state ? state() : {};
       }
@@ -1152,7 +1171,7 @@ function createSetupStore($id, setup, options = {}, pinia, hot, isOptionsStore) 
   let actionSubscriptions = [];
   let debuggerEvents;
   const initialState = pinia.state.value[$id];
-  if (!isOptionsStore && !initialState && (!("production" !== "production") )) {
+  if (!isOptionsStore && !initialState && (!("production" !== "production"))) {
     {
       pinia.state.value[$id] = {};
     }
@@ -1195,7 +1214,7 @@ function createSetupStore($id, setup, options = {}, pinia, hot, isOptionsStore) 
     });
   } : (
     /* istanbul ignore next */
-    noop
+    noop$1
   );
   function $dispose() {
     scope.stop();
@@ -1636,10 +1655,181 @@ function hasChildrenRoutes(fork, newRoute, Component) {
   });
   return index < newRoute.matched.length - 1;
 }
+const useMyStore = defineStore("myStore", {
+  state: () => ({
+    myUrl: "",
+    myUrlSaved: false,
+    myUrl2: "",
+    myUrlSaved2: false,
+    isMobile: ref(false),
+    menuIsOpen: ref(false),
+    headerBlack: false
+  })
+});
+function tryOnScopeDispose(fn) {
+  if (getCurrentScope()) {
+    onScopeDispose(fn);
+    return true;
+  }
+  return false;
+}
+function toValue(r) {
+  return typeof r === "function" ? r() : unref(r);
+}
+typeof WorkerGlobalScope !== "undefined" && globalThis instanceof WorkerGlobalScope;
+const toString = Object.prototype.toString;
+const isObject = (val) => toString.call(val) === "[object Object]";
+const noop = () => {
+};
+function getLifeCycleTarget(target) {
+  return getCurrentInstance();
+}
+function tryOnMounted(fn, sync = true, target) {
+  const instance = getLifeCycleTarget();
+  if (instance)
+    ;
+  else if (sync)
+    fn();
+  else
+    nextTick(fn);
+}
+function unrefElement(elRef) {
+  var _a;
+  const plain = toValue(elRef);
+  return (_a = plain == null ? void 0 : plain.$el) != null ? _a : plain;
+}
+const defaultWindow = void 0;
+function useEventListener(...args) {
+  let target;
+  let events2;
+  let listeners;
+  let options;
+  if (typeof args[0] === "string" || Array.isArray(args[0])) {
+    [events2, listeners, options] = args;
+    target = defaultWindow;
+  } else {
+    [target, events2, listeners, options] = args;
+  }
+  if (!target)
+    return noop;
+  if (!Array.isArray(events2))
+    events2 = [events2];
+  if (!Array.isArray(listeners))
+    listeners = [listeners];
+  const cleanups = [];
+  const cleanup = () => {
+    cleanups.forEach((fn) => fn());
+    cleanups.length = 0;
+  };
+  const register = (el, event, listener, options2) => {
+    el.addEventListener(event, listener, options2);
+    return () => el.removeEventListener(event, listener, options2);
+  };
+  const stopWatch = watch(
+    () => [unrefElement(target), toValue(options)],
+    ([el, options2]) => {
+      cleanup();
+      if (!el)
+        return;
+      const optionsClone = isObject(options2) ? { ...options2 } : options2;
+      cleanups.push(
+        ...events2.flatMap((event) => {
+          return listeners.map((listener) => register(el, event, listener, optionsClone));
+        })
+      );
+    },
+    { immediate: true, flush: "post" }
+  );
+  const stop = () => {
+    stopWatch();
+    cleanup();
+  };
+  tryOnScopeDispose(stop);
+  return stop;
+}
+function useMounted() {
+  const isMounted = ref(false);
+  getCurrentInstance();
+  return isMounted;
+}
+function useSupported(callback) {
+  const isMounted = useMounted();
+  return computed(() => {
+    isMounted.value;
+    return Boolean(callback());
+  });
+}
+function useMediaQuery(query, options = {}) {
+  const { window: window2 = defaultWindow } = options;
+  const isSupported = useSupported(() => window2 && "matchMedia" in window2 && typeof window2.matchMedia === "function");
+  let mediaQuery;
+  const matches = ref(false);
+  const handler = (event) => {
+    matches.value = event.matches;
+  };
+  const cleanup = () => {
+    if (!mediaQuery)
+      return;
+    if ("removeEventListener" in mediaQuery)
+      mediaQuery.removeEventListener("change", handler);
+    else
+      mediaQuery.removeListener(handler);
+  };
+  const stopWatch = watchEffect(() => {
+    if (!isSupported.value)
+      return;
+    cleanup();
+    mediaQuery = window2.matchMedia(toValue(query));
+    if ("addEventListener" in mediaQuery)
+      mediaQuery.addEventListener("change", handler);
+    else
+      mediaQuery.addListener(handler);
+    matches.value = mediaQuery.matches;
+  });
+  tryOnScopeDispose(() => {
+    stopWatch();
+    cleanup();
+    mediaQuery = void 0;
+  });
+  return matches;
+}
+function useWindowSize(options = {}) {
+  const {
+    window: window2 = defaultWindow,
+    initialWidth = Number.POSITIVE_INFINITY,
+    initialHeight = Number.POSITIVE_INFINITY,
+    listenOrientation = true,
+    includeScrollbar = true
+  } = options;
+  const width = ref(initialWidth);
+  const height = ref(initialHeight);
+  const update = () => {
+    if (window2) {
+      if (includeScrollbar) {
+        width.value = window2.innerWidth;
+        height.value = window2.innerHeight;
+      } else {
+        width.value = window2.document.documentElement.clientWidth;
+        height.value = window2.document.documentElement.clientHeight;
+      }
+    }
+  };
+  update();
+  tryOnMounted(update);
+  useEventListener("resize", update, { passive: true });
+  if (listenOrientation) {
+    const matches = useMediaQuery("(orientation: portrait)");
+    watch(matches, () => update());
+  }
+  return { width, height };
+}
 const _sfc_main$2 = {
   __name: "app",
   __ssrInlineRender: true,
   setup(__props) {
+    const { width } = useWindowSize();
+    useMyStore();
+    computed(() => width.value <= 768);
     return (_ctx, _push, _parent, _attrs) => {
       const _component_NuxtLayout = __nuxt_component_0;
       const _component_NuxtPage = __nuxt_component_1;
@@ -1687,8 +1877,8 @@ const _sfc_main$1 = {
     const statusMessage = _error.statusMessage ?? (is404 ? "Page Not Found" : "Internal Server Error");
     const description = _error.message || _error.toString();
     const stack = void 0;
-    const _Error404 = defineAsyncComponent(() => import('./error-404-BzeVUFS0.mjs').then((r) => r.default || r));
-    const _Error = defineAsyncComponent(() => import('./error-500-Cz4jA0VI.mjs').then((r) => r.default || r));
+    const _Error404 = defineAsyncComponent(() => import('./error-404-Y3oNoxfd.mjs').then((r) => r.default || r));
+    const _Error = defineAsyncComponent(() => import('./error-500-t7sk5l6r.mjs').then((r) => r.default || r));
     const ErrorTemplate = is404 ? _Error404 : _Error;
     return (_ctx, _push, _parent, _attrs) => {
       _push(ssrRenderComponent(unref(ErrorTemplate), mergeProps({ statusCode: unref(statusCode), statusMessage: unref(statusMessage), description: unref(description), stack: unref(stack) }, _attrs), null, _parent));
@@ -1769,5 +1959,5 @@ let entry;
 }
 const entry$1 = (ssrContext) => entry(ssrContext);
 
-export { navigateTo as a, useRuntimeConfig as b, useNuxtApp as c, asyncDataDefaults as d, entry$1 as default, createError as e, defineStore as f, resolveUnrefHeadInput as g, injectHead as i, nuxtLinkDefaults as n, resolveRouteObject as r, useRouter as u };
+export { navigateTo as a, useNuxtApp as b, useRuntimeConfig as c, useMyStore as d, entry$1 as default, useWindowSize as e, asyncDataDefaults as f, createError as g, resolveUnrefHeadInput as h, injectHead as i, nuxtLinkDefaults as n, resolveRouteObject as r, useRouter as u };
 //# sourceMappingURL=server.mjs.map

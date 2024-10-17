@@ -11,7 +11,7 @@
             overflow-y-scroll md:overflow-y-unset justify-unset md:justify-between h-auto md:h-[100dvh]">
                 <div id="aboutText" class="relative h-full flex flex-col justify-between leading-normal
                 w-full md:w-50vw">
-                    <div id="aboutTopText" class="upper text-[.9rem] leading-[120%] *:mb-4">
+                    <div id="aboutTopText" class="upper text-[.9rem] leading-[125%] *:mb-4">
                         <template v-for="block in myData.text_top" :key="block._key">
                             <PortableText
                                 :value="[block]"
@@ -28,7 +28,7 @@
                     </figure>
 
                     <!-- <p v-html="myData.text_top"></p> -->
-                    <div class="bottom text-[.9rem] leading-[120%]
+                    <div class="bottom text-[.9rem] leading-[125%]
                     mt-4 mb-8 md:mt-0 md:mb-0">
                         <template v-for="block in myData.text_bottom" :key="block._key">
                             <PortableText

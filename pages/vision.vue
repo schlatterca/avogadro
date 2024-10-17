@@ -36,7 +36,7 @@
                         left-20px md:left-[calc(calc(23vw+2px))]
                         top-[unset] md:top-[50%]
                         bottom-20px md:bottom-[unset]
-                        w-auto md:w-[30vw] max-w-[80vw] md:max-w-[unset]">
+                        w-auto md:w-80 max-w-[calc(100vw-40px)] md:max-w-[unset]">
                         <!-- text absolute bottom-0 left-0 w-full z-10 text-white
                         p-20px pr-66% pointer-events-none
                         leading-tight text-m blur-[20px] transition-[filter] duration-[1200ms] -->

@@ -3,6 +3,7 @@ import { defineStore } from 'pinia';
 
 export const useMyStore = defineStore('myStore', {
   state: () => ({
+    gifs: {},
     myUrl: '',
     myUrlSaved: false,
     myUrl2: '',

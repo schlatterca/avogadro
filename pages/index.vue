@@ -19,6 +19,7 @@
                 @scroll.passive="checkVisibilityMobile"
                 ref="mainHome">
                     <section id="s_1">
+                        <div id="downArrow"></div>
                     </section>
 
                     <div v-if="!isMobile" id="leftArrow" class="arrow"></div>
@@ -362,23 +363,28 @@ onMounted(() => {
 
 function idleScroll() {
 
+    /* console.log(s_2.value.getBoundingClientRect().top)
+    console.log(s_2.value.getBoundingClientRect().bottom) */
+    if((s_2.value.getBoundingClientRect().top < 0) && (s_2.value.getBoundingClientRect().bottom < 1)){
+        console.log('no')
+        stopForeverScrollMobile = true;
+        console.log(stopForeverScrollMobile)
+        return
+    }
     if(isMobile.value){
         timeScroll = 2000;
     } else {
         timeScroll = 200;
     }
     myInterval = setInterval(() => {
-        if(stopForeverScrollMobile == true){
+        if (stopForeverScrollMobile === true) {
             clearTimeout(myTimeout);
-            if (myInterval) {
-                clearInterval(myInterval);
-            }
-            return
+            clearInterval(myInterval);
+            return;
         }
         //currentIndex = (currentIndex + 1) % figures.length;
         //figures[currentIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
         
-        //replicate click
         const container = document.getElementById('s_2');
         /* const overlay = document.getElementById('overlay_slide');
         if (overlay.classList.contains('show')) {
@@ -389,12 +395,16 @@ function idleScroll() {
         let nextIndex;
         nextIndex = currentIndex < slides.length - 1 ? currentIndex + 1 : 0;
         //overlay.classList.add('show');
-        setTimeout(() => {
+        
+        myTimeout = setTimeout(() => {
+            if (stopForeverScrollMobile === true) {
+                clearInterval(myInterval);
+                return;
+            }
+            
             if (currentIndex < slides.length - 1) {
-                //console.log(currentIndex, 'a')
                 slides[currentIndex + 1].scrollIntoView({ behavior: 'smooth', inline: 'start' });
             } else {
-                //console.log(currentIndex, 'a')
                 slides[0].scrollIntoView({ behavior: 'smooth', inline: 'start' });
             }
         }, timeScroll);
@@ -463,10 +473,11 @@ function checkVisibilityMobile() {
         store.headerBlack = false;
     }
 
-    if((s_2.value.getBoundingClientRect().top < window.innerHeight / 2) && (s_2.value.getBoundingClientRect().bottom > 0)){
-        idleScroll();
-    } else if(s_2.value.getBoundingClientRect().top < 0) {
+
+    if(s_2.value.getBoundingClientRect().top < 0) {
         stopForeverScrollMobile = true;
+    } else if((s_2.value.getBoundingClientRect().top < window.innerHeight / 2) && (s_2.value.getBoundingClientRect().bottom > 0)){
+        idleScroll();
     }
     
 }
