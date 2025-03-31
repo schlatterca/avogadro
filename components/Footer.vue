@@ -14,7 +14,7 @@
             <div class="flex w-[70vw] justify-end
             gap-20px md:gap-[12vw]">
                 <p>&nbsp;</p>
-                <a href="mailto:cecilia.avogadro@gmail.com">E—MAIL</a>
+                <a href="mailto:info@ceciliaavogadro.com">E—MAIL</a>
                 <a href="https://www.instagram.com/ceciliaavogadroarchitetto/" target="_blank" class="w-">IG</a>
                 <p @click="doSomething" class="cursor-pointer w-">CREDITS</p>
             </div>
