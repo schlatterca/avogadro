@@ -112,13 +112,12 @@
 </template>
 
 <script setup>
-import { onMounted, ref, nextTick, computed } from 'vue';
+import { onMounted, ref, computed } from 'vue';
 import { useWindowSize } from '@vueuse/core'
 import sanity from "../sanity/sanity.js";
 import imageUrlBuilder from "@sanity/image-url";
 import { useRoute } from 'vue-router';
 import { useMyStore } from '../store/store.js';
-import $ from 'jquery';
 
 const imageBuilder = imageUrlBuilder(sanity);
 const route = useRoute();
@@ -131,14 +130,6 @@ const myData = ref([]);
 const store = useMyStore();
 let isMobile = computed(() => store.isMobile)
 
-useHead({
-    title: "Cecilia Avogadro",
-    meta: [{ name: "description", content: "" }],
-});
-
-// import store from '../store'
-
-//const otherQuery = `*[_type == "project" && slug.current == "${slug}"]`;
 const otherQuery = `*[_type == "project" && slug.current == "${slug}"]{
     _id,
     _type,
@@ -183,14 +174,6 @@ const imageUrlFor = (source) => {
 
 const getImageWidthClass = (myData) => {
     return myData.split('%')[0];
-    /* switch (imageWidth) {
-    case '10%':
-        return 'w-10';
-    case '30%':
-        return 'w-30';
-    default:
-        return '';
-    } */
 }
 const getMargin = (myMargin) => {
     if(myMargin){   
@@ -278,7 +261,7 @@ onMounted(() => {
     }, 100);
 });
 const query = groq`*[_type == "project" && slug.current == "${slug}"]`;
-const { data } = useSanityQuery(query);
+//const { data } = useSanityQuery(query);
 //console.log("data:", data);
 
 
@@ -290,7 +273,6 @@ let interval; // Declare interval outside the function to control its scope
 let intervalIsSetted = false;
 
 function onScroll(event) {
-    //handleMouseMove();
 
     const { width, height } = useWindowSize();
     let firstSlide = document.getElementById('planimetria')
@@ -315,25 +297,6 @@ function onScroll(event) {
                 span.classList.remove('text-black');
             });
         }
-
-        //START GIF
-        // if(document.querySelectorAll('figure[alt_1]')){
-        // //if(originalImg){
-        //     /* if(!intervalIsSetted && document.querySelector('figure[alt_1]').getBoundingClientRect().left > 0
-        //     && document.querySelector('figure[alt_1]').getBoundingClientRect().left < (width._value)){
-        //         //changeGifImg(mouseX, width._value);
-        //         interval = setInterval(function() {changeGifImg(true, true)}, 2000);
-        //         intervalIsSetted = true;
-        //     } */
-        //     document.querySelectorAll('figure[alt_1]').forEach(imageGIF => {
-        //         if(!intervalIsSetted && imageGIF.getBoundingClientRect().left > 0){
-        //             //&& imageGIF.getBoundingClientRect().left < (width._value) + 10
-        //             //changeGifImg(mouseX, width._value);
-        //             interval = setInterval(function() {changeGifImg(true, true)}, 2000);
-        //             intervalIsSetted = true;
-        //         }
-        //     })
-        // }
     } else if(isMobile.value){
         if (firstSlide.getBoundingClientRect().top <= (height._value / 10)) {
             document.querySelector('#homeLinkMobile').classList.add('text-black');
@@ -344,16 +307,6 @@ function onScroll(event) {
             document.querySelector('#menuButtonMobile').classList.remove('text-black');
             document.querySelector('#background').classList.remove('opacity-0');
         }
-
-        //START GIF
-        /* if(document.querySelectorAll('figure[alt_1]')){
-            document.querySelectorAll('figure[alt_1]').forEach(imageGIF => {
-                if(!intervalIsSetted && imageGIF.getBoundingClientRect().left > 0){
-                    interval = setInterval(function() {changeGifImg(true, true)}, 2000);
-                    intervalIsSetted = true;
-                }
-            })
-        } */
     }
 
     
@@ -385,28 +338,6 @@ function onScroll(event) {
             console.error(`GIF with ID ${gifId} is not initialized in store.`);
         }
     });
-
-
-
-    
-
-    
-    /* let GIFs = document.querySelectorAll('figure[alt_1]');
-    if(GIFs.length > 0){
-        const originalImgSrc = GIFs[0].getElementsByTagName('img')[0].src;
-        if(!store.myUrlSaved){
-            store.myUrl_1 = originalImgSrc;
-            store.myUrl_2 = GIFs[0].getElementsByTagName('img')[0].parentElement.getAttribute('alt_1');
-            store.myUrlSaved = true;
-        }
-        if((GIFs.length > 0)&&(GIFs[0].getBoundingClientRect().left > (width._value / 2)&&(GIFs[0].classList.contains('changed')))) {
-            GIFs[0].classList.remove('changed')
-            GIFs[0].getElementsByTagName('img')[0].src = store.myUrl_1;
-        } else if((GIFs.length > 0)&&(GIFs[0].getBoundingClientRect().left <= (width._value / 2)&&(!GIFs[0].classList.contains('changed')))) {
-            GIFs[0].classList.add('changed')
-            GIFs[0].getElementsByTagName('img')[0].src = store.myUrl_2;
-        }
-    } */
 }
 
 function initializeGifInStore(gifId, imgElement) {
@@ -483,51 +414,6 @@ function changeGifImg(mousePosition, width) {
         imgElement.src = gifData.myUrl_1;
         gifData.currentImage = 1;
     }
-
-    /*let GIFs = document.querySelectorAll('figure[alt_1]');
-    
-    if(GIFs.length > 1){
-        console.log('>1', GIFs.length)
-        const originalImgSrc = GIFs[0].getElementsByTagName('img')[0].src;
-        const originalImgSrc2 = GIFs[1].getElementsByTagName('img')[0].src;
-        if(!store.myUrlSaved){
-            store.myUrl_1 = originalImgSrc;
-            store.myUrl_2 = GIFs[0].getElementsByTagName('img')[0].parentElement.getAttribute('alt_1');
-            store.myUrlSaved = true;
-
-            store.myUrl_1_2 = originalImgSrc2;
-            store.myUrl_2_2 = GIFs[1].getElementsByTagName('img')[0].parentElement.getAttribute('alt_1');
-            store.myUrlSaved2 = true;
-        }
-        if((GIFs.length > 0)&&(GIFs[0].classList.contains('changed'))) {
-            GIFs[0].classList.remove('changed')
-            GIFs[0].getElementsByTagName('img')[0].src = store.myUrl_1;
-
-            GIFs[1].classList.remove('changed')
-            GIFs[1].getElementsByTagName('img')[0].src = store.myUrl_1_2;
-
-        } else if((GIFs.length > 0)&&(!GIFs[0].classList.contains('changed'))) {
-            GIFs[0].classList.add('changed')
-            GIFs[0].getElementsByTagName('img')[0].src = store.myUrl_2;
-            GIFs[1].classList.add('changed')
-            GIFs[1].getElementsByTagName('img')[0].src = store.myUrl_2_2;
-        } 
-    } else if(GIFs.length > 0){
-        console.log('>0', GIFs.length)
-        const originalImgSrc = GIFs[0].getElementsByTagName('img')[0].src;
-        if(!store.myUrlSaved){
-            store.myUrl_1 = originalImgSrc;
-            store.myUrl_2 = GIFs[0].getElementsByTagName('img')[0].parentElement.getAttribute('alt_1');
-            store.myUrlSaved = true;
-        }
-        if((GIFs.length > 0)&&(GIFs[0].classList.contains('changed'))) {
-            GIFs[0].classList.remove('changed')
-            GIFs[0].getElementsByTagName('img')[0].src = store.myUrl_1;
-        } else if((GIFs.length > 0)&&(!GIFs[0].classList.contains('changed'))) {
-            GIFs[0].classList.add('changed')
-            GIFs[0].getElementsByTagName('img')[0].src = store.myUrl_2;
-        } 
-    } */
 }
 
 
@@ -601,80 +487,12 @@ const handleClick = (event) => {
 
     }, 100);
 };
-//JQUERY
-/* const handleClick = (event) => {
-    event.preventDefault();
-
-    const $container = $(event.currentTarget);
-    const mouseX = event.clientX - $container.offset().left;
-    const containerWidth = $container.width();
-    const viewportWidth = $(window).width();
-    const containerScrollLeft = $container.scrollLeft();
-    const containerScrollWidth = $container[0].scrollWidth;
-    const $slides = $container.children('.slide');
-
-    // Check if the scrolling animation is already in progress
-    if ($container.is(':animated')) return;
-
-    // Determine the direction and calculate the new scroll position
-    let newScrollLeft;
-    if (mouseX < containerWidth / 2) {
-        // Scroll left
-        if (containerScrollLeft <= 0) {
-            // If at the start, jump to the end
-            newScrollLeft = containerScrollWidth - containerWidth;
-        } else {
-            // Otherwise, scroll by viewport width
-            newScrollLeft = Math.max(containerScrollLeft - viewportWidth, 0);
-        }
-    } else {
-        // Scroll right
-        if (containerScrollLeft + containerWidth >= containerScrollWidth) {
-            // If at the end, jump to the start
-            newScrollLeft = 0;
-        } else {
-            // Otherwise, scroll by viewport width
-            newScrollLeft = Math.min(containerScrollLeft + viewportWidth, containerScrollWidth - containerWidth);
-        }
-    }
-
-    // Remove the scroll snap class
-    $container.removeClass('snap-mandatory');
-
-    // Animate scrolling
-    $container.animate({ scrollLeft: newScrollLeft }, 500, function() {
-        // Add the scroll snap class back after the animation completes
-        $container.addClass('snap-mandatory');
-    });
-}; */
 
 
 
 //VERTICAL SCROLL
 const snapContainer = ref(null);
 let scrollTimeout;
-
-/* setTimeout(() => {
-    if (snapContainer.value) {
-        let container = snapContainer._value;
-
-        // Horizontal scroll on vertical scroll
-        container.addEventListener('wheel', function(e) {
-            if (e.deltaY !== 0) {
-                container.scrollLeft += e.deltaY;
-                e.preventDefault();
-            }
-
-            // Reset the timeout on every scroll
-            clearTimeout(scrollTimeout);
-
-            // Set a timeout to run after the user stops scrolling
-            scrollTimeout = setTimeout(() => {
-                snapToMostVisibleSlide(container);
-            }, 100); // Adjust the delay as needed
-        });
-    }
-}, 100); */
 
 // Function to calculate the most visible slide and snap to the right margin
 function snapToMostVisibleSlide(container) {
@@ -701,30 +519,6 @@ function snapToMostVisibleSlide(container) {
         });
     }
 }
-
-
-/* const snapContainer = ref(null);
-onMounted(async () => {
-    
-    setTimeout(() => {
-        if (snapContainer.value) {
-            snapContainer.value.addEventListener('wheel', (ev) => {
-                if (ev.deltaY !== 0) {
-                    ev.preventDefault();
-                    snapContainer.value.scrollLeft += ev.deltaY;
-
-                    // Debugging output
-                    console.log(
-                        'Scroll Amount (Vertical):', ev.deltaY,
-                        'Current ScrollLeft:', snapContainer.value.scrollLeft
-                    );
-                }
-            });
-        } else {
-        console.error('snapContainer.value is null');
-        }
-    }, 100); // 100 ms delay to ensure DOM updates
-}); */
 
 </script>
 

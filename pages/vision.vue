@@ -90,11 +90,6 @@ const myData = ref([]);
 const snapContainer = ref(null);
 let isMobile = computed(() => width.value <= 768);
 
-useHead({
-    title: "Cecilia Avogadro",
-    meta: [{ name: "description", content: "" }],
-});
-
 // import store from '../store'
 
 const otherQuery = `*[_type == "vision"]{

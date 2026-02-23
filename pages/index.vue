@@ -177,6 +177,9 @@ const sortedProjects = computed(() => {
   // Check if myData is defined and not empty
   if (!myData.value || myData.value.length === 0) return [];
 
+  //REMOVE THIS ????
+  myData.value = myData.value.filter(p => p.slug.current != "de-finetti-reloaded");
+
   // Sort projects by the creation date in descending order
   return myData.value.slice().sort((a, b) => {
     const dateA = new Date(a._createdAt);
@@ -184,6 +187,7 @@ const sortedProjects = computed(() => {
     return dateA - dateB;  // For descending order
   });
 });
+console.log('sortedProjects', sortedProjects)
 
 const changeBackgroundColor = () => {
     const colors = ["#723137", "#7d91a0", "#c3c2be"];

@@ -1,9 +1,9 @@
 {
-  "_hash": "JoYYf8Zrya",
+  "_hash": "w28CH-W0l691OPWLjfomPBpkSrr8ogH4IkqDIW4gcow",
   "project": {
-    "rootDir": "/Users/carloandreaschlatter/Desktop/lavoro/cecilia_avogadro/web/2107/ca-web"
+    "rootDir": "/Users/carloandreaschlatter/Desktop/lavoro/cecilia_avogadro/web/310325/ca-web/avogadro"
   },
   "versions": {
-    "nuxt": "3.13.0"
+    "nuxt": "3.21.1"
   }
 }

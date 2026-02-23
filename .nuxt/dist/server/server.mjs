@@ -1,1 +1,1 @@
-export { default } from "file:///Users/carloandreaschlatter/Desktop/lavoro/cecilia_avogadro/web/2107/ca-web/node_modules/@nuxt/vite-builder/dist/runtime/vite-node.mjs"
+export { default } from "file:///Users/carloandreaschlatter/Desktop/lavoro/cecilia_avogadro/web/310325/ca-web/avogadro/node_modules/@nuxt/vite-builder/dist/vite-node-entry.mjs"

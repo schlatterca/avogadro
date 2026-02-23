@@ -15,6 +15,7 @@
                         <template v-for="block in myData.text_top" :key="block._key">
                             <PortableText
                                 :value="[block]"
+                                :components="portableTextComponents"
                             />
                         </template>
                     </div>
@@ -28,13 +29,14 @@
                     </figure>
 
                     <!-- <p v-html="myData.text_top"></p> -->
-                    <div class="bottom text-[.9rem] leading-[125%]
-                    mt-4 mb-8 md:mt-0 md:mb-0">
+                    <div class="bottom text-[.9rem] leading-[125%] text-[#723137]
+                    mt-4 mb-8 md:mt-0 md:mb-0 [&_a]:underline ">
                         <template v-for="block in myData.text_bottom" :key="block._key">
                             <PortableText
                                 :value="[
                                     block
                                 ]"
+                                :components="portableTextComponents"
                             />
                         </template>
                     </div>
@@ -54,7 +56,7 @@
   
 
 <script setup>
-import { ref, onMounted, nextTick } from 'vue';
+import { ref, onMounted, nextTick, computed, h } from 'vue';
 import sanity from "../sanity/sanity.js";
 import imageUrlBuilder from "@sanity/image-url";
 import groq from "groq"; // Ensure you have groq imported if used in your setup
@@ -67,6 +69,27 @@ const loading = ref(true);
 const myData = ref([]);
 const store = useMyStore();
 let isMobile = computed(() => store.isMobile)
+
+const portableTextComponents = {
+    marks: {
+        link: ({ value }, { slots }) => {
+            const href = value?.href;
+            const children = slots.default?.();
+
+            if (!href) return children;
+
+            return h(
+                'a',
+                {
+                    href,
+                    target: '_blank',
+                    rel: 'noopener noreferrer',
+                },
+                children
+            );
+        },
+    },
+};
 
 const fetchData = async () => {
     loading.value = true;
