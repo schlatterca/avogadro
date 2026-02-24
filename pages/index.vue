@@ -178,7 +178,7 @@ const sortedProjects = computed(() => {
   if (!myData.value || myData.value.length === 0) return [];
 
   //REMOVE THIS ????
-  myData.value = myData.value.filter(p => p.slug.current != "de-finetti-reloaded");
+  //myData.value = myData.value.filter(p => p.slug.current != "de-finetti-reloaded");
 
   // Sort projects by the creation date in descending order
   return myData.value.slice().sort((a, b) => {
