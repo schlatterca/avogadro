@@ -90,15 +90,19 @@ const indexScroll = ref(null)
 let scrolledProject = ref(0);
 
 const sortedProjects = computed(() => {
-  // Check if myData is defined and not empty
-  if (!myData.value || myData.value.length === 0) return [];
 
-  // Sort projects by the creation date in descending order
-  return myData.value.slice().sort((a, b) => {
-    const dateA = new Date(a._createdAt);
-    const dateB = new Date(b._createdAt);
-    return dateA - dateB;  // For descending order
-  });
+    if (!myData.value || myData.value.length === 0) return [];
+
+    // Preserve the current/fetched order, but display the last project first
+    const projects = myData.value.slice().sort((a, b) => {
+        const dateA = new Date(a._createdAt);
+        const dateB = new Date(b._createdAt);
+        return dateA - dateB;  // For descending order
+    });
+
+    const rotated = projects.slice();
+    rotated.unshift(rotated.pop());
+    return rotated;
 });
 //console.log(sortedProjects)
 
