@@ -124,7 +124,7 @@
   
 
 <script setup>
-import { ref, onMounted, nextTick } from 'vue';
+import { ref, onMounted, nextTick, computed } from 'vue';
 import { useRoute } from 'vue-router';
 import sanity from "../sanity/sanity.js";
 import imageUrlBuilder from "@sanity/image-url";
@@ -173,7 +173,7 @@ const fetchDataCarousel = async () => {
     }
 };
 
-const sortedProjects = computed(() => {
+/* const sortedProjects = computed(() => {
   // Check if myData is defined and not empty
   if (!myData.value || myData.value.length === 0) return [];
 
@@ -186,8 +186,24 @@ const sortedProjects = computed(() => {
     const dateB = new Date(b._createdAt);
     return dateA - dateB;  // For descending order
   });
+}); */
+
+const sortedProjects = computed(() => {
+
+    if (!myData.value || myData.value.length === 0) return [];
+
+    // Preserve the current/fetched order, but display the last project first
+    const projects = myData.value.slice().sort((a, b) => {
+        const dateA = new Date(a._createdAt);
+        const dateB = new Date(b._createdAt);
+        return dateA - dateB;  // For descending order
+    });
+
+    const rotated = projects.slice();
+    rotated.unshift(rotated.pop());
+    return rotated;
 });
-console.log('sortedProjects', sortedProjects)
+//console.log('sortedProjects', sortedProjects._value);
 
 const changeBackgroundColor = () => {
     const colors = ["#723137", "#7d91a0", "#c3c2be"];
